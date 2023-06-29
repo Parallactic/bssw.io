@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_08_175658) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_29_181732) do
   create_table "acronyms", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: nil, null: false
@@ -140,6 +140,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_08_175658) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.integer "order", default: 1
+    t.string "display_name"
     t.index ["author_id"], name: "index_contributions_on_author_id"
     t.index ["site_item_id"], name: "index_contributions_on_site_item_id"
   end
