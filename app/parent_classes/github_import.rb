@@ -49,7 +49,9 @@ class GithubImport < ApplicationRecord
     auths = AuthorUtility.make_from_data(
       node, rebuild
     )
-    self.authors = auths
+    auths.each do |auth|
+      self.contributions << Contribution.create(author: auth.first, display_name: auth.last)
+    end
     node.try(:remove)
   end
 end

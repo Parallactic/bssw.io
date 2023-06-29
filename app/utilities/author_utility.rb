@@ -71,13 +71,14 @@ class AuthorUtility
   def self.from_node_text(text, rebuild)
     node_data = Nokogiri::HTML.parse(text)
     if node_data.css('a').empty?
-      author_from_text(node_data.text,
+      auth = author_from_text(node_data.text,
                        rebuild)
     else
-      author_from_website(
+      auth = author_from_website(
         node_data.css('a').first, rebuild
       )
     end
+    [auth, node_data.text]
   end
 
   def self.author_from_text(text, rebuild)
@@ -96,11 +97,11 @@ class AuthorUtility
     host = uri.host
     website = host.blank? ? nil : "https://#{host}#{uri.path}"
 
-    auth = Author.find_by(website:, rebuild_id: rebuild)
+    auth = Author.find_by(website: website, rebuild_id: rebuild)
     unless auth
       #      last_name = names.last
       auth = Author.find_or_create_by(rebuild_id: rebuild, last_name: names.last, first_name: names.first)
-      auth.update(website:, alphabetized_name: names.last)
+      auth.update(website: website, alphabetized_name: names.last)
     end
     auth
   end
