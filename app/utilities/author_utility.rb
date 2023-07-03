@@ -78,6 +78,11 @@ class AuthorUtility
         node_data.css('a').first, rebuild
       )
     end
+    if auth.nil?
+      puts "no author from #{node_data.text}"
+    else
+      puts "#{auth.display_name} #{auth.website} #{auth.rebuild_id} #{auth.id}"
+    end
     [auth, node_data.text]
   end
 
