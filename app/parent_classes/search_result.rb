@@ -88,13 +88,11 @@ class SearchResult < MarkdownImport
 
   has_many :announcements, foreign_key: 'site_item_id'
 
-  store_methods :topic_list, :topics_count, :author_list
-
   def author_list_without_links
     if authors.empty?
       '<strong>By</strong> BSSw Community'.html_safe
     else
-      "<strong>By</strong> #{authors.map(&:display_name).to_sentence}
+      "<strong>By</strong> #{contributions.map(&:display_name).to_sentence}
       ".html_safe
     end
   end

@@ -41,7 +41,9 @@ class Topic < GithubImport
   def self.from_name(top_name, rebuild_id)
     return if top_name.match(Regexp.new(/\[(.*)\]/))
 
+
     name = top_name.strip
+
     top = find_or_create_by(
       name: ,
       rebuild_id:

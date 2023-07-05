@@ -39,8 +39,6 @@ RSpec.describe Event, type: :model do
     expect(
       event.additional_dates.map(&:additional_date_values).flatten.map(&:date).flatten
     ).to include(Chronic.parse('July 4 2022').to_date)
-    puts event.additional_dates.map(&:additional_date_values).flatten.map(&:date).flatten
-    puts Event.past.to_a.map(&:id)
   end
 
   it 'can parse written dates' do
