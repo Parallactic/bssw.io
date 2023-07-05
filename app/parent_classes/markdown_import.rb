@@ -32,7 +32,6 @@ class MarkdownImport < GithubImport
       method = "add_#{string.strip}".downcase.tr(' ', '_')
       if method == 'add_topics'
         names = CSV.parse(names.gsub(/,\s+"/, ',"'), liberal_parsing: true).first
-        puts names.inspect
         save if new_record?
         try(:add_topics, names)
       elsif respond_to?(method, true)

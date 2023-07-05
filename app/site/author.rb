@@ -102,7 +102,7 @@ class Author < SearchResult
 
   def cleanup
     if SiteItem.published.displayed.with_author(self).empty?
-#      delete
+    #      delete
     else
       blog_listing
       resource_listing

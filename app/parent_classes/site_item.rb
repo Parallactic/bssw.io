@@ -10,7 +10,6 @@ class SiteItem < SearchResult
   before_destroy { contributions.clear }
   has_many :contributions, join_table: 'contributions', dependent: :destroy
   has_many :authors, through: :contributions
-  # has_and_belongs_to_many :communities, through: :features, class_name: 'Resource'
 
   has_many :features
 
@@ -25,22 +24,9 @@ class SiteItem < SearchResult
   def self.clean
     items = where(name: nil)
     items.each(&:delete)
-
-    #   Fellow.displayed.each(&:set_search_text)
-    puts 'refresh lists'
     displayed.each do |si|
-      #      si.set_search_text
       si.refresh_topic_list
       si.refresh_author_list
     end
   end
-
-  # def set_search_text
-  #   text = ActionController::Base.helpers.strip_tags(
-  #     " #{content.to_s.gsub('"', '')} #{try(:author_list)} #{name} #{try(:description)} #{try(:location)} #{try(:organizers)} ".downcase.gsub(/\s+/, " ")
-  #   )
-  #   #    puts text
-  #   update(search_text: text)
-  #   #    save
-  # end
 end
