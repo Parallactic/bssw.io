@@ -73,7 +73,7 @@ RSpec.describe RebuildsController, type: :controller do
       expect(Page.displayed.where(name: 'Contributors')).not_to be_empty
 
       expect(Author.displayed.where(website: @author_slug).first.resource_listing).not_to eq '0 resources'
-      puts Rebuild.last.names
+      puts Staff.displayed
       expect(Staff.displayed.select do |a|
                a.website.try(
                  :match?, 'maherou'
@@ -85,7 +85,11 @@ RSpec.describe RebuildsController, type: :controller do
                )
              end.first.affiliation).to eq "Sandia National Labs and St. John's University"
 
+      # expect(@blankline.main).to match('<span class="caption">Figure 4')
+      # expect(@blankline.main).to match('<span class="caption">Figure 3')
       expect(Category.displayed.first.slug).to eq 'better-planning'
+      #      expect(Event.displayed.where(name: 'test event').first.additional_dates.size).to be > 1
+      #      expect(Fellow.displayed.where(base_path: '_HM_LowndesJu_2021.md').first.modified_path).to match('NSFcohort')
 
       expect(SiteItem.displayed.last.topic_list).not_to be_empty
       expect(Event.where(

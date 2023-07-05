@@ -36,6 +36,13 @@ class GithubImport < ApplicationRecord
     pars.to_s.html_safe
   end
 
+  # def find_from_title(string, path)
+  #   res = self.class.find_by(name: string, rebuild_id: rebuild_id, path: path) || self
+  #   res.name = string
+  #   res.save
+  #   res
+  # end
+
   def update_author(node, rebuild)
     return unless node && respond_to?('authors')
 
