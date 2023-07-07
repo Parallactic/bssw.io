@@ -101,7 +101,7 @@ class SearchResult < MarkdownImport
     if authors.empty?
       'BSSw Community'
     else
-      authors.map { |a| a.link.html_safe }.to_sentence.html_safe
+      contributions.map { |c| c.link.html_safe }.to_sentence.html_safe
     end
   end
 

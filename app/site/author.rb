@@ -96,10 +96,6 @@ class Author < SearchResult
     end
   end
 
-  def link
-    "<a class='author' href='/items?author=#{slug}'>#{first_name} #{last_name}</a>"
-  end
-
   def cleanup
     if SiteItem.published.displayed.with_author(self).empty?
     #      delete
