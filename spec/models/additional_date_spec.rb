@@ -26,17 +26,16 @@ RSpec.describe AdditionalDate, type: :model do
     FactoryBot.create(:additional_date,
                       additional_date_values:
                         [FactoryBot.build(:additional_date_value,
-                                          date: 2.weeks.ago),
-                        ],
+                                          date: 2.weeks.ago)],
                       label: 'Date',
-                      event: event)
+                      event:)
     FactoryBot.create(:additional_date,
                       additional_date_values:
                         [FactoryBot.build(:additional_date_value,
-                                          date: 3.weeks.ago)], label: 'Date', event: event)
+                                          date: 3.weeks.ago)], label: 'Date', event:)
     FactoryBot.create(:additional_date,
                       additional_date_values:
-                        [FactoryBot.build(:additional_date_value, date: 1.week.from_now)], label: 'Date', event: event)
+                        [FactoryBot.build(:additional_date_value, date: 1.week.from_now)], label: 'Date', event:)
     FactoryBot.create(:additional_date,
                       additional_date_values:
                         [FactoryBot.build(:additional_date_value,

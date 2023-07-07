@@ -24,9 +24,5 @@ class SiteItem < SearchResult
   def self.clean
     items = where(name: nil)
     items.each(&:delete)
-    displayed.each do |si|
-      si.refresh_topic_list
-      si.refresh_author_list
-    end
   end
 end
