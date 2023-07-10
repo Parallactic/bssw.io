@@ -76,7 +76,8 @@ class SearchResult < MarkdownImport
 
   has_and_belongs_to_many :topics, lambda {
                                      distinct
-                                   }, join_table: 'site_items_topics', dependent: :destroy, foreign_key: 'site_item_id'
+  }, join_table: 'site_items_topics', dependent: :destroy, foreign_key: 'site_item_id'
+  has_and_belongs_to_many :tracks, join_table: 'site_items_tracks', foreign_key: 'site_item_id'
   before_destroy { topics.clear }
   before_destroy { contributions.clear }
   has_many :contributions, join_table: 'contributions', dependent: :destroy, foreign_key: 'site_item_id'
@@ -121,4 +122,9 @@ class SearchResult < MarkdownImport
       topics << topic if topic
     end
   end
+
+  def add_track(name)
+    tracks << Track.from_name(name, rebuild_id)
+  end
+  
 end
