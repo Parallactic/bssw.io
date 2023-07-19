@@ -96,6 +96,7 @@ RSpec.describe RebuildsController, type: :controller do
       expect(Event.where(
         base_path: '2021-10-wosss21.md'
       ).first.end_at.to_date).to eq Date.parse('October 8 2021').to_date
+      puts SiteItem.displayed.all.map(&:tracks).flatten.map(&:name)
       # expect do
       #   post :import
       # end.not_to change(Rebuild, :count)
