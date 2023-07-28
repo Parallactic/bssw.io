@@ -43,7 +43,7 @@ class GithubImport < ApplicationRecord
       node, rebuild
     )
     auths.each do |auth|
-      contributions << Contribution.create(author: auth.first, display_name: auth.last)
+      contributions << Contribution.create(author: auth.first, display_name: auth.last.strip)
     end
     node.try(:remove)
   end

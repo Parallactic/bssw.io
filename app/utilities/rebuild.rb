@@ -47,6 +47,7 @@ class Rebuild < ApplicationRecord
     Author.all.each(&:cleanup)
     # rescue StandardError
     # end
+    update(:names, Author.displayed.order(:alphabetized_name).map(&:contributions).flatten.map(&:display_name).uniq) 
     SearchResult.clear_index!
     SearchResult.displayed.reindex
     File.delete(file_path)

@@ -87,7 +87,8 @@ class AuthorUtility
   end
 
   def self.author_from_text(text, rebuild)
-    text = text.gsub("\:", '')
+    text = text.strip
+    text = text.gsub(":", '')
     return if text.blank? || text.match?("\#")
 
     names = names_from(text)
