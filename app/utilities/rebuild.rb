@@ -47,14 +47,16 @@ class Rebuild < ApplicationRecord
     Author.all.each(&:cleanup)
     # rescue StandardError
     # end
-    update(:names, Author.displayed.order(:alphabetized_name).map(&:contributions).flatten.map(&:display_name).uniq) 
+    update(names: Author.displayed.order(:alphabetized_name).map(&:contributions).flatten.map(&:display_name).uniq) 
     SearchResult.clear_index!
     SearchResult.displayed.reindex
     File.delete(file_path)
   end
 
   def clear_old
-    rebuild_ids = Rebuild.first(5).to_a.map(&:id).delete_if(&:nil?)
+    Contribution.where(site_item_id: nil).each(&:destroy)
+    Contribution.where(author_id: nil).each(&:destroy)
+rebuild_ids = Rebuild.first(5).to_a.map(&:id).delete_if(&:nil?)
     rebuild_ids += [id]
     classes = [Community, Category, Topic, Announcement, Author, Quote, SearchResult, FeaturedPost, Fellow, Page]
     everything = Rebuild.where(['id NOT IN (?)', rebuild_ids])
@@ -64,6 +66,8 @@ class Rebuild < ApplicationRecord
     end
 
     everything.each(&:destroy)
+    Contribution.all.select{|c| c.site_item.nil? && c.author.nil? }.each(&:destroy)
+    puts Contribution.all.map(&:display_name)
   end
 
   def self.file_structure # rubocop:disable Metrics/MethodLength
