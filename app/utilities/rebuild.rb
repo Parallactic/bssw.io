@@ -66,8 +66,9 @@ rebuild_ids = Rebuild.first(5).to_a.map(&:id).delete_if(&:nil?)
     end
 
     everything.each(&:destroy)
-    Contribution.all.select{|c| c.site_item.nil? && c.author.nil? }.each(&:destroy)
-    puts Contribution.all.map(&:display_name)
+#    Contribution.all.select{|c| c.site_item.nil? && c.author.nil? }.each(&:destroy)
+    puts "contributions:"
+    puts Contribution.all.map{|c| ".#{c.display_name}."}
   end
 
   def self.file_structure # rubocop:disable Metrics/MethodLength
