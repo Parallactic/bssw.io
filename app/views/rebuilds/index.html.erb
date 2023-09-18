@@ -94,7 +94,7 @@
 				<td>
 		    <p>
 		    <a href='#' id='shownames<%= r.id %>' onclick="$('#files<%= r.id %>').show(); $('#hide<%= r.id %>').show(); $('#shownames<%= r.id %>').hide();">Show List</a>
-p		    <a href='#' id='hidenames<%= r.id %>' onclick="$('#files<%= r.id %>').hide(); $('#show<%= r.id %>').show(); $('#hidenames<%= r.id %>').hide();">Hide List</a>
+		    <a href='#' id='hidenames<%= r.id %>' onclick="$('#files<%= r.id %>').hide(); $('#show<%= r.id %>').show(); $('#hidenames<%= r.id %>').hide();">Hide List</a>
 		    </p>
 		    <div id='names<%= r.id %>'>
 			<%= r.names.try(:html_safe) %>
