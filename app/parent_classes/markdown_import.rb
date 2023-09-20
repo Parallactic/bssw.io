@@ -60,7 +60,7 @@ class MarkdownImport < GithubImport
   end
 
   def add_publish(val)
-    val = val.downcase
+    val = val.strip.downcase
     if val.match('yes')
       update_attribute(:publish, true)
     else
