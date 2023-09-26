@@ -20,10 +20,15 @@ class Rebuild < ApplicationRecord
     full_name = file.full_name
     begin
       resource = process_path(full_name, file.read)
+
       update_attribute(:files_processed, "#{files_processed}<li>#{resource.try(:path)}</li>")
-    rescue Exception => e
+      resource.try(:save)
+    rescue => e
+      puts "EXCEPTED!!!!"
+      puts e.inspect
       record_errors(File.basename(full_name), e)
     end
+
   end
 
   def record_errors(file_name, error)
@@ -34,19 +39,18 @@ class Rebuild < ApplicationRecord
   end
 
   def update_links_and_images
-    (Page.all + SearchResult.all + Community.all
-    ).each(&:update_links_and_images)
+    # (Page.all + SearchResult.all + Community.all
+    # ).each(&:update_links_and_images)
   end
 
   def clean(file_path)
+
     Category.displayed.each { |category| category.update(slug: nil) }
     AuthorUtility.all_custom_info(id, file_path)
     clear_old
+
     update_links_and_images
-    #    begin
     Author.all.each(&:cleanup)
-    # rescue StandardError
-    # end
     update(names: Author.displayed.order(:alphabetized_name).map(&:contributions).flatten.map(&:display_name).uniq) 
     SearchResult.clear_index!
     SearchResult.displayed.reindex
@@ -56,7 +60,7 @@ class Rebuild < ApplicationRecord
   def clear_old
     Contribution.where(site_item_id: nil).each(&:destroy)
     Contribution.where(author_id: nil).each(&:destroy)
-rebuild_ids = Rebuild.first(5).to_a.map(&:id).delete_if(&:nil?)
+    rebuild_ids = Rebuild.first(5).to_a.map(&:id).delete_if(&:nil?)
     rebuild_ids += [id]
     classes = [Community, Category, Topic, Announcement, Author, Quote, SearchResult, FeaturedPost, Fellow, Page]
     everything = Rebuild.where(['id NOT IN (?)', rebuild_ids])
@@ -66,9 +70,7 @@ rebuild_ids = Rebuild.first(5).to_a.map(&:id).delete_if(&:nil?)
     end
 
     everything.each(&:destroy)
-#    Contribution.all.select{|c| c.site_item.nil? && c.author.nil? }.each(&:destroy)
-    puts "contributions:"
-    puts Contribution.all.map{|c| ".#{c.display_name}."}
+    Contribution.all.select{|c| c.site_item.nil? && c.author.nil? }.each(&:destroy)
   end
 
   def self.file_structure # rubocop:disable Metrics/MethodLength
@@ -113,7 +115,9 @@ rebuild_ids = Rebuild.first(5).to_a.map(&:id).delete_if(&:nil?)
       end
     end
     item = res.find_or_create_by(path: GithubImporter.normalized_path(path), rebuild_id: id)
+
     item.update(base_path: File.basename(path))
+
     item
   end
 end

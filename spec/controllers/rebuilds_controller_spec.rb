@@ -73,9 +73,7 @@ RSpec.describe RebuildsController, type: :controller do
       expect(Page.displayed.where(name: 'Contributors')).not_to be_empty
 
       expect(Author.displayed.where(website: @author_slug).first.resource_listing).not_to eq '0 resources'
-      SiteItem.displayed.sample(10).each do |si|
-        puts si.author_list_without_links
-      end
+
       expect(Staff.displayed.select do |a|
                a.website.try(
                  :match?, 'maherou'

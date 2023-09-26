@@ -6,6 +6,22 @@ class GithubImport < ApplicationRecord
 
   belongs_to :rebuild
 
+#   def dumpme(string)
+#     if respond_to?(:slug) && slug == 'introducing-the-2019-bssw-fellows'
+#       puts "\e[#{rand(29..36)}m"
+#       puts string
+#       puts "errors #{errors.inspect}"
+#       puts "published #{publish}"
+#       puts "contribus #{contributions.inspect}"
+#       contributions = []
+#       try(:save)
+#       puts self.errors.inspect
+
+# #      puts self.inspect
+#       puts "\e[0m"
+#     end
+#   end
+
   def parse_and_update(content)
     content_string = content.dup.force_encoding('UTF-8').encode!
     doc = GithubImporter.parse_html_from(content_string)
@@ -23,6 +39,7 @@ class GithubImport < ApplicationRecord
 
     content_string = doc.css('body').to_s + "\n<!-- file path: #{path} -->".html_safe
     update_attribute(:content, content_string)
+
   end
 
   def snippet
@@ -50,7 +67,10 @@ class GithubImport < ApplicationRecord
       node, rebuild
     )
     auths.each do |auth|
-      contributions << Contribution.create(author: auth.first, display_name: auth.last.strip)
+  
+      if auth.first && auth.first.is_a?(Author)
+        contributions << Contribution.create(author: auth.first, display_name: auth.last.strip)
+      end
     end
     node.try(:remove)
   end
