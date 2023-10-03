@@ -40,7 +40,7 @@ class RebuildsController < ApplicationController
               elsif Rails.env.test? || Rails.env.development?
                 'preview'
               else
-                'master'
+                'main'
               end
   end
 
