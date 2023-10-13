@@ -12,9 +12,25 @@ class Fellow < SearchResult
 
   has_many :fellow_links, dependent: :destroy
 
-  def should_generate_new_friendly_id?
-    true #    name_changed?
+  before_save :sluggos
+
+  def sluggos
+    if self.name
+      s = SearchResult.where(slug: self.name.try(:parameterize), rebuild_id: self.rebuild_id).first
+     if s && s != self
+       begin
+         s.destroy
+       rescue 
+       end
+     end
+     self.slug = self.name.try(:parameterize).force_encoding("UTF-8")
+    end
   end
+  
+  
+def should_generate_new_friendly_id?
+true                            #    name_changed?
+end
 
   def last_name
     name.try(:split).try(:last).to_s
