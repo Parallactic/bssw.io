@@ -4,7 +4,8 @@
 class BlogPost < SiteItem
   default_scope -> { order(published_at: 'desc') }
 
-  friendly_id :slug_candidates, use: %i[finders slugged scoped], scope: :rebuild_id
+  extend FriendlyId
+friendly_id :slug_candidates, use: %i[finders slugged scoped], scope: :rebuild_id
 
   def related_posts
     posts = []

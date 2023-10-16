@@ -10,7 +10,8 @@ class Author < SearchResult
   has_many :search_results, through: :contributions, foreign_key: 'site_item_id'
   before_destroy { contributions.clear }
 
-  friendly_id :slug_candidates, use: %i[finders slugged scoped], scope: :rebuild_id
+  extend FriendlyId
+friendly_id :slug_candidates, use: %i[finders slugged scoped], scope: [:rebuild_id, :type]
 
   scope :displayed, lambda {
     where("#{table_name}.rebuild_id = ?", RebuildStatus.first.display_rebuild_id)

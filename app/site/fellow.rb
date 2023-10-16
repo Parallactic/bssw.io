@@ -8,7 +8,8 @@ class Fellow < SearchResult
 
   self.table_name = 'search_results'
 
-  friendly_id :slug_candidates, use: %i[finders slugged scoped], scope: :rebuild_id
+  extend FriendlyId
+friendly_id :slug_candidates, use: %i[finders slugged scoped], scope: [:rebuild_id, :type]
 
   has_many :fellow_links, dependent: :destroy
 
@@ -16,7 +17,7 @@ class Fellow < SearchResult
 
   def sluggos
     if self.name
-      s = SearchResult.where(slug: self.name.try(:parameterize), rebuild_id: self.rebuild_id).first
+      s = Fellow.where(slug: self.name.try(:parameterize), rebuild_id: self.rebuild_id).first
      if s && s != self
        begin
          s.destroy
