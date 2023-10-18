@@ -61,7 +61,7 @@ class GithubImporter < ApplicationRecord
         rebuild.process_file(file)
       rescue StandardError => e
         puts "uh-oh: #{e.inspect}"
-        puts file.full_name
+#        puts file.full_name
       end
     end
 
