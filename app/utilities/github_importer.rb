@@ -50,24 +50,21 @@ class GithubImporter < ApplicationRecord
   end
 
   def self.populate(branch)
-
     rebuild = RebuildStatus.in_progress_rebuild
     file_path = save_content(branch, rebuild)
 
     tar_extract(file_path).each do |file|
       next if File.extname(file.full_name) != '.md'
       next if GithubImporter.excluded_filenames.include?(File.basename(file.full_name))
-      begin
 
+      begin
         rebuild.process_file(file)
-        
-      rescue => e
+      rescue StandardError => e
         puts "uh-oh: #{e.inspect}"
         puts file.full_name
       end
     end
-   
-    RebuildStatus.complete(rebuild, file_path)
 
+    RebuildStatus.complete(rebuild, file_path)
   end
 end

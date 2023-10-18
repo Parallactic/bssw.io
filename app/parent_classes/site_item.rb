@@ -25,8 +25,6 @@ class SiteItem < SearchResult
   def self.clean
     items = where(name: nil)
     items.each(&:delete)
-
-
   end
 
   # def set_search_text

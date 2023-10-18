@@ -38,7 +38,6 @@ class RebuildStatus < ApplicationRecord
   end
 
   def self.complete(rebuild, file_path)
-
     first.update(display_rebuild_id: rebuild.id, in_progress_rebuild_id: nil)
 
     SiteItem.clean
@@ -47,6 +46,5 @@ class RebuildStatus < ApplicationRecord
 
     rebuild.update(files_processed: "<ul>#{rebuild.files_processed}</ul>",
                    ended_at: Time.now)
-
   end
 end

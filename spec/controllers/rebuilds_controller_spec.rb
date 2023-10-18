@@ -31,6 +31,7 @@ RSpec.describe RebuildsController, type: :controller do
       post :import
 
       puts "errors: #{Rebuild.first.errors_encountered}"
+      puts "collis: #{Rebuild.first.slug_collisions}"
 
       # these are specific checks to our resource library...
       # using variables defined at top of this file
@@ -97,7 +98,9 @@ RSpec.describe RebuildsController, type: :controller do
       # expect do
       #   post :import
       # end.not_to change(Rebuild, :count)
-      Fellow.displayed.each{|f| puts "#{f.slug} #{f.name}" }
+      puts response.inspect
+      Fellow.displayed.each { |f| puts "#{f.slug} #{f.name}" }
+
       expect(response).to redirect_to('/rebuilds?rebuilt=true')
     end
 

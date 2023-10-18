@@ -10,7 +10,6 @@ class MarkdownImport < GithubImport
   }
 
   def update_links_and_images
-
     doc = Nokogiri::HTML.parse(content, nil, 'UTF-8')
 
     MarkdownUtility.update_links(doc)

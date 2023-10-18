@@ -1,3 +1,4 @@
+# redcarpet markdown processing
 # frozen_string_literal: true
 
 class RougeRenderer < Redcarpet::Render::HTML

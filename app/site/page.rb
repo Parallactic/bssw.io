@@ -12,9 +12,8 @@ class Page < SearchResult
 
   self.table_name = 'search_results'
 
-
   extend FriendlyId
-friendly_id :name, use: %i[finders slugged scoped], scope: :rebuild_id
+  friendly_id :name, use: %i[finders slugged scoped], scope: :rebuild_id
 
   def regular
     name != 'Contact BSSw' &&

@@ -3,6 +3,7 @@
 # created each time we run the GH import
 class Rebuild < ApplicationRecord
   default_scope { order(created_at: 'desc') }
+
   after_create :set_location
 
   def set_location
@@ -23,12 +24,11 @@ class Rebuild < ApplicationRecord
 
       update_attribute(:files_processed, "#{files_processed}<li>#{resource.try(:path)}</li>")
       resource.try(:save)
-    rescue => e
-      puts "EXCEPTED!!!!"
+    rescue StandardError => e
+      puts 'EXCEPTED!!!!'
       puts e.inspect
       record_errors(File.basename(full_name), e)
     end
-
   end
 
   def record_errors(file_name, error)
@@ -44,33 +44,32 @@ class Rebuild < ApplicationRecord
   end
 
   def clean(file_path)
-
     Category.displayed.each { |category| category.update(slug: nil) }
     AuthorUtility.all_custom_info(id, file_path)
     clear_old
 
     update_links_and_images
     Author.all.each(&:cleanup)
-    update(names: Author.displayed.order(:alphabetized_name).map(&:contributions).flatten.map(&:display_name).uniq) 
+    update(names: Author.displayed.order(:alphabetized_name).map(&:contributions).flatten.map(&:display_name).uniq)
+    update(slug_collisions: slug_collisions.split('\n').uniq.join('\n')) unless slug_collisions.blank?
     SearchResult.clear_index!
     SearchResult.displayed.reindex
     File.delete(file_path)
   end
 
   def clear_old
-    Contribution.where(site_item_id: nil).each(&:destroy)
-    Contribution.where(author_id: nil).each(&:destroy)
-    rebuild_ids = Rebuild.first(5).to_a.map(&:id).delete_if(&:nil?)
-    rebuild_ids += [id]
+    rebuild_ids = Rebuild.first(5).to_a.map(&:id).delete_if(&:nil?) + [id]
     classes = [Community, Category, Topic, Announcement, Author, Quote, SearchResult, FeaturedPost, Fellow, Page]
     everything = Rebuild.where(['id NOT IN (?)', rebuild_ids])
     classes.each do |klass|
-      everything += klass.where(['rebuild_id NOT IN (?)', rebuild_ids])
+      pp everything += klass.where(['rebuild_id NOT IN (?)', rebuild_ids])
       everything += klass.where(rebuild_id: nil)
     end
 
     everything.each(&:destroy)
-    Contribution.all.select{|c| c.site_item.nil? && c.author.nil? }.each(&:destroy)
+    Contribution.where(site_item_id: nil).each(&:destroy)
+    Contribution.where(author_id: nil).each(&:destroy)
+    #    Contribution.all.select { |c| c.site_item.nil? && c.author.nil? }.each(&:destroy)
   end
 
   def self.file_structure # rubocop:disable Metrics/MethodLength

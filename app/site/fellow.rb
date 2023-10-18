@@ -9,29 +9,24 @@ class Fellow < SearchResult
   self.table_name = 'search_results'
 
   extend FriendlyId
-friendly_id :slug_candidates, use: %i[finders slugged scoped], scope: [:rebuild_id, :type]
+  friendly_id :slug_candidates, use: %i[finders slugged scoped], scope: %i[rebuild_id type honorable_mention]
 
   has_many :fellow_links, dependent: :destroy
 
   before_save :sluggos
 
   def sluggos
-    if self.name
-      s = Fellow.where(slug: self.name.try(:parameterize), rebuild_id: self.rebuild_id).first
-     if s && s != self
-       begin
-         s.destroy
-       rescue 
-       end
-     end
-     self.slug = self.name.try(:parameterize).force_encoding("UTF-8")
+    return unless name
+
+    s = Fellow.where(slug: name.try(:parameterize), rebuild_id:).first
+    if s && s != self
+      begin
+        s.update(:slug, nil)
+      rescue StandardError
+      end
     end
+    self.slug = name.try(:parameterize).force_encoding('UTF-8')
   end
-  
-  
-def should_generate_new_friendly_id?
-true                            #    name_changed?
-end
 
   def last_name
     name.try(:split).try(:last).to_s
@@ -47,6 +42,7 @@ end
 
   def update_from_content(doc, _rebuild)
     fellow_links.each(&:destroy)
+    set_hm
     save
     update_details(doc)
   end
@@ -59,7 +55,7 @@ end
     do_fields(doc)
     node = doc.at("strong:contains('Long Bio')")
     node.try(:remove)
-    set_hm
+
     send('long_bio=', doc.to_html)
     save
   end
