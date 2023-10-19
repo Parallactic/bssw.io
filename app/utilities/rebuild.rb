@@ -51,7 +51,12 @@ class Rebuild < ApplicationRecord
     update_links_and_images
     Author.all.each(&:cleanup)
     update(names: Author.displayed.order(:alphabetized_name).map(&:contributions).flatten.map(&:display_name).uniq)
-    update(slug_collisions: slug_collisions.split('\n').uniq.join('\n')) unless slug_collisions.blank?
+    unless slug_collisions.blank?
+      new_cols = slug_collisions.split('\n')
+      new_cols = new_cols.map(&:strip)
+      new_cols = new_cols.uniq
+      update(slug_collisions: new_cols.join('<br />'))
+    end
     SearchResult.clear_index!
     SearchResult.displayed.reindex
     File.delete(file_path)
