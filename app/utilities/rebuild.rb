@@ -44,6 +44,14 @@ class Rebuild < ApplicationRecord
   end
 
   def clean(file_path)
+        unless slug_collisions.blank?
+      new_cols = slug_collisions.split('\n')
+      new_cols = new_cols.map(&:strip)
+      new_cols = new_cols.uniq
+      update(slug_collisions: new_cols.join('<br />'))
+
+    end
+
     Category.displayed.each { |category| category.update(slug: nil) }
     AuthorUtility.all_custom_info(id, file_path)
     clear_old
@@ -51,12 +59,6 @@ class Rebuild < ApplicationRecord
     update_links_and_images
     Author.all.each(&:cleanup)
     update(names: Author.displayed.order(:alphabetized_name).map(&:contributions).flatten.map(&:display_name).uniq)
-    unless slug_collisions.blank?
-      new_cols = slug_collisions.split('\n')
-      new_cols = new_cols.map(&:strip)
-      new_cols = new_cols.uniq
-      update(slug_collisions: new_cols.join('<br />'))
-    end
     SearchResult.clear_index!
     SearchResult.displayed.reindex
     File.delete(file_path)
