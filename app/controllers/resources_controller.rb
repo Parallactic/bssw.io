@@ -33,10 +33,10 @@ class ResourcesController < ApplicationController
 
     @search = search_string
     @resources = []
-    (1..50).each do |i|
-      @results = SearchResult.algolia_search(search_string, hitsPerPage: 5, page: i)
-      @resources += @results
-    end
+#    (1..50).each do |i|
+      @resources += SearchResult.algolia_search(search_string, hitsPerPage: 1000, page: 1)
+    #   @resources += @results
+    # end
     @resources = if params[:view] != 'all'
                    @resources.paginate(page:, per_page: 25)
                  else
