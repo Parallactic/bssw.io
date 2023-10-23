@@ -44,7 +44,7 @@ class ResourcesController < ApplicationController
                  end
 
     render 'index'
-  end
+    end
 
   def authors
     @authors = Author.displayed.order('alphabetized_name ASC, first_name ASC')
