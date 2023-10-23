@@ -6,8 +6,8 @@ class SearchResult < MarkdownImport
   algoliasearch per_environment: true, sanitize: true, auto_index: false, if: :searchable? do
     attributes :name, :content, :author_list_without_links, :published_at
     searchableAttributes %w[name author_list_without_links content]
-    attributesToSnippet %w[content name author_list_without_links]
-    attributesToHighlight %w[content name author_list_without_links]
+    attributesToSnippet %w[content]
+    attributesToHighlight %w[name author_list_without_links]
     highlightPreTag '<mark>'
     highlightPostTag '</mark>'
     hitsPerPage 1000
