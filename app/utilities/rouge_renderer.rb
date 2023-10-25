@@ -1,3 +1,4 @@
+# redcarpet markdown processing
 # frozen_string_literal: true
 
 # process markdown

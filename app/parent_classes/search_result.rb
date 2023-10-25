@@ -6,12 +6,12 @@ class SearchResult < MarkdownImport
   algoliasearch per_environment: true, sanitize: true, auto_index: false, if: :searchable? do
     attributes :name, :content, :author_list_without_links, :published_at
     searchableAttributes %w[name author_list_without_links content]
-    attributesToSnippet %w[content name author_list_without_links]
-    attributesToHighlight %w[content name author_list_without_links]
+    attributesToSnippet %w[content]
+    attributesToHighlight %w[name author_list_without_links]
     highlightPreTag '<mark>'
     highlightPostTag '</mark>'
     hitsPerPage 1000
-    ranking ['desc(is_fellow)', 'desc(published_at)']
+    ranking ['typo', 'desc(is_fellow)', 'desc(published_at)']
     advancedSyntax true
   end
 
@@ -24,10 +24,27 @@ class SearchResult < MarkdownImport
 
   def slug_candidates
     if custom_slug.blank?
-      honorable_mention ? nil : name
+      if honorable_mention
+        'none'
+      else
+        name
+      end
     else
       custom_slug
     end
+  end
+
+  def resolve_friendly_id_conflict(candidates)
+    if rebuild && candidates.first
+
+      rebuild.slug_collisions = rebuild.slug_collisions.to_s + "\n#{candidates.first.inspect} #{base_path} #{SearchResult.where(
+        rebuild_id:, slug: candidates.first.to_s
+      ).first.base_path}"
+      rebuild.save
+      puts rebuild.slug_collisions
+      puts "-------- #{rebuild_id}"
+    end
+    super
   end
 
   def should_generate_new_friendly_id?
@@ -118,7 +135,8 @@ class SearchResult < MarkdownImport
     names.each do |top_name|
       next if top_name.blank?
 
-      topic = Topic.from_name(top_name, rebuild_id)
+      topic = Topic.from_name(top_name.strip.gsub(/^"/, '').gsub(/"$/, ''),
+                              rebuild_id)
       topics << topic if topic
     end
   end

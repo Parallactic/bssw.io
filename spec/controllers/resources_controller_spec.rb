@@ -224,7 +224,7 @@ RSpec.describe ResourcesController, type: :controller do
 
     it 'displays pages' do
       150.times { FactoryBot.create(:resource) }
-      get :index, params: { page: 1 }, xhr: true
+      get :search, params: { page: 1 }, xhr: true
       expect(response).to render_template :index
     end
 

@@ -65,6 +65,8 @@
 	    <th>Rebuild Finished</th>
 	    <th>Initiating IP</th>
 	    <th>Files Processed Successfully</th>
+	    <th>Contributor Names Found</th>
+	    <th>Slug Collisions</th>
 	    <th>Errors Encountered</th>
 	    <th></th>
 	</tr>
@@ -90,6 +92,35 @@
 		    </script>
 
 		</td>
+				<td>
+		    <p>
+		    <a href='#' id='shownames<%= r.id %>' onclick="$('#names<%= r.id %>').show(); $('#hidenames<%= r.id %>').show(); $('#shownames<%= r.id %>').hide();">Show List</a>
+		    <a href='#' id='hidenames<%= r.id %>' onclick="$('#names<%= r.id %>').hide(); $('#shownames<%= r.id %>').show(); $('#hidenames<%= r.id %>').hide();">Hide List</a>
+		    </p>
+		    <div id='names<%= r.id %>'>
+			<%= r.names.try(:html_safe) %>
+		    </div>
+		    <script type='text/javascript'>
+		     $('#names<%= r.id %>').hide();	
+	     $('#hidenames<%= r.id %>').hide();
+		    </script>
+
+		</td>
+				<td>
+		    <p>
+		    <a href='#' id='showcols<%= r.id %>' onclick="$('#cols<%= r.id %>').show(); $('#hidecols<%= r.id %>').show(); $('#showcols<%= r.id %>').hide();">Show List</a>
+		    <a href='#' id='hidecols<%= r.id %>' onclick="$('#cols<%= r.id %>').hide(); $('#showcols<%= r.id %>').show(); $('#hidecols<%= r.id %>').hide();">Hide List</a>
+		    </p>
+		    <div id='cols<%= r.id %>'>
+			<%= r.slug_collisions.try(:html_safe) %>
+		    </div>
+		    <script type='text/javascript'>
+		     $('#cols<%= r.id %>').hide();	
+	     $('#hidecols<%= r.id %>').hide();
+		    </script>
+
+		</td>
+
 		<td><%= r.errors_encountered.try(:html_safe) %></td>
 		<td><% if r != RebuildStatus.displayed_rebuild && Rebuild.first(10).include?(r) %> <%= button_to 'Set As Displayed', {:action => 'make_displayed', :id => r.id}, data: { confirm: "Do you really want to change the displayed rebuild?"} %> <% end  %>
 <% if r == RebuildStatus.displayed_rebuild %>

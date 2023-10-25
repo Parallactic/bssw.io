@@ -12,12 +12,12 @@ RSpec.describe MarkdownUtility, type: :model do
   it 'provides an adjusted path' do
     path = 'foo.jpg'
     modified_path = MarkdownUtility.modified_path(path)
-    expect(modified_path).to match('/master/images/foo.jpg')
+    expect(modified_path).to match('/main/images/foo.jpg')
   end
 
   it 'maintains subdirectories' do
     path = '../images/foo/foo.jpg'
     modified_path = MarkdownUtility.modified_path(path)
-    expect(modified_path).to match('/master/images/foo/foo.jpg')
+    expect(modified_path).to match('/main/images/foo/foo.jpg')
   end
 end

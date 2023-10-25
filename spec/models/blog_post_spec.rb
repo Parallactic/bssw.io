@@ -18,7 +18,7 @@ RSpec.describe BlogPost, type: :model do
 \n
 \n
 <!--
-Topics: foo, bar, \"quoted, topic\"
+Topics: \"first qutoe\", foo, bar, \"quoted, topic\", \"end quo\"
 Categories: Blah Blah
 Publish: true
 
@@ -31,7 +31,10 @@ Publish: true
     res.parse_and_update(content)
     res.reload
     expect(res.content).to match 'bar'
+    puts res.topics.map(&:name)
     expect(res.topics.map(&:name)).to include('quoted, topic')
+    expect(res.topics.map(&:name)).to include('end quo')
+    expect(res.topics.map(&:name)).to include('first qutoe')
     expect(res.categories).not_to be_empty
     expect(res.authors.map(&:last_name).to_s).to match 'Doe'
     expect(res.hero_image_caption).not_to be_nil

@@ -13,7 +13,7 @@ class MarkdownUtility < ApplicationRecord
     if image_path.match?('http')
       "#{image_path}?raw=true"
     elsif image_path
-      branch = Rails.env.preview? ? 'preview' : 'master'
+      branch = Rails.env.preview? ? 'preview' : 'main'
       path = URI(image_path).path.split('/').select do |dir|
         !dir.empty? && !dir.in?(['images', '.', '..'])
       end.join('/')

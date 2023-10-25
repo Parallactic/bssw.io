@@ -22,10 +22,10 @@ class EventsController < ApplicationController
 
   private
 
-  def set_cache_key
-    last_modified_str = Event.order(:updated_at).last.updated_at.utc.to_fs(:number)
-    @cache_key = "#{params[:past]}/all_events/#{last_modified_str}"
-  end
+  # def set_cache_key
+  #   last_modified_str = Event.order(:updated_at).last.updated_at.utc.to_fs(:number)
+  #   @cache_key = "#{params[:past]}/all_events/#{last_modified_str}"
+  # end
 
   def filter_events
     author = params[:author]
@@ -39,15 +39,13 @@ class EventsController < ApplicationController
   end
 
   def filter_events_by_time(events)
-    set_cache_key
+    #    set_cache_key
     @page = Page.find_by_name('Upcoming Events')
     @page = Page.find_by_name('Past Events') if params[:past]
-    @past_events = Rails.cache.fetch(@cache_key) do
-      events.past
-    end
-    @events = @upcoming_events = Rails.cache.fetch(@cache_key) do
-      events.upcoming
-    end
-    @events = @past_events if params[:past]
+
+    @events = @upcoming_events = events.upcoming
+    return unless params[:past]
+
+    @events = @past_events = events.past
   end
 end

@@ -671,6 +671,7 @@ body:not(.scrollup) .sm-logo-div {
       }
       .nav-link:hover {
         background: #349dff;
+	color: #b9ffff;
       }
       .nav-heading-link {
         h2 {
@@ -2209,10 +2210,11 @@ PAGINATION
   font-size: 14px;
   line-height: 14px;
   letter-spacing: .07em;
-  a {
+  span, a, em {
     padding-left: 12px;
     font-family: 'Roboto Mono', 'Roboto', Helvetica, Arial, sans-serif;
   }
+
 }
 
 .pagination-top {
@@ -2251,7 +2253,7 @@ RESOURCES
       color: #349dff;
       padding-right: 120px;
     }
-    &:nth-last-child(2) .container a {
+    &:nth-last-child(1) .container a {
       border-bottom: 1px solid #dcdcdd;
     }
     &:before {
@@ -3946,7 +3948,7 @@ SEARCH RESULTS
   background: #18187d;
   color: #fff;
   padding: 130px 0 60px 0;
-  margin-bottom: 70px;
+
   h1 {
     color:#fff;
   }

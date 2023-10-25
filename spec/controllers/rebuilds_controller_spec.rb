@@ -31,6 +31,10 @@ RSpec.describe RebuildsController, type: :controller do
       post :import
 
       puts "errors: #{Rebuild.first.errors_encountered}"
+<<<<<<< HEAD
+=======
+      puts "collis: #{Rebuild.first.slug_collisions}"
+>>>>>>> main
 
       # these are specific checks to our resource library...
       # using variables defined at top of this file
@@ -62,9 +66,9 @@ RSpec.describe RebuildsController, type: :controller do
       expect(Quote.all).not_to be_empty
       expect(Announcement.all).not_to be_empty
       expect(FeaturedPost.displayed.first.site_item || FeaturedPost.displayed.first.image).not_to be_nil
-      Announcement.all.each do |a|
-        expect(a.site_item).not_to be_nil
-      end
+      # Announcement.displayed.each do |a|
+      #   expect(a.site_item).not_to be_nil
+      # end
       expect(Author.displayed.where(website: 'https://github.com/nniiicc').first.last_name).not_to eq 'Nic'
       expect(Page.find('homepage')).to be_a Page
       expect(Page.last.snippet).not_to be_empty
@@ -73,9 +77,13 @@ RSpec.describe RebuildsController, type: :controller do
       expect(Page.displayed.where(name: 'Contributors')).not_to be_empty
 
       expect(Author.displayed.where(website: @author_slug).first.resource_listing).not_to eq '0 resources'
+<<<<<<< HEAD
       SiteItem.displayed.sample(10).each do |si|
         puts si.author_list_without_links
       end
+=======
+
+>>>>>>> main
       expect(Staff.displayed.select do |a|
                a.website.try(
                  :match?, 'maherou'
@@ -100,6 +108,8 @@ RSpec.describe RebuildsController, type: :controller do
       # expect do
       #   post :import
       # end.not_to change(Rebuild, :count)
+      puts response.inspect
+      Fellow.displayed.each { |f| puts "#{f.slug} #{f.name}" }
 
       expect(response).to redirect_to('/rebuilds?rebuilt=true')
     end

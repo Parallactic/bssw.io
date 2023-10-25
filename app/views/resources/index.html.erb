@@ -38,7 +38,7 @@
 <% end %>
 
 
-<div id='resources'>
+<div id='resources' <% if params[:author] || params[:search_string] %>class='container'<% end %>>
     <%= render 'resources', :resources => @resources, :results => (@search? @results : nil), cached: true %>
 </div>
 

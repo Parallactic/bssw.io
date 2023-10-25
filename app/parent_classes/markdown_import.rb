@@ -11,9 +11,13 @@ class MarkdownImport < GithubImport
 
   def update_links_and_images
     doc = Nokogiri::HTML.parse(content, nil, 'UTF-8')
+
     MarkdownUtility.update_links(doc)
+
     MarkdownUtility.update_images(doc)
+
     html = doc.to_html.to_s
+
     update_attribute(:content, html) unless content == html
   end
 
@@ -60,7 +64,7 @@ class MarkdownImport < GithubImport
   end
 
   def add_publish(val)
-    val = val.downcase
+    val = val.strip.downcase
     if val.match('yes')
       update_attribute(:publish, true)
     else

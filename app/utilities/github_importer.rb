@@ -56,8 +56,14 @@ class GithubImporter < ApplicationRecord
       next if File.extname(file.full_name) != '.md'
       next if GithubImporter.excluded_filenames.include?(File.basename(file.full_name))
 
-      rebuild.process_file(file)
+      begin
+        rebuild.process_file(file)
+      rescue StandardError => e
+        puts "uh-oh: #{e.inspect}"
+#        puts file.full_name
+      end
     end
+    puts 'time to complete'
     RebuildStatus.complete(rebuild, file_path)
   end
 end

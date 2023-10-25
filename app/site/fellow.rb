@@ -8,12 +8,24 @@ class Fellow < SearchResult
 
   self.table_name = 'search_results'
 
-  friendly_id :slug_candidates, use: %i[finders slugged scoped], scope: :rebuild_id
+  extend FriendlyId
+  friendly_id :slug_candidates, use: %i[finders slugged scoped], scope: %i[rebuild_id type honorable_mention]
 
   has_many :fellow_links, dependent: :destroy
 
-  def should_generate_new_friendly_id?
-    true #    name_changed?
+  before_save :sluggos
+
+  def sluggos
+    return unless name
+
+    s = Fellow.where(slug: name.try(:parameterize), rebuild_id:).first
+    if s && s != self
+      begin
+        s.update(:slug, nil)
+      rescue StandardError
+      end
+    end
+    self.slug = name.try(:parameterize).force_encoding('UTF-8')
   end
 
   def last_name
@@ -30,6 +42,7 @@ class Fellow < SearchResult
 
   def update_from_content(doc, _rebuild)
     fellow_links.each(&:destroy)
+    set_hm
     save
     update_details(doc)
   end
@@ -42,7 +55,7 @@ class Fellow < SearchResult
     do_fields(doc)
     node = doc.at("strong:contains('Long Bio')")
     node.try(:remove)
-    set_hm
+
     send('long_bio=', doc.to_html)
     save
   end

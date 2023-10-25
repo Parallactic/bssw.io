@@ -25,8 +25,9 @@ class RebuildsController < ApplicationController
     puts "branch is #{@branch}"
     rebuild = Rebuild.create(started_at: Time.now, ip: request.ip)
     RebuildStatus.start(rebuild, @branch)
+    #    SearchResult.all.each{|s| s.printb }
     GithubImporter.populate(@branch)
-
+    #    SearchResult.all.each{|s| s.printa }
     flash[:notice] = 'Import completed!'
     redirect_to controller: 'rebuilds', action: 'index', rebuilt: true
   end
@@ -39,7 +40,7 @@ class RebuildsController < ApplicationController
               elsif Rails.env.test? || Rails.env.development?
                 'preview'
               else
-                'master'
+                'main'
               end
   end
 

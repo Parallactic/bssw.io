@@ -1,16 +1,21 @@
-<div class="container">
-  <div class="row">
-
-    <% if params[:view] == 'all' %>
-      1-<%= @resources.total_entries %> of <%= @resources.total_entries %> Items
-    <% else %>
-      <%= will_paginate @resources %>
-      <% if @resources.next_page %>
-	| <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
-      <% end %>
 
 
-    <% end %>
-  </div>
-</div>
+<% if @resources.respond_to?(:next_page) %>
+  <%= will_paginate @resources %>
+
+  <% if @resources.total_pages != @resources.current_page %>   &nbsp;| <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
+  <% else %>
+    1-<%= @resources.size %> of <%= @resources.size %> Items
+<% end %>
+
+<% elsif params[:view] || params[:author] || params[:topic] || params[:category] %>
+  1-<%= @resources.size %> of <%= @total %> Items
+  <% if @total > @resources.size %>
+      &nbsp;|
+ <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
+<% end %>
+  <% end %>
+
+
+
 

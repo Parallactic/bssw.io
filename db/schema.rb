@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema[7.0].define(version: 2023_07_07_143302) do
+=======
+ActiveRecord::Schema[7.0].define(version: 2023_10_16_161637) do
+>>>>>>> main
   create_table "acronyms", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: nil, null: false
@@ -283,6 +287,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_07_143302) do
     t.text "errors_encountered"
     t.string "content_branch"
     t.string "commit_hash"
+    t.text "names"
+    t.text "slug_collisions"
   end
 
   create_table "resources", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
