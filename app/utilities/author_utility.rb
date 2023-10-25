@@ -62,7 +62,7 @@ class AuthorUtility
 
   def self.make_from_data(node, rebuild)
     authors = []
-    node.to_html.gsub('Contributed by', '').gsub(' and ', ',').strip.split(',').each do |text|
+    node.to_html.gsub('Contributed by', '').gsub(' and ', ',').gsub(': ', '').strip.split(',').each do |text|
       authors << from_node_text(text, rebuild)
     end
     authors.delete_if(&:nil?)

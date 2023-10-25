@@ -31,10 +31,10 @@ RSpec.describe RebuildsController, type: :controller do
       post :import
 
       puts "errors: #{Rebuild.first.errors_encountered}"
-<<<<<<< HEAD
-=======
+
+
       puts "collis: #{Rebuild.first.slug_collisions}"
->>>>>>> main
+
 
       # these are specific checks to our resource library...
       # using variables defined at top of this file
@@ -77,13 +77,13 @@ RSpec.describe RebuildsController, type: :controller do
       expect(Page.displayed.where(name: 'Contributors')).not_to be_empty
 
       expect(Author.displayed.where(website: @author_slug).first.resource_listing).not_to eq '0 resources'
-<<<<<<< HEAD
+
       SiteItem.displayed.sample(10).each do |si|
         puts si.author_list_without_links
       end
-=======
 
->>>>>>> main
+
+
       expect(Staff.displayed.select do |a|
                a.website.try(
                  :match?, 'maherou'

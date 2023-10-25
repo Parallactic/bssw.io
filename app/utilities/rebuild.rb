@@ -7,10 +7,12 @@ class Rebuild < ApplicationRecord
   after_create :set_location
 
   def set_location
-    update_attribute(
-      :location,
-      Geocoder.search(ip).try(:first).try(:data).try(:[], 'city')
-    )
+    unless ip.blank?
+      update_attribute(
+        :location,
+        Geocoder.search(ip).try(:first).try(:data).try(:[], 'city')
+      )
+    end
   end
 
   def self.in_progress
@@ -19,16 +21,16 @@ class Rebuild < ApplicationRecord
 
   def process_file(file)
     full_name = file.full_name
-    begin
+#    begin                       # 
       resource = process_path(full_name, file.read)
 
       update_attribute(:files_processed, "#{files_processed}<li>#{resource.try(:path)}</li>")
       resource.try(:save)
-    rescue StandardError => e
-      puts 'EXCEPTED!!!!'
-      puts e.inspect
-      record_errors(File.basename(full_name), e)
-    end
+    # rescue StandardError => e
+    #   puts 'EXCEPTED!!!!'
+    #   puts e.inspect
+    #   record_errors(File.basename(full_name), e)
+    # end
   end
 
   def record_errors(file_name, error)
