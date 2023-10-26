@@ -78,8 +78,12 @@ RSpec.describe RebuildsController, type: :controller do
 
       expect(Author.displayed.where(website: @author_slug).first.resource_listing).not_to eq '0 resources'
 
-      SiteItem.displayed.sample(10).each do |si|
-        puts si.author_list_without_links
+      puts "tracks: ...."
+      SiteItem.displayed.each do |si|
+        unless si.tracks.empty?
+          puts si.tracks.map(&:name)
+          puts si.base_path
+        end
       end
 
 
@@ -104,7 +108,7 @@ RSpec.describe RebuildsController, type: :controller do
       expect(Event.where(
         base_path: '2021-10-wosss21.md'
       ).first.end_at.to_date).to eq Date.parse('October 8 2021').to_date
-      puts SiteItem.displayed.all.map(&:tracks).flatten.map(&:name)
+      puts SiteItem.displayed.all.map(&:tracks).flatten.map(&:inspect)
       # expect do
       #   post :import
       # end.not_to change(Rebuild, :count)

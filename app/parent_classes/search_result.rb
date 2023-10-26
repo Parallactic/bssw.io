@@ -63,6 +63,10 @@ class SearchResult < MarkdownImport
     joins([:topics]).where('topics.id = ?', topic) if topic.present?
   }
 
+  scope :with_track, lambda { |track|
+                               joins([:tracks]).where('tracks.id = ?', track) if track.present?
+                               }
+
   scope :with_category, lambda { |category|
     joins([:topics]).joins([:searchresults_topics]).where('topics.category_id = ?', category)
   }

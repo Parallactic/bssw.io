@@ -60,8 +60,19 @@
 		    </div>
 		</div>
 	    </div>
-	    
-	
+	    <% if !(@post.listed_tracks.empty?) %>
+<div class="row">
+<div class="col-xl-3">
+<div class="row">
+<div class="col-xl-12">
+<div class="small-caps"><strong>Track</strong>
+    <%= @post.listed_tracks.map(&:display_name).to_sentence %>
+</div>
+</div>
+</div>
+</div>
+</div>
+		
 	</div>
 
     </div>

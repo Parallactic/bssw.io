@@ -12,16 +12,29 @@ class Track < GithubImport
   extend FriendlyId
   friendly_id :name, use: %i[finders history slugged scoped], scope: :rebuild_id
 
-  def self.from_name(top_name, rebuild_id)
-    return if top_name.match(Regexp.new(/\[(.*)\]/))
+  def self.import(content, rebuild_id)
+    doc = GithubImporter.parse_html_from(content)
+    doc.css("li").each do |elem|
+      next if elem.text.blank?
 
-    name = top_name.strip.downcase
+      track = self.from_name(elem.text, rebuild_id)
+      track.update(listed: true)
+    end
+  end
 
-    top = find_or_create_by(
+
+  
+  def self.from_name(track_name, rebuild_id)
+    return if track_name.match(Regexp.new(/\[(.*)\]/))
+    
+    name = track_name.strip.downcase
+    
+    track = find_or_create_by(
       name:,
       rebuild_id:
     )
-    top.slug = name.parameterize
-    top
+    track.slug = name.parameterize
+    track
   end
+  
 end

@@ -6,6 +6,7 @@ class SiteItem < SearchResult
   require 'csv'
 
   has_and_belongs_to_many :topics, -> { distinct }, join_table: 'site_items_topics', dependent: :destroy
+  has_and_belongs_to_many :tracks, -> { distinct }, join_table: 'site_items_tracks'
   before_destroy { topics.clear }
   before_destroy { contributions.clear }
   has_many :contributions, join_table: 'contributions', dependent: :destroy
@@ -13,9 +14,14 @@ class SiteItem < SearchResult
 
   has_many :features
 
-  def rss_date
-    super || published_at
+
+  def listed_tracks
+    tracks.where(listed: true)
   end
+  
+def rss_date
+super || published_at
+end
 
   def categories
     topics.map(&:category).uniq

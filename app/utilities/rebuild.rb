@@ -46,12 +46,11 @@ class Rebuild < ApplicationRecord
   end
 
   def clean(file_path)
-        unless slug_collisions.blank?
+    unless slug_collisions.blank?
       new_cols = slug_collisions.split('\n')
       new_cols = new_cols.map(&:strip)
       new_cols = new_cols.uniq
       update(slug_collisions: new_cols.join('<br />'))
-
     end
 
     Category.displayed.each { |category| category.update(slug: nil) }
@@ -107,10 +106,12 @@ class Rebuild < ApplicationRecord
       Quote.import(content)
     elsif path.match('Announcements')
       Announcement.import(content, id)
-    else
-      resource = find_or_create_resource(path)
-      resource.parse_and_update(content)
-      resource
+    elsif path.match('BlogTracks')
+      Track.import(content, id)
+else
+resource = find_or_create_resource(path)
+resource.parse_and_update(content)
+resource
     end
   end
 
