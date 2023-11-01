@@ -15,7 +15,7 @@ class AuthorUtility
     names = name.split(' ').map { |chunk| chunk.blank? ? nil : chunk }
     last_name = names.last
     first_name = [names - [last_name]].join(' ')
-    [first_name, last_name]
+    [first_name.strip, last_name.strip]
   end
 
   def self.do_overrides(comment, rebuild)
