@@ -1,25 +1,25 @@
-
+`
 <% if resource.topics %>
-  <div class="topics-wrapper">
-    <div class="topics">
-      <div class="row">
-	<span class="topics-heading">TOPICS</span>
-	<% index = 0 %>
-	<% resource.topics.group_by(&:category).each do |cat, topics| %>
-	  <% if cat %>
-	    <div class="topic">
-	      <%= link_to cat.name, "/items?category="+cat.slug %>
+    <div class="topics-wrapper">
+	<div class="topics">
+	    <div class="row">
+		<span class="topics-heading">TOPICS</span>
+		<% index = 0 %>
+		<% resource.topics.group_by(&:category).each do |cat, topics| %>
+		    <% if cat %>
+			<div class="topic">
+			    <%= link_to cat.name, "/items?category="+cat.slug %>
+			</div>
+			<% topics.each do |topic| %>
+			    <div class="sub-topic" id="sub-topic-<%= index %>"><%= link_to topic.name, "/items?topic="+topic.slug %>
+			    </div>
+			    <% index = index + 1 %>
+			<% end %>
+		    <% end %>
+		<% end %>
 	    </div>
-	    <% topics.each do |topic| %>
-		<div class="sub-topic" id="sub-topic-<%= index %>"><%= link_to topic.name, "/items?topic="+topic.slug %>
-		</div>
-		<% index = index + 1 %>
-	    <% end %>
-	  <% end %>
-	<% end %>
-      </div>
+	</div>
     </div>
-  </div>
-</div>
-<!-- topics: <%= resource.topics.map(&:name) %> -->
+
+    <!-- topics: <%= resource.topics.map(&:name) %> -->
 <% end %>
