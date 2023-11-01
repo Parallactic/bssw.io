@@ -66,7 +66,7 @@
 <div class="row">
 <div class="col-xl-12">
 <div class="small-caps"><strong>Track</strong>
-    <%= @post.listed_tracks.map(&:display_name).to_sentence %>
+    <%= @post.listed_tracks.map(&:name).map(&:titleize).to_sentence %>
 </div>
 </div>
 </div>
