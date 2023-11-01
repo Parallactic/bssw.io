@@ -55,27 +55,30 @@
 			    </div>			    
 			</div>
 		    </div>
-		    <div class="col-xl-6">
-			<%= render :partial => '/resources/topics', :locals => {:resource => @post } %>
-		    </div>
+	
+		<div class="col-xl-6">
+		    <%= render :partial => '/resources/topics', :locals => {:resource => @post } %>
 		</div>
+	    </div>
 
 	    <% if !(@post.listed_tracks.empty?) %>
-		    <div class="row">
-			<div class="col-xl-3">
-			    <div class="small-caps"><strong>Track</strong>
-				<%= @post.listed_tracks.map(&:name).map(&:titleize).to_sentence %>
-				
-			    </div>
+		<div class="row">
+		    <div class="col-xl-6">
+			<div class="row">
+			    <div class="col-xl-12">
+				<div class="small-caps"><strong>Track</strong>
+				    <%= @post.listed_tracks.map(&:name).map(&:titleize).to_sentence %>
+				</div></div>
 			</div>
 		    </div>
-	    </div>
+
+		</div>
 	    <% end %>
 	</div>
     </div>
 </div>
 </div>
-
+</div>
 
 <div class="page-content post-event-content">
     <div class="container">
