@@ -4,8 +4,9 @@
     <a href="/blog_posts/<%= post.slug %>">
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-          <h3><%= post.name %></h3>
+            <h3><%= post.name %></h3>
         </div>
+	<%= post.listed_tracks.map(&:name).map(&:titleize).to_sentence %>
       </div>
       <div class="row">
       	<div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">

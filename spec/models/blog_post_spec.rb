@@ -32,9 +32,9 @@ Publish: true
     res.reload
     expect(res.content).to match 'bar'
     puts res.topics.map(&:name)
-    expect(res.topics.map(&:name)).to include('quoted, topic')
-    expect(res.topics.map(&:name)).to include('end quo')
-    expect(res.topics.map(&:name)).to include('first qutoe')
+    expect(res.topics.map(&:name)).to include('Quoted, Topic')
+    expect(res.topics.map(&:name)).to include('End Quo')
+    expect(res.topics.map(&:name)).to include('First Qutoe')
     expect(res.categories).not_to be_empty
     expect(res.authors.map(&:last_name).to_s).to match 'Doe'
     expect(res.hero_image_caption).not_to be_nil
