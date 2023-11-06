@@ -59,12 +59,15 @@
 			<%= render :partial => '/resources/topics', :locals => {:resource => @post } %>
 		    </div>
 		</div>
-		<div class="row">
-		    <div class="col-xl-6">
-			TRAKCS
-		    </div>
-		</div>
-	    </div>
+		<% unless @post.listed_tracks.empty? %>
+		    <div class="row">
+			<div class="col-xl-6">
+<%= 			    @post.listed_tracks.map(&:name).to_sentence %>
+</div>
+
+</div>
+<% end %>
+</div>
 	    
 	    
 	</div>
