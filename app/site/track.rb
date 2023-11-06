@@ -27,7 +27,7 @@ class Track < GithubImport
   def self.from_name(track_name, rebuild_id)
     return if track_name.match(Regexp.new(/\[(.*)\]/))
     
-    name = track_name.strip.downcase
+    name = track_name.strip.titleize
     
     track = find_or_create_by(
       name:,

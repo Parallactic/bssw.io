@@ -3227,9 +3227,11 @@ p.date { font-weight: bold;
       transition: all 0.2s ease-in-out;
     }
   }
-  &:hover h3 {
-    color: #19197d !important;
-  }
+  h4 { color: #349dff; 
+     }
+  &:hover h3, &hover h4 {
+	      color: #19197d !important;
+	      }
   &:hover h3 mark {
     color: #19197d;
   }
