@@ -3227,7 +3227,9 @@ p.date { font-weight: bold;
       transition: all 0.2s ease-in-out;
     }
   }
-  h4 { color: #349dff; 
+  h4 { color: #349dff;
+       font-weight: 700;
+       font-size: 18px; 
      }
   &:hover h3, &hover h4 {
 	      color: #19197d !important;
