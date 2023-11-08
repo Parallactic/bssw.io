@@ -48,18 +48,19 @@
 
 
                   <div class="post-content">
-                    <p><%= @resource.snippet %></p>
+                      <p><%= @resource.snippet %></p>
                   </div>
 
                   <%= render :partial => '/resources/topics', :locals => {:resource => @resource } %>
 
-                </div>
-              </div>
-
-              <%= render :partial => '/layouts/sidebar' %>
-
-
             </div>
+          </div>
+	</div>
+      </div>
+      <%= render :partial => '/layouts/sidebar' %>
+
+
+      
           </div>
         </div>
 
