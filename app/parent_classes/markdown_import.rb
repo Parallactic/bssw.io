@@ -34,6 +34,7 @@ class MarkdownImport < GithubImport
   def update_associates(array, _rebuild)
     array.each_cons(2) do |string, names|
       method = "add_#{string.strip}".downcase.tr(' ', '_')
+      puts method
       if method == 'add_topics'
         names = CSV.parse(names.gsub(/,\s+"/, ',"'), liberal_parsing: true).first
         save if new_record?

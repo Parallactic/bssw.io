@@ -146,6 +146,7 @@ class SearchResult < MarkdownImport
   end
 
   def add_track(name)
-    tracks << Track.from_name(name, rebuild_id)
+    tracks << Track.from_name(name.strip.gsub(/^"/, '').gsub(/"$/, ''),
+                              rebuild_id)
   end
 end
