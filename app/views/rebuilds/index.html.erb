@@ -50,7 +50,7 @@
       $('#form').submit(function() {
       var are_waiting = true;
 	  $('#wait').show();
-	  $('#wait').html("In progress rebuild started at <%= Time.now.in_time_zone('Central Time (US & Canada)') %>");
+	  $('#wait p').html("In progress rebuild started at <%= Time.now.in_time_zone('Central Time (US & Canada)') %>");
       $('#form').hide();
       setInterval(function () {
       if (are_waiting) {
