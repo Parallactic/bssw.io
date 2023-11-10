@@ -49,11 +49,11 @@
     <script type='text/javascript'>
       $('#form').submit(function() {
       var are_waiting = true;
-	 $('#wait').show();
+	  $('#wait').show();
       $('#form').hide();
       setInterval(function () {
       if (are_waiting) {
-      $('#wait p').append(" ... ");
+	  $('#wait p').html("in-progress build started <%= Rebuild.first.started_at.try(:in_time_zone, 'Central Time (US & Canada)') %> (<%= time_ago_in_words(r.started_at) %> ago)");
       }
       }, 10000); 
      });
