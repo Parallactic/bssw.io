@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ContributesController, type: :controller do
-  before(:each) do
+  before do
     InvisibleCaptcha.init!
     InvisibleCaptcha.timestamp_threshold = 1
     InvisibleCaptcha.spinner_enabled = false

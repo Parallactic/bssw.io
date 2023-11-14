@@ -25,8 +25,6 @@ class Rebuild < ApplicationRecord
       update_attribute(:files_processed, "#{files_processed}<li>#{resource.try(:path)}</li>")
       resource.try(:save)
     rescue StandardError => e
-      puts 'EXCEPTED!!!!'
-      puts e.inspect
       record_errors(File.basename(full_name), e)
     end
   end
@@ -44,12 +42,11 @@ class Rebuild < ApplicationRecord
   end
 
   def clean(file_path)
-        unless slug_collisions.blank?
+    if slug_collisions.present?
       new_cols = slug_collisions.split('\n')
       new_cols = new_cols.map(&:strip)
       new_cols = new_cols.uniq
       update(slug_collisions: new_cols.join('<br />'))
-
     end
 
     Category.displayed.each { |category| category.update(slug: nil) }
@@ -69,14 +66,13 @@ class Rebuild < ApplicationRecord
     classes = [Community, Category, Topic, Announcement, Author, Quote, SearchResult, FeaturedPost, Fellow, Page]
     everything = Rebuild.where(['id NOT IN (?)', rebuild_ids])
     classes.each do |klass|
-      pp everything += klass.where(['rebuild_id NOT IN (?)', rebuild_ids])
+      Rails.logger.debug everything += klass.where(['rebuild_id NOT IN (?)', rebuild_ids])
       everything += klass.where(rebuild_id: nil)
     end
 
     everything.each(&:destroy)
     Contribution.where(site_item_id: nil).each(&:destroy)
     Contribution.where(author_id: nil).each(&:destroy)
-    #    Contribution.all.select { |c| c.site_item.nil? && c.author.nil? }.each(&:destroy)
   end
 
   def self.file_structure # rubocop:disable Metrics/MethodLength

@@ -3,11 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe Quote, type: :model do
-  it 'can create itself from content' do
-    content = "- Foo --bar \n- baz --ban"
+  let(:content) { "- Foo --bar \n- baz --ban" }
 
-    Quote.import(content)
-    expect(Quote.find_by_text('Foo ').author).to match 'bar'
-    expect(Quote.find_by_author('ban').text).to match 'baz'
+  it 'matches content text' do
+    described_class.import(content)
+    expect(described_class.find_by(text: 'Foo ').author).to match 'bar'
+  end
+
+  it 'matches content author' do
+    described_class.import(content)
+    expect(described_class.find_by(author: 'ban').text).to match 'baz'
   end
 end

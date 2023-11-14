@@ -18,8 +18,8 @@ class ContributesController < ApplicationController
   private
 
   def set_page
-    @page = Page.find_by_name(
-      'Questions About Contributing to Better Scientific Software?'
+    @page = Page.find_by(
+      name: 'Questions About Contributing to Better Scientific Software?'
     )
   end
 end

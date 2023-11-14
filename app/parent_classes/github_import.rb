@@ -6,22 +6,6 @@ class GithubImport < ApplicationRecord
 
   belongs_to :rebuild
 
-  #   def dumpme(string)
-  #     if respond_to?(:slug) && slug == 'introducing-the-2019-bssw-fellows'
-  #       puts "\e[#{rand(29..36)}m"
-  #       puts string
-  #       puts "errors #{errors.inspect}"
-  #       puts "published #{publish}"
-  #       puts "contribus #{contributions.inspect}"
-  #       contributions = []
-  #       try(:save)
-  #       puts self.errors.inspect
-
-  # #      puts self.inspect
-  #       puts "\e[0m"
-  #     end
-  #   end
-
   def parse_and_update(content)
     content_string = content.dup.force_encoding('UTF-8').encode!
     doc = GithubImporter.parse_html_from(content_string)
@@ -51,13 +35,6 @@ class GithubImport < ApplicationRecord
     pars.css('p').try(:first).try(:remove)
     pars.to_s.html_safe
   end
-
-  # def find_from_title(string, path)
-  #   res = self.class.find_by(name: string, rebuild_id: rebuild_id, path: path) || self
-  #   res.name = string
-  #   res.save
-  #   res
-  # end
 
   def update_author(node, rebuild)
     return unless node && respond_to?('authors')

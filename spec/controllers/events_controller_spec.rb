@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe EventsController, type: :controller do
   render_views
 
-  before(:each) do
+  before do
     @rebuild = Rebuild.create
     RebuildStatus.all.each(&:destroy)
     RebuildStatus.create(display_rebuild_id: @rebuild.id)
@@ -101,6 +101,7 @@ RSpec.describe EventsController, type: :controller do
       expect(assigns(:event)).not_to be_nil
       expect(assigns(:resource)).not_to be_nil
     end
+
     it 'shows an event with a different date range' do
       event = FactoryBot.create(:event,
                                 additional_dates: [

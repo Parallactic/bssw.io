@@ -10,6 +10,7 @@ RSpec.describe Author, type: :model do
     expect(author.event_listing).to match '0'
     expect(author.website).to match 'foobar'
   end
+
   it 'updates from github' do
     author = FactoryBot.create(:author, website: 'http://github.com/clararaubertas')
     author.update_from_github

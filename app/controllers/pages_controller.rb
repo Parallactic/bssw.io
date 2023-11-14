@@ -4,9 +4,9 @@
 class PagesController < ApplicationController
   def show
     @page = if params[:id] == 'about'
-              Page.displayed.find_by_slug('team')
+              Page.displayed.find_by(slug: 'team')
             else
-              Page.displayed.find_by_slug(params[:id])
+              Page.displayed.find_by(slug: params[:id])
             end
     raise ActionController::RoutingError, 'Not Found' unless @page
 

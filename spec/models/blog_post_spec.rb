@@ -26,7 +26,7 @@ Publish: true
     FactoryBot.create(:category, name: 'Better Blah Blah')
 
     res = Rebuild.create.find_or_create_resource('Blog/FooPost.md')
-    expect(res).to be_a(BlogPost)
+    expect(res).to be_a(described_class)
 
     res.parse_and_update(content)
     res.reload

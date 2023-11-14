@@ -91,7 +91,7 @@ class MarkdownImport < GithubImport
 
   def dates(doc, rebuild)
     update_date(doc)
-    return if !has_attribute?(:published_at) || is_a?(Event) || !published_at.blank?
+    return if !has_attribute?(:published_at) || is_a?(Event) || published_at.present?
 
     update_attribute(:published_at,
                      GithubImporter.github.commits(

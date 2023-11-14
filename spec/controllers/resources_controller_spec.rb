@@ -5,11 +5,13 @@ require 'rails_helper'
 RSpec.describe ResourcesController, type: :controller do
   render_views
 
-  before(:each) do
+  let(:rebuild) { Rebuild.first }
+
+  before do
     FactoryBot.create(:page, name: 'Resources')
-    @rebuild = Rebuild.create
+    Rebuild.create
     RebuildStatus.all.each(&:destroy)
-    RebuildStatus.create(display_rebuild_id: @rebuild.id)
+    RebuildStatus.create(display_rebuild_id: rebuild.id)
   end
 
   it 'deals with bad queries' do
@@ -189,18 +191,20 @@ RSpec.describe ResourcesController, type: :controller do
 
   describe 'get authors' do
     it 'renders template' do
-      FactoryBot.create(:author)
+      author = FactoryBot.create(:author, rebuild_id: rebuild.id)
+      resource = FactoryBot.create(:resource, rebuild_id: rebuild.id)
+      resource.contributions << Contribution.create(author: author, display_name: author.display_name)
       RebuildStatus.all.each(&:destroy)
-      RebuildStatus.create(display_rebuild_id: @rebuild.id)
-      FactoryBot.create(:page, name: 'Contributors', path: 'Contributors.md', rebuild_id: @rebuild.id)
+      RebuildStatus.create(display_rebuild_id: rebuild.id)
+      FactoryBot.create(:page, name: 'Contributors', path: 'Contributors.md', rebuild_id: rebuild.id)
       get :authors
-      expect(:response).to render_template :authors
+      expect(response.body).to match(author.display_name)
     end
   end
 
   describe 'get show' do
     it 'renders the show template' do
-      resource = FactoryBot.create(:resource, rebuild_id: @rebuild.id)
+      resource = FactoryBot.create(:resource, rebuild_id: rebuild.id)
 
       resource.categories << FactoryBot.create(:category)
       get :show, params: { id: resource }
@@ -208,7 +212,7 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     it 'renders the show template or what_is / how_to' do
-      what_is = FactoryBot.create(:what_is, publish: true, rebuild_id: @rebuild.id)
+      what_is = FactoryBot.create(:what_is, publish: true, rebuild_id: rebuild.id)
       get :show, params: { id: what_is }
       expect(response).to render_template 'resources/show'
     end
@@ -223,15 +227,15 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     it 'displays pages' do
-      150.times { FactoryBot.create(:resource) }
+      FactoryBot.create_list(:resource, 150)
       get :search, params: { page: 1 }, xhr: true
       expect(response).to render_template :index
     end
 
     it 'can use topics' do
-      topic = FactoryBot.create(:topic, rebuild_id: @rebuild.id)
-      topiced_resource = FactoryBot.create(:resource, rebuild_id: @rebuild.id)
-      untopiced_resource = FactoryBot.create(:resource, rebuild_id: @rebuild.id)
+      topic = FactoryBot.create(:topic, rebuild_id: rebuild.id)
+      topiced_resource = FactoryBot.create(:resource, rebuild_id: rebuild.id)
+      untopiced_resource = FactoryBot.create(:resource, rebuild_id: rebuild.id)
       topiced_resource.topics << topic
       get :index, params: { topic: topic.slug }
       expect(assigns(:resources)).to include(topiced_resource)
@@ -240,10 +244,10 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     it 'can use categories' do
-      category = FactoryBot.create(:category, rebuild_id: @rebuild.id)
-      topic = FactoryBot.create(:topic, category:, rebuild_id: @rebuild.id)
-      resource_with_category = FactoryBot.create(:resource, rebuild_id: @rebuild.id)
-      resource_without_category = FactoryBot.create(:resource, rebuild_id: @rebuild.id)
+      category = FactoryBot.create(:category, rebuild_id: rebuild.id)
+      topic = FactoryBot.create(:topic, category:, rebuild_id: rebuild.id)
+      resource_with_category = FactoryBot.create(:resource, rebuild_id: rebuild.id)
+      resource_without_category = FactoryBot.create(:resource, rebuild_id: rebuild.id)
       resource_with_category.topics << topic
       get :index, params: { category: category.slug }
       expect(assigns(:resources)).to include(resource_with_category)
@@ -251,9 +255,9 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     it 'can use authors' do
-      author = FactoryBot.create(:author, rebuild_id: @rebuild.id)
-      resource_with_author = FactoryBot.create(:resource, rebuild_id: @rebuild.id)
-      resource_without_author = FactoryBot.create(:resource, rebuild_id: @rebuild.id)
+      author = FactoryBot.create(:author, rebuild_id: rebuild.id)
+      resource_with_author = FactoryBot.create(:resource, rebuild_id: rebuild.id)
+      resource_without_author = FactoryBot.create(:resource, rebuild_id: rebuild.id)
       resource_with_author.authors << author
 
       get :index, params: { author: author.slug }
@@ -262,9 +266,9 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     it 'is in alpha order' do
-      old_resource = FactoryBot.create(:resource, published_at: 1.week.ago, name: 'AA', rebuild_id: @rebuild.id)
-      FactoryBot.create(:resource, published_at: 2.weeks.ago, rebuild_id: @rebuild.id)
-      FactoryBot.create(:resource, published_at: Date.today, name: 'BB', rebuild_id: @rebuild.id)
+      old_resource = FactoryBot.create(:resource, published_at: 1.week.ago, name: 'AA', rebuild_id: rebuild.id)
+      FactoryBot.create(:resource, published_at: 2.weeks.ago, rebuild_id: rebuild.id)
+      FactoryBot.create(:resource, published_at: Date.today, name: 'BB', rebuild_id: rebuild.id)
       get :index
       expect(assigns(:resources).first).to eq old_resource
     end
@@ -272,7 +276,7 @@ RSpec.describe ResourcesController, type: :controller do
 
   describe 'rss feed' do
     it 'shows nothing' do
-      5.times { FactoryBot.create(:resource) }
+      FactoryBot.create_list(:resource, 5)
       #      begin
       get :index, format: :rss
       #     rescue Exception => e
@@ -284,8 +288,9 @@ RSpec.describe ResourcesController, type: :controller do
       expect(response.media_type).to eq 'application/rss+xml'
       expect(response).to be_ok
     end
+
     it 'shows feed' do
-      5.times { FactoryBot.create(:resource, rss_date: 1.week.ago, rebuild_id: @rebuild.id) }
+      5.times { FactoryBot.create(:resource, rss_date: 1.week.ago, rebuild_id: rebuild.id) }
       get :index, format: :rss
       expect(assigns(:resources)).not_to be_empty
       expect(response.media_type).to eq 'application/rss+xml'

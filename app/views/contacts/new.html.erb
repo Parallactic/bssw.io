@@ -18,7 +18,10 @@
           <%= f.select :reason, ['I have a question about the website',
             'I have a question about BSSw',
             'I have a comment',
-            'I have a suggestion for the site'], :label => 'Select The Nature Of Your Message', :class=> "form-control" %>
+            'I have a suggestion for the site',
+				 
+	     'I have a question about the BSSw Fellowship',
+				 'I want to contribute to the site'], :label => 'Select The Nature Of Your Message', :class=> "form-control" %>
         </div>
         <%= f.input :message, :as => :text, :required => false, :class => 'optional' %>
       </div>

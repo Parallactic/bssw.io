@@ -45,6 +45,6 @@ class RebuildStatus < ApplicationRecord
     rebuild.clean(file_path)
 
     rebuild.update(files_processed: "<ul>#{rebuild.files_processed}</ul>",
-                   ended_at: Time.now)
+                   ended_at: Time.zone.now)
   end
 end
