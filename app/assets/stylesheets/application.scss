@@ -3229,12 +3229,12 @@ p.date { font-weight: bold;
   }
   h4 { color: #349dff;
        font-weight: 700;
-       font-size: 22px;
-       margin-top: .25em;
-       margin-bottom: 0;
+       font-size: 18px;
+       line-height: 30px;
+
      }
   &:hover h3, &:hover h4 {
-	      color: #19197d !important;
+      color: #19197d !important;
 	      }
   &:hover h3 mark {
     color: #19197d;

@@ -14,18 +14,13 @@
 		<h3><% name = result.highlight_result['name']['value'].try(:html_safe)  %>
 		    <%= name.blank? ? result.name : name %>
 		</h3>
-	    </div>
-	  </div>
 
 	  <% unless result.listed_tracks.empty? %>
-	      <div class="row">
-		  <div class="col-xl-6">
-	<h4>	      <%= 			    result.listed_tracks.map(&:name).to_sentence %>
-	</h4>
-</div>
-
-	      </div>
+	      <h4><%= 			    result.listed_tracks.map(&:name).to_sentence %>
+	      </h4>
 	  <% end %>
+	    </div>
+	  </div>
 
 	  <div class="row">
 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
