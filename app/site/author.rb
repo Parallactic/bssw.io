@@ -18,7 +18,7 @@ class Author < SearchResult
   }
 
   def should_generate_new_friendly_id?
-    (new_record? || slug.blank?) && !last_name.blank?
+    (new_record? || slug.blank?) && last_name.present?
   end
 
   def display_name

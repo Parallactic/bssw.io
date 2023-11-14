@@ -4,6 +4,6 @@ require 'rails_helper'
 
 RSpec.describe Rebuild, type: :model do
   it 'exists' do
-    expect(Rebuild.new).to be_a(Rebuild)
+    expect(described_class.new).to be_a(described_class)
   end
 end

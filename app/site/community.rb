@@ -13,7 +13,7 @@ class Community < MarkdownImport
   friendly_id :name, use: %i[finders slugged scoped], scope: :rebuild_id
 
   def resources
-    resource_paths.map { |path| SiteItem.find_by_base_path(File.basename(path)) }.delete_if(&:nil?)
+    resource_paths.map { |path| SiteItem.find_by(base_path: File.basename(path)) }.delete_if(&:nil?)
   end
 
   def update_from_content(doc, rebuild)

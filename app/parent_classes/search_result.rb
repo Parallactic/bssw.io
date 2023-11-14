@@ -41,8 +41,6 @@ class SearchResult < MarkdownImport
         rebuild_id:, slug: candidates.first.to_s
       ).first.base_path}"
       rebuild.save
-      puts rebuild.slug_collisions
-      puts "-------- #{rebuild_id}"
     end
     super
   end

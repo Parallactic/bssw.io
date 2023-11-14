@@ -49,9 +49,9 @@ RSpec.describe RebuildsController, type: :controller do
       wi = SearchResult.displayed.find(@what_is_slug)
       expect(wi.topics).to include topic
       expect(topic.site_items).to include wi
-      expect(topic.site_items).to include HowTo.displayed.find_by_name(@how_to_name)
-      expect(topic.category).to eq Category.displayed.find_by_name(
-        @category_name
+      expect(topic.site_items).to include HowTo.displayed.find_by(name: @how_to_name)
+      expect(topic.category).to eq Category.displayed.find_by(
+        name: @category_name
       )
 
       expect(Fellow.all).not_to be_empty
@@ -60,9 +60,9 @@ RSpec.describe RebuildsController, type: :controller do
       expect(Fellow.first.name).not_to be_blank
       expect(Fellow.first.long_bio).not_to be_blank
 
-      expect(BlogPost.find_by_slug(@blog_post_slug)).to be_a BlogPost
+      expect(BlogPost.find_by(slug: @blog_post_slug)).to be_a BlogPost
 
-      expect(BlogPost.find_by_slug(@blog_post_slug).related_posts.size).to eq 5
+      expect(BlogPost.find_by(slug: @blog_post_slug).related_posts.size).to eq 5
       expect(Quote.all).not_to be_empty
       expect(Announcement.all).not_to be_empty
       expect(FeaturedPost.displayed.first.site_item || FeaturedPost.displayed.first.image).not_to be_nil

@@ -3,11 +3,11 @@
 # display blog
 class BlogPostsController < ApplicationController
   def index
-    @page = Page.displayed.find_by_name('BSSw Blog')
+    @page = Page.displayed.find_by(name: 'BSSw Blog')
     author = params[:author]
     @posts = scoped_resources.blog
     if author
-      @posts = @posts.with_author(Author.find_by_slug_and_rebuild_id(author, RebuildStatus.first.display_rebuild_id))
+      @posts = @posts.with_author(Author.find_by(slug: author, rebuild_id: RebuildStatus.first.display_rebuild_id))
     end
     @posts = @posts.paginate(page: params[:page], per_page: 25)
   end

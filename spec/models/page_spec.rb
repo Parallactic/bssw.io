@@ -19,12 +19,12 @@ Publish: true
     RebuildStatus.create(display_rebuild_id: @rebuild.id)
 
     res = @rebuild.find_or_create_resource('Site/Homepage.md')
-    expect(res).to be_a(Page)
+    expect(res).to be_a(described_class)
     res.parse_and_update(content)
     res.reload
     expect(res.content).to match 'bar'
     expect(res.name).to match 'Foo'
     expect(res.home?).to eq true
-    expect(Page.names_to_pages(['Foo'])).to include(res)
+    expect(described_class.names_to_pages(['Foo'])).to include(res)
   end
 end

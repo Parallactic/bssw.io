@@ -59,8 +59,8 @@ class GithubImporter < ApplicationRecord
       begin
         rebuild.process_file(file)
       rescue StandardError => e
-        puts "uh-oh: #{e.inspect}"
-#        puts file.full_name
+        Rails.logger.debug "uh-oh: #{e.inspect}"
+        #        puts file.full_name
       end
     end
     puts 'time to complete'

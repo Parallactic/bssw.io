@@ -19,15 +19,15 @@ Announcement:
 - Display dates: #{4.days.ago.strftime('%m/%d/%Y')}-#{2.days.ago.strftime('%m/%d/%Y')} # #
 
 "
-    Announcement.import(content, FactoryBot.create(:rebuild).id)
-    expect(Announcement.count).to eq 3
-    current_announcement = Announcement.find_by(start_date: 1.day.ago)
-    late_announcement = Announcement.find_by(start_date: 1.day.from_now)
-    early_announcement = Announcement.find_by(start_date: 4.days.ago)
-    expect(Announcement.first.start_date).not_to be_nil
+    described_class.import(content, FactoryBot.create(:rebuild).id)
+    expect(described_class.count).to eq 3
+    current_announcement = described_class.find_by(start_date: 1.day.ago)
+    late_announcement = described_class.find_by(start_date: 1.day.from_now)
+    early_announcement = described_class.find_by(start_date: 4.days.ago)
+    expect(described_class.first.start_date).not_to be_nil
     expect(current_announcement).not_to be_nil
     expect(late_announcement).not_to be_nil
-    expect(Announcement.for_today).to include(current_announcement)
-    expect(Announcement.for_today).not_to include(early_announcement)
+    expect(described_class.for_today).to include(current_announcement)
+    expect(described_class.for_today).not_to include(early_announcement)
   end
 end

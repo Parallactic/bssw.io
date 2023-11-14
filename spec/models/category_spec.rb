@@ -13,9 +13,9 @@ A fooble given a blah
 
     cat = RebuildStatus.displayed_rebuild.find_or_create_resource('Site/Topics/foo.md')
     cat.parse_and_update(content)
-    expect(cat).to be_a(Category)
+    expect(cat).to be_a(described_class)
     expect(cat.order_num).to eq 2
-    topic = Topic.find_by_name('Fooble')
+    topic = Topic.find_by(name: 'Fooble')
     expect(topic.overview).to match('fooble')
     expect(cat.topics).to include(topic)
   end

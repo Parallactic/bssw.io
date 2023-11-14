@@ -12,7 +12,7 @@ class AuthorUtility
     return [nil, nil] unless name.respond_to?(:split)
     return %w[BSSw Community] if name.match?(/BSSw Community/i)
 
-    names = name.split(' ').map { |chunk| chunk.blank? ? nil : chunk }
+    names = name.split(' ').map(&:presence)
     last_name = names.last
     first_name = [names - [last_name]].join(' ')
     [first_name.strip, last_name.strip]

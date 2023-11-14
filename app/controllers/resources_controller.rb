@@ -4,7 +4,7 @@
 class ResourcesController < ApplicationController
   require 'will_paginate/array'
 
-  if Rails.env != 'preview'
+  unless Rails.env.preview?
     http_basic_authenticate_with name: Rails.application.credentials.import['name'],
                                  password: Rails.application.credentials.import['password'], only: ['import']
   end
@@ -33,8 +33,8 @@ class ResourcesController < ApplicationController
 
     @search = search_string
     @resources = []
-#    (1..50).each do |i|
-      @resources += SearchResult.algolia_search(search_string, hitsPerPage: 1000, page: 1)
+    #    (1..50).each do |i|
+    @resources += SearchResult.algolia_search(search_string, hitsPerPage: 1000, page: 1)
     #   @resources += @results
     # end
     @resources = if params[:view] != 'all'
@@ -44,11 +44,11 @@ class ResourcesController < ApplicationController
                  end
 
     render 'index'
-    end
+  end
 
   def authors
     @authors = Author.displayed.order('alphabetized_name ASC, first_name ASC')
-    @page = Page.displayed.find_by_name('Contributors')
+    @page = Page.displayed.find_by(name: 'Contributors')
   end
 
   private
@@ -67,13 +67,13 @@ class ResourcesController < ApplicationController
     @resources = @resources.first(75)
   end
 
-  def paginate
-    @resources = if params[:view] == 'all'
-                   @resources.paginate(page: 1, per_page: @resources.size)
-                 else
-                   @resources.paginate(page: params[:page], per_page: 75)
-                 end
-  end
+  # def paginate
+  #   @resources = if params[:view] == 'all'
+  #                  @resources.paginate(page: 1, per_page: @resources.size)
+  #                else
+  #                  @resources.paginate(page: params[:page], per_page: 75)
+  #                end
+  # end
 
   def set_filters
     category = params[:category]

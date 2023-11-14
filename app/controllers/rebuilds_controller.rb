@@ -2,7 +2,7 @@
 
 # display and perform rebuilds
 class RebuildsController < ApplicationController
-  if Rails.env != 'preview' && Rails.env != 'development'
+  if !Rails.env.preview? && !Rails.env.development?
     http_basic_authenticate_with name: Rails.application.credentials[:import][:name],
                                  password: Rails.application.credentials[:import][:password]
   end
@@ -22,8 +22,8 @@ class RebuildsController < ApplicationController
 
   def import
     branch
-    puts "branch is #{@branch}"
-    rebuild = Rebuild.create(started_at: Time.now, ip: request.ip)
+    Rails.logger.debug "branch is #{@branch}"
+    rebuild = Rebuild.create(started_at: Time.zone.now, ip: request.ip)
     RebuildStatus.start(rebuild, @branch)
     GithubImporter.populate(@branch)
     flash[:notice] = 'Import completed!'

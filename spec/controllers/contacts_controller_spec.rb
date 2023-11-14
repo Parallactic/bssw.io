@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ContactsController, type: :controller do
   render_views
 
-  before(:each) do
+  before do
     @rebuild = Rebuild.create
     RebuildStatus.all.each(&:destroy)
     RebuildStatus.create(display_rebuild_id: @rebuild.id)

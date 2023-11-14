@@ -40,8 +40,8 @@ class EventsController < ApplicationController
 
   def filter_events_by_time(events)
     #    set_cache_key
-    @page = Page.find_by_name('Upcoming Events')
-    @page = Page.find_by_name('Past Events') if params[:past]
+    @page = Page.find_by(name: 'Upcoming Events')
+    @page = Page.find_by(name: 'Past Events') if params[:past]
 
     @events = @upcoming_events = events.upcoming
     return unless params[:past]
