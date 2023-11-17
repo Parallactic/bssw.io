@@ -7,10 +7,12 @@ class Rebuild < ApplicationRecord
   after_create :set_location
 
   def set_location
-    update_attribute(
-      :location,
-      Geocoder.search(ip).try(:first).try(:data).try(:[], 'city')
-    )
+    unless ip.blank?
+      update_attribute(
+        :location,
+        Geocoder.search(ip).try(:first).try(:data).try(:[], 'city')
+      )
+    end
   end
 
   def self.in_progress

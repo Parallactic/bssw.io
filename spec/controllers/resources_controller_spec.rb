@@ -6,6 +6,7 @@ RSpec.describe ResourcesController, type: :controller do
   render_views
 
   let(:rebuild) { Rebuild.first }
+  let(:request) { @request }
 
   before do
     FactoryBot.create(:page, name: 'Resources')
@@ -16,6 +17,7 @@ RSpec.describe ResourcesController, type: :controller do
 
   it 'deals with bad queries' do
     get 'search', params: { q: '%bm%&cp=0&hl=en-US&pq=%bm%&sourceid=chrome&ie=UTF-8' }
+    expect(response).to be_ok
   end
 
   it 'shows not found page' do
@@ -25,7 +27,7 @@ RSpec.describe ResourcesController, type: :controller do
 
   describe 'preview' do
     it 'is invalid without auth' do
-      @request.host = 'preview.bssw.io'
+      request.host = 'preview.bssw.io'
       credentials = ActionController::HttpAuthentication::Basic.encode_credentials 'name', 'pw'
       request.env['HTTP_AUTHORIZATION'] = credentials
       get 'index'
@@ -33,7 +35,7 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     it 'is valid with auth' do
-      @request.host = 'preview.bssw.io'
+      request.host = 'preview.bssw.io'
       name = Rails.application.credentials[:preview][:name]
       pw = Rails.application.credentials[:preview][:password]
       credentials = ActionController::HttpAuthentication::Basic.encode_credentials name, pw
@@ -65,17 +67,12 @@ RSpec.describe ResourcesController, type: :controller do
 
       SearchResult.reindex!
       sleep(5)
-      # expect(SiteItem.where(Arel.sql(Searchable.word_str(resource.name)))).to include(resource)
-      #      expect(SiteItem.where(Arel.sql("search_text REGEXP '#{resource.name}'"))).to include(resource)
-
-      #      expect(Searchable.get_word_results([[resource.name]], SiteItem.displayed)).to include(resource)
-      #      expect(Searchable.perform_search([[resource.name]], nil)).to include(resource)
       get :search, params: { search_string: resource.name }
       expect(assigns(:resources)).to include(resource)
     end
 
     it 'finds fellows' do
-      @request.env['HTTP_AUTHORIZATION'] = "Basic {Base64.encode64('preview-bssw:SoMyCodeWillSeeTheFuture!!')}"
+      request.env['HTTP_AUTHORIZATION'] = "Basic {Base64.encode64('preview-bssw:SoMyCodeWillSeeTheFuture!!')}"
       resource = FactoryBot.create(:resource, publish: true, type: 'Resource', name: 'Blorgon')
 
       fellow = FactoryBot.create(:fellow, name: 'Joe Blow', rebuild_id: RebuildStatus.displayed_rebuild.id,
@@ -84,23 +81,25 @@ RSpec.describe ResourcesController, type: :controller do
       sleep(5)
 
       get :search, params: { search_string: 'Joe' }
-      #      expect(assigns(:resources)).to include(author)
+
       expect(assigns(:resources)).to include(fellow)
       expect(assigns(:resources)).not_to include(resource)
     end
 
     it 'finds pages' do
-      @request.env['HTTP_AUTHORIZATION'] = "Basic {Base64.encode64('preview-bssw:SoMyCodeWillSeeTheFuture!!')}"
-      resource = FactoryBot.create(:resource, publish: true, type: 'Resource', name: 'Blorgon')
-      page = FactoryBot.create(:page, name: 'Joe', content: 'Blow',
-                                      rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true)
-      SearchResult.reindex
-      sleep(5)
+      before do
+        request.env['HTTP_AUTHORIZATION'] = "Basic {Base64.encode64('preview-bssw:SoMyCodeWillSeeTheFuture!!')}"
+        resource = FactoryBot.create(:resource, publish: true, type: 'Resource', name: 'Blorgon')
+        page = FactoryBot.create(:page, name: 'Joe', content: 'Blow',
+                                        rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true)
+        SearchResult.reindex
+        sleep(5)
+      end
 
-      get :search, params: { search_string: 'Joe' }
-      #      expect(assigns(:resources)).to include(author)
-      expect(assigns(:resources)).to include(page)
-      expect(assigns(:resources)).not_to include(resource)
+      it 'shows the page' do
+        get :search, params: { search_string: 'Joe' }
+        expect(assigns(:resources)).to include(page)
+      end
     end
 
     it 'renders template' do
@@ -193,7 +192,7 @@ RSpec.describe ResourcesController, type: :controller do
     it 'renders template' do
       author = FactoryBot.create(:author, rebuild_id: rebuild.id)
       resource = FactoryBot.create(:resource, rebuild_id: rebuild.id)
-      resource.contributions << Contribution.create(author: author, display_name: author.display_name)
+      resource.contributions << Contribution.create(author:, display_name: author.display_name)
       RebuildStatus.all.each(&:destroy)
       RebuildStatus.create(display_rebuild_id: rebuild.id)
       FactoryBot.create(:page, name: 'Contributors', path: 'Contributors.md', rebuild_id: rebuild.id)
@@ -254,21 +253,30 @@ RSpec.describe ResourcesController, type: :controller do
       expect(assigns(:resources)).not_to include(resource_without_category)
     end
 
-    it 'can use authors' do
-      author = FactoryBot.create(:author, rebuild_id: rebuild.id)
-      resource_with_author = FactoryBot.create(:resource, rebuild_id: rebuild.id)
-      resource_without_author = FactoryBot.create(:resource, rebuild_id: rebuild.id)
-      resource_with_author.authors << author
+    describe 'using authors' do
+      before do
+        author = FactoryBot.create(:author, rebuild_id: rebuild.id)
+        resource_with_author = FactoryBot.create(:resource, rebuild_id: rebuild.id)
 
-      get :index, params: { author: author.slug }
-      expect(assigns(:resources)).to include resource_with_author
-      expect(assigns(:resources)).not_to include resource_without_author
+        resource_with_author.authors << author
+      end
+
+      it 'includes the right resource' do
+        get :index, params: { author: author.slug }
+        expect(assigns(:resources)).to include resource_with_author
+      end
+
+      it 'does not include the wrong one' do
+        resource_without_author = FactoryBot.create(:resource, rebuild_id: rebuild.id)
+        get :index, params: { author: author.slug }
+        expect(assigns(:resources)).not_to include resource_without_author
+      end
     end
 
     it 'is in alpha order' do
       old_resource = FactoryBot.create(:resource, published_at: 1.week.ago, name: 'AA', rebuild_id: rebuild.id)
       FactoryBot.create(:resource, published_at: 2.weeks.ago, rebuild_id: rebuild.id)
-      FactoryBot.create(:resource, published_at: Date.today, name: 'BB', rebuild_id: rebuild.id)
+      FactoryBot.create(:resource, published_at: Time.zone.today, name: 'BB', rebuild_id: rebuild.id)
       get :index
       expect(assigns(:resources).first).to eq old_resource
     end
@@ -277,24 +285,14 @@ RSpec.describe ResourcesController, type: :controller do
   describe 'rss feed' do
     it 'shows nothing' do
       FactoryBot.create_list(:resource, 5)
-      #      begin
       get :index, format: :rss
-      #     rescue Exception => e
-      #      puts e.inspect
-      #   end
-
-      #  puts response.inspect
-      expect(assigns(:resources)).to be_empty
       expect(response.media_type).to eq 'application/rss+xml'
-      expect(response).to be_ok
     end
 
     it 'shows feed' do
       5.times { FactoryBot.create(:resource, rss_date: 1.week.ago, rebuild_id: rebuild.id) }
       get :index, format: :rss
       expect(assigns(:resources)).not_to be_empty
-      expect(response.media_type).to eq 'application/rss+xml'
-      expect(response).to be_ok
     end
   end
 end

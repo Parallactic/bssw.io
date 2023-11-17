@@ -26,20 +26,22 @@ RSpec.describe Event, type: :model do
   end
 
   it 'has a start time' do
-    expect(event.start_at).not_to be_nil
-
     expect(event.start_at).to be < event.end_at
   end
 
   it 'has an end time' do
     expect(event.end_at).to be > Time.zone.today
+  end
 
+  it 'has a location' do
     expect(event.location).to match 'Place'
-    #    expect(Event.past).not_to include(event)
+  end
+
+  it 'is upcoming' do
     expect(described_class.upcoming).to include(event)
   end
 
-  it 'can create itself from content' do
+  it 'can have additional dates' do
     content = "# Foo \n bar
         \n* Dates: December 3, #{Time.zone.today.year} - January 5
         \n* Submission Date: November 1, #{Time.zone.today.year}
@@ -48,8 +50,6 @@ RSpec.describe Event, type: :model do
         \n* Location: Place \n* \n* <!--- Publish: Yes --->"
 
     event.parse_and_update(content)
-    event.reload
-    expect(event.additional_dates).not_to be_empty
     expect(
       event.additional_dates.map(&:additional_date_values).flatten.map(&:date).flatten
     ).to include(Chronic.parse('July 4 2022').to_date)
@@ -60,7 +60,6 @@ RSpec.describe Event, type: :model do
     \n* Dates: 10-9-18 - 1-25-19
     \n* Location: Place \n* \n* <!--- Publish: Yes --->"
 
-    event = Rebuild.create.find_or_create_resource('Events/foo.md')
     event.parse_and_update(content)
     expect(event.start_at).to eq Chronic.parse('October 9 2018').to_date
   end
@@ -70,7 +69,6 @@ RSpec.describe Event, type: :model do
     \n* Dates: February 1 - March 2 #{Time.zone.today.year}
     \n* Location: Place \n* \n* <!--- Publish: Yes --->"
 
-    event = Rebuild.create.find_or_create_resource('Events/foo.md')
     event.parse_and_update(content)
     expect(event.start_at.to_date).to eq Chronic.parse("February 1 #{Time.zone.today.year}").to_date
   end
@@ -79,18 +77,20 @@ RSpec.describe Event, type: :model do
     content = "# Foo \n bar
     \n* Dates: December 1 - December 20 #{Time.zone.today.year}
     \n* Location: Place \n* \n* <!--- Publish: Yes --->"
-    event = Rebuild.create.find_or_create_resource('Events/foo.md')
+
     event.parse_and_update(content)
     expect(event.start_at.to_date).to eq Chronic.parse("December 1 #{Time.zone.today.year}").to_date
   end
 
   describe 'parsing dates across years' do
-    content = "# Foo \n bar
+    before do
+      content = "# Foo \n bar
      \n* Dates: December 1 - January 2
      \n* Location: Place \n* \n* <!--- Publish: Yes --->"
 
-    event = Rebuild.create.find_or_create_resource('Events/foo.md')
-    event.parse_and_update(content)
+      event.parse_and_update(content)
+    end
+
     it 'starts this year' do
       expect(event.start_at).to eq Chronic.parse("December 1 #{Time.zone.today.year}").to_date
     end

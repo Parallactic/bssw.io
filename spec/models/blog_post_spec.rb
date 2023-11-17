@@ -3,13 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe BlogPost, type: :model do
-  before(:all) do
-    r = Rebuild.create
-    RebuildStatus.create(display_rebuild_id: r.id)
-  end
-
-  it 'can create itself from content' do
-    content = "# Foo \n#### Publication date: Jan 1, 2017
+  let(:content) {
+    "# Foo \n#### Publication date: Jan 1, 2017
 \n#### Contributed by [Jane Does](https://github.com)\n \n bar
 \n
 \n
@@ -23,20 +18,42 @@ Categories: Blah Blah
 Publish: true
 
 -->"
+  }
+
+  let(:res) { Rebuild.create.find_or_create_resource('Blog/FooPost.md') }
+
+  before do
+    r = Rebuild.create
+    RebuildStatus.create(display_rebuild_id: r.id)
     FactoryBot.create(:category, name: 'Better Blah Blah')
-
-    res = Rebuild.create.find_or_create_resource('Blog/FooPost.md')
-    expect(res).to be_a(described_class)
-
     res.parse_and_update(content)
-    res.reload
+  end
+
+  it 'gets content' do
     expect(res.content).to match 'bar'
-    puts res.topics.map(&:name)
+  end
+
+  it 'gets quoted topics' do
     expect(res.topics.map(&:name)).to include('quoted, topic')
+  end
+
+  it 'gets quoted topics at end of list' do
     expect(res.topics.map(&:name)).to include('end quo')
+  end
+
+  it 'gets quoted topic at beginning of list' do
     expect(res.topics.map(&:name)).to include('first qutoe')
+  end
+
+  it 'gets categories' do
     expect(res.categories).not_to be_empty
+  end
+
+  it 'gets authors' do
     expect(res.authors.map(&:last_name).to_s).to match 'Doe'
+  end
+
+  it 'gets caption' do
     expect(res.hero_image_caption).not_to be_nil
   end
 end
