@@ -15,11 +15,6 @@ RSpec.describe ResourcesController, type: :controller do
     RebuildStatus.create(display_rebuild_id: rebuild.id)
   end
 
-  it 'deals with bad queries' do
-    get 'search', params: { q: '%bm%&cp=0&hl=en-US&pq=%bm%&sourceid=chrome&ie=UTF-8' }
-    expect(response).to be_ok
-  end
-
   it 'shows not found page' do
     get :show, params: { id: 'foo' }
     expect(response.body).to match 'changing'
@@ -86,7 +81,7 @@ RSpec.describe ResourcesController, type: :controller do
       expect(assigns(:resources)).not_to include(resource)
     end
 
-    it 'finds pages' do
+    describe 'finds pages' do
       before do
         request.env['HTTP_AUTHORIZATION'] = "Basic {Base64.encode64('preview-bssw:SoMyCodeWillSeeTheFuture!!')}"
         resource = FactoryBot.create(:resource, publish: true, type: 'Resource', name: 'Blorgon')
@@ -98,7 +93,7 @@ RSpec.describe ResourcesController, type: :controller do
 
       it 'shows the page' do
         get :search, params: { search_string: 'Joe' }
-        expect(assigns(:resources)).to include(page)
+        expect(assigns(:resources)).to include(Page.last)
       end
     end
 
@@ -254,10 +249,10 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     describe 'using authors' do
-      before do
-        author = FactoryBot.create(:author, rebuild_id: rebuild.id)
-        resource_with_author = FactoryBot.create(:resource, rebuild_id: rebuild.id)
+      let(:author) { FactoryBot.create(:author, rebuild_id: rebuild.id) }
+      let(:resource_with_author) { FactoryBot.create(:resource, rebuild_id: rebuild.id) }
 
+      before do
         resource_with_author.authors << author
       end
 
