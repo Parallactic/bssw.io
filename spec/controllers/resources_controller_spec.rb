@@ -102,6 +102,11 @@ RSpec.describe ResourcesController, type: :controller do
       expect(response).to render_template :index
     end
 
+    it 'shows recent' do
+      get :index, params: { recent: true }
+      expect(response).to render_template :index
+    end
+
     it 'performs an empty search' do
       get :search, params: { search_string: 'foob' }
       SearchResult.reindex!

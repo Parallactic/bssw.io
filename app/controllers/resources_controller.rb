@@ -33,10 +33,7 @@ class ResourcesController < ApplicationController
 
     @search = search_string
     @resources = []
-    #    (1..50).each do |i|
     @resources += SearchResult.algolia_search(search_string, hitsPerPage: 1000, page: 1)
-    #   @resources += @results
-    # end
     @resources = if params[:view] != 'all'
                    @resources.paginate(page:, per_page: 25)
                  else
@@ -60,24 +57,22 @@ class ResourcesController < ApplicationController
     @resources = scoped_resources.with_category(@category) if @category
     @resources = scoped_resources.with_author(@author) if @author
     @resources = @resources.standard_scope
+    @resources = @resources.order("published_at desc") if params[:recent]
     @total = @resources.size
-    return unless @resources.size > 75 && params[:view] != 'all'
+    @resources = if params[:view] != 'all'
+                   @resources.paginate(page: @page_num, per_page: 75)
+                 else
+                   @resources.paginate(page: @page_num, per_page: @resources.size)
+                 end
 
-    @resources = @resources.first(75)
   end
 
-  # def paginate
-  #   @resources = if params[:view] == 'all'
-  #                  @resources.paginate(page: 1, per_page: @resources.size)
-  #                else
-  #                  @resources.paginate(page: params[:page], per_page: 75)
-  #                end
-  # end
 
   def set_filters
     category = params[:category]
     topic = params[:topic]
     author = params[:author]
+    @page_num = params[:page] || 1
     @category = Category.displayed.find(category) if category
     @topic = Topic.displayed.find(topic) if topic
     @author = Author.displayed.find(author) if author
