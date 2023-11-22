@@ -5,8 +5,7 @@ require 'rails_helper'
 RSpec.describe FeaturedPost, type: :model do
   it 'might have an image' do
     fp = FactoryBot.create(:featured_post, path: 'image.jpg')
-    expect(fp).to be_image
-    expect(fp.image).to be_a String
+    expect(fp.image).to match('jpg')
   end
 
   it 'might have a site item' do

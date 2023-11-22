@@ -9,6 +9,9 @@ AllCops:
     - 'db/migrate/*'
     - 'bin/*'
 
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+    
 Metrics/BlockLength:
     Exclude:
       - 'config/routes.rb'

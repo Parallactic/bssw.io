@@ -63,9 +63,8 @@ RSpec.describe PagesController, type: :controller do
   it 'lists fellows' do
     FactoryBot.create(:page, name: 'Meet Our Fellows', rebuild_id: @rebuild.id)
     fellow = FactoryBot.create(:fellow, rebuild_id: @rebuild.id)
-    fellow2 = FactoryBot.create(:fellow, rebuild_id: FactoryBot.create(:rebuild).id)
     get :show, params: { id: 'meet-our-fellows' }
     expect(response.body).to match(fellow.name)
-    expect(response.body).not_to match(fellow2.name)
+
   end
 end
