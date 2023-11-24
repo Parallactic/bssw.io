@@ -6,9 +6,9 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <h3><%= post.name %></h3>
         </div>
-	<% if result.respond_to?(:listed_tracks) %>
-	<% unless result.listed_tracks.empty? %>
-	<h4><%= 			    result.listed_tracks.map(&:name).to_sentence %>
+	<% if post.respond_to?(:listed_tracks) %>
+	<% unless post.listed_tracks.empty? %>
+	<h4><%= 			    post.listed_tracks.map(&:name).to_sentence %>
 	</h4>
 	<% end %>
 	<% end %>
