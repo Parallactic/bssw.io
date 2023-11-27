@@ -45,12 +45,12 @@ class Rebuild < ApplicationRecord
   end
 
   def clean(file_path)
-    # if slug_collisions.present?
-    #   new_cols = slug_collisions.split('\n')
-    #   new_cols = new_cols.map(&:strip)
-    #   new_cols = new_cols.uniq
-    #   update(slug_collisions: new_cols.join('<br />'))
-    # end
+    if slug_collisions.present?
+      new_cols = slug_collisions.split('\n')
+      new_cols = new_cols.map(&:strip)
+      new_cols = new_cols.uniq
+      update(slug_collisions: new_cols.join('<br />'))
+    end
 
     update(slug_collisions: "<ul>#{slug_collisions}</ul>")
     Category.displayed.each { |category| category.update(slug: nil) }
