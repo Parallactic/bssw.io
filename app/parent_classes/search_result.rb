@@ -37,9 +37,9 @@ class SearchResult < MarkdownImport
   def resolve_friendly_id_conflict(candidates)
     if rebuild && candidates.first
 
-      rebuild.slug_collisions = rebuild.slug_collisions.to_s + "\n#{candidates.first.inspect} #{base_path} #{SearchResult.where(
+      rebuild.slug_collisions = rebuild.slug_collisions.to_s + "<li> <strong>Slug:</strong> #{candidates.first.inspect} <br /> <strong>Filename of item trying to use slug:</strong> #{base_path} <br /> <strong>Filename of conflicting item:</strong> #{SearchResult.where(
         rebuild_id:, slug: candidates.first.to_s
-      ).first.base_path}"
+      ).first.base_path}</li>"
       rebuild.save
     end
     super
