@@ -4,6 +4,16 @@
 class Rebuild < ApplicationRecord
   default_scope { order(created_at: 'desc') }
 
+#  after_save :print_collis
+
+  def print_collis
+    puts "...#{id}...\n#{self.slug_collisions}"
+    caller.each do |line|
+      puts line.split("`").pop.gsub("'", "")
+    end
+    puts "..."
+  end
+  
   after_create :set_location
 
   def set_location
@@ -20,12 +30,13 @@ class Rebuild < ApplicationRecord
   end
 
   def process_file(file)
+    
     full_name = file.full_name
     begin
       resource = process_path(full_name, file.read)
 
       update_attribute(:files_processed, "#{files_processed}<li>#{resource.try(:path)}</li>")
-      
+      puts "..... #{slug_collisions} ......"
       resource.try(:save)
     rescue StandardError => e
       record_errors(File.basename(full_name), e)
@@ -45,14 +56,18 @@ class Rebuild < ApplicationRecord
   end
 
   def clean(file_path)
-    if slug_collisions.present?
-      new_cols = slug_collisions.split('\n')
-      new_cols = new_cols.map(&:strip)
-      new_cols = new_cols.uniq
-      update(slug_collisions: new_cols.join('<br />'))
-    end
+    # if slug_collisions.present?
+    #   new_cols = slug_collisions.split('\n')
+    #   new_cols = new_cols.map(&:strip)
+    #   new_cols = new_cols.uniq
+    #   update(slug_collisions: new_cols.join('<br />'))
+    # end
 
-    update(slug_collisions: "<ul>#{slug_collisions}</ul>")
+    #    update(slug_collisions: "<ul>#{slug_collisions}</ul>")
+    puts "id #{id}"
+    puts "collisions ---"
+    puts slug_collisions
+    puts ".."
     Category.displayed.each { |category| category.update(slug: nil) }
     AuthorUtility.all_custom_info(id, file_path)
     clear_old
