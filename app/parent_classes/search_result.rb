@@ -41,8 +41,6 @@ class SearchResult < MarkdownImport
       rebuild.slug_collisions = rebuild.slug_collisions.to_s + "<li><strong>Slug:</strong> #{candidates.first.inspect}  <strong>Filename of item trying to use slug:</strong> #{base_path} <br /><strong>Filename of conflicting item:</strong> #{SearchResult.where(rebuild_id:, slug: candidates.first.to_s).first.base_path}</li>"
 
       rebuild.save
-      puts "id #{rebuild.id}"
-      puts rebuild.slug_collisions
     end
     super
   end
