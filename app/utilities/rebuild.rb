@@ -4,7 +4,7 @@
 class Rebuild < ApplicationRecord
   default_scope { order(created_at: 'desc') }
 
-#  after_save :print_collis
+  after_save :print_collis
 
   def print_collis
     puts "...#{id}...\n#{self.slug_collisions}"
