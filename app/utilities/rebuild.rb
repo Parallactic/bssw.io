@@ -44,13 +44,7 @@ class Rebuild < ApplicationRecord
   end
 
   def clean(file_path)
-    if slug_collisions.present?
-      new_cols = slug_collisions.split('\n')
-      new_cols = new_cols.map(&:strip)
-      new_cols = new_cols.uniq
-      update(slug_collisions: new_cols.join('<br />'))
-
-    end
+ 
 
     Category.displayed.each { |category| category.update(slug: nil) }
     AuthorUtility.all_custom_info(id, file_path)
@@ -69,14 +63,13 @@ class Rebuild < ApplicationRecord
     classes = [Community, Category, Topic, Announcement, Author, Quote, SearchResult, FeaturedPost, Fellow, Page]
     everything = Rebuild.where(['id NOT IN (?)', rebuild_ids])
     classes.each do |klass|
-      everything += klass.where(['rebuild_id NOT IN (?)', rebuild_ids])
+      Rails.logger.debug everything += klass.where(['rebuild_id NOT IN (?)', rebuild_ids])
       everything += klass.where(rebuild_id: nil)
     end
 
     everything.each(&:destroy)
     Contribution.where(site_item_id: nil).each(&:destroy)
     Contribution.where(author_id: nil).each(&:destroy)
-   
   end
 
   def self.file_structure # rubocop:disable Metrics/MethodLength
@@ -105,12 +98,10 @@ class Rebuild < ApplicationRecord
       Quote.import(content)
     elsif path.match('Announcements')
       Announcement.import(content, id)
-    elsif path.match('BlogTracks')
-      Track.import(content, id)
-else
-resource = find_or_create_resource(path)
-resource.parse_and_update(content)
-resource
+    else
+      resource = find_or_create_resource(path)
+      resource.parse_and_update(content)
+      resource
     end
   end
 

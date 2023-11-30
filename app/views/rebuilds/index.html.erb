@@ -113,7 +113,7 @@
 		    <a href='#' id='hidecols<%= r.id %>' onclick="$('#cols<%= r.id %>').hide(); $('#showcols<%= r.id %>').show(); $('#hidecols<%= r.id %>').hide();">Hide List</a>
 		    </p>
 		    <div id='cols<%= r.id %>'>
-			<%= r.slug_collisions.try(:html_safe) %>
+		      <ul><%= r.slug_collisions.try(:html_safe) %></ul>
 		    </div>
 		    <script type='text/javascript'>
 		     $('#cols<%= r.id %>').hide();	
