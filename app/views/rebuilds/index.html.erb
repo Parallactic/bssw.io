@@ -122,7 +122,7 @@
 		    </script>
 
 		</td>
-				<td><%= r.unpublished_files %></td>
+				<td><%= r.unpublished_files.try(:html_safe) %></td>
 		<td><%= r.errors_encountered.try(:html_safe) %></td>
 		<td><% if r != RebuildStatus.displayed_rebuild && Rebuild.first(10).include?(r) %> <%= button_to 'Set As Displayed', {:action => 'make_displayed', :id => r.id}, data: { confirm: "Do you really want to change the displayed rebuild?"} %> <% end  %>
 <% if r == RebuildStatus.displayed_rebuild %>
