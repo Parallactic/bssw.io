@@ -5,17 +5,25 @@
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
           <h3><%= post.name %></h3>
+
+	<% if post.respond_to?(:listed_tracks) %>
+	<% unless post.listed_tracks.empty? %>
+	<h4><%= 			    post.listed_tracks.map(&:name).to_sentence %>
+	</h4>
+	<% end %>
+	<% end %>
+
         </div>
       </div>
       <div class="row">
       	<div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
-         <p class='small-caps'><strong>Published</strong> <%= post.published_at.try(:strftime, '%b %d, %Y') %></p>
-       </div>
-       <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
-         <p class='small-caps'><%= author_list_without_links(post)  %></p>
-       </div>
-     </div>
-   </a>
- </div>
+          <p class='small-caps'><strong>Published</strong> <%= post.published_at.try(:strftime, '%b %d, %Y') %></p>
+	</div>
+	<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
+          <p class='small-caps'><%= author_list_without_links(post)  %></p>
+	</div>
+      </div>
+    </a>
+  </div>
 </div>
 

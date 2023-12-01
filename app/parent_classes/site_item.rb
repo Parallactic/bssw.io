@@ -6,17 +6,22 @@ class SiteItem < SearchResult
   require 'csv'
 
   has_and_belongs_to_many :topics, -> { distinct }, join_table: 'site_items_topics', dependent: :destroy
+  has_and_belongs_to_many :tracks, -> { distinct }, join_table: 'site_items_tracks'
   before_destroy { topics.clear }
   before_destroy { contributions.clear }
   has_many :contributions, join_table: 'contributions', dependent: :destroy
   has_many :authors, through: :contributions
-  # has_and_belongs_to_many :communities, through: :features, class_name: 'Resource'
 
   has_many :features
 
-  def rss_date
-    super || published_at
+
+  def listed_tracks
+    tracks.where(listed: true)
   end
+  
+def rss_date
+super || published_at
+end
 
   def categories
     topics.map(&:category).uniq
@@ -26,13 +31,4 @@ class SiteItem < SearchResult
     items = where(name: nil)
     items.each(&:delete)
   end
-
-  # def set_search_text
-  #   text = ActionController::Base.helpers.strip_tags(
-  #     " #{content.to_s.gsub('"', '')} #{try(:author_list)} #{name} #{try(:description)} #{try(:location)} #{try(:organizers)} ".downcase.gsub(/\s+/, " ")
-  #   )
-  #   #    puts text
-  #   update(search_text: text)
-  #   #    save
-  # end
 end

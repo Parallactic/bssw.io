@@ -15,6 +15,7 @@ RSpec.describe BlogPost, type: :model do
 <!--
 Topics: \"first qutoe\", foo, bar, \"quoted, topic\", \"end quo\"
 Categories: Blah Blah
+Track: Deep dive
 Publish: true
 
 -->"
@@ -34,15 +35,15 @@ Publish: true
   end
 
   it 'gets quoted topics' do
-    expect(res.topics.map(&:name)).to include('quoted, topic')
+    expect(res.topics.map(&:name)).to include('Quoted, Topic')
   end
 
   it 'gets quoted topics at end of list' do
-    expect(res.topics.map(&:name)).to include('end quo')
+    expect(res.topics.map(&:name)).to include('End Quo')
   end
 
   it 'gets quoted topic at beginning of list' do
-    expect(res.topics.map(&:name)).to include('first qutoe')
+    expect(res.topics.map(&:name)).to include('First Qutoe')
   end
 
   it 'gets categories' do

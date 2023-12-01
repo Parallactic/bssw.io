@@ -7,7 +7,10 @@ RSpec.describe AdditionalDate, type: :model do
     event = FactoryBot.create(:event)
     date = FactoryBot.create(:additional_date,
                              additional_date_values:
-                               [FactoryBot.build(:additional_date_value, date: 1.week.ago)], label: 'Date', event_id: event.id)
+                               [FactoryBot.build(:additional_date_value,
+                                                 date: 1.week.ago)],
+                             label: 'Date',
+                             event_id: event.id)
 
     expect(date).to be_valid
   end
@@ -17,7 +20,9 @@ RSpec.describe AdditionalDate, type: :model do
 
     FactoryBot.create(:additional_date,
                       additional_date_values:
-                        [FactoryBot.build(:additional_date_value, date: 1.week.ago)], label: 'Date', event_id: event.id)
+                        [FactoryBot.build(:additional_date_value, date: 1.week.ago)],
+                      label: 'Date',
+                      event_id: event.id)
     FactoryBot.create(:additional_date,
                       additional_date_values:
                         [FactoryBot.build(:additional_date_value,
@@ -34,11 +39,13 @@ RSpec.describe AdditionalDate, type: :model do
     FactoryBot.create(:additional_date,
                       additional_date_values:
                         [FactoryBot.build(:additional_date_value,
-                                          date: 2.weeks.from_now)], label: 'Date', event_id: event.id)
+                                          date: 2.weeks.from_now)],
+                      label: 'Date', event_id: event.id)
     FactoryBot.create(:additional_date,
                       additional_date_values:
                         [FactoryBot.build(:additional_date_value,
-                                          date: 3.weeks.from_now)], label: 'Date', event_id: event.id)
+                                          date: 3.weeks.from_now)],
+                      label: 'Date', event_id: event.id)
 
     AdditionalDateValue.get_from_events(Event.all, true)
 

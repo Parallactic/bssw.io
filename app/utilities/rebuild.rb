@@ -20,13 +20,11 @@ class Rebuild < ApplicationRecord
   end
 
   def process_file(file)
-    
     full_name = file.full_name
     begin
       resource = process_path(full_name, file.read)
 
       update_attribute(:files_processed, "#{files_processed}<li>#{resource.try(:path)}</li>")
-
       resource.try(:save)
     rescue StandardError => e
       record_errors(File.basename(full_name), e)
@@ -46,6 +44,8 @@ class Rebuild < ApplicationRecord
   end
 
   def clean(file_path)
+ 
+
     Category.displayed.each { |category| category.update(slug: nil) }
     AuthorUtility.all_custom_info(id, file_path)
     clear_old

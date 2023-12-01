@@ -15,7 +15,7 @@ class AuthorUtility
     names = name.split(' ').map(&:presence)
     last_name = names.last
     first_name = [names - [last_name]].join(' ')
-    [first_name, last_name]
+    [first_name.strip, last_name.strip]
   end
 
   def self.do_overrides(comment, rebuild)
@@ -78,12 +78,16 @@ class AuthorUtility
                node_data.css('a').first, rebuild
              )
            end
+    # if auth.nil?
+    #   puts "no author from #{node_data.text}"
+    # else
+    #   puts "#{auth.display_name} #{auth.website} #{auth.rebuild_id} #{auth.id}"
+    # end
     [auth, node_data.text]
   end
 
   def self.author_from_text(text, rebuild)
-    text = text.strip
-    text = text.gsub(':', '')
+    text = text.gsub("\:", '')
     return if text.blank? || text.match?("\#")
 
     names = names_from(text)

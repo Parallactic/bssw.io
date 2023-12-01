@@ -59,7 +59,8 @@ class ResourcesController < ApplicationController
     @resources = scoped_resources.joins(:searchresults_topics).with_topic(@topic) if @topic
     @resources = scoped_resources.with_category(@category) if @category
     @resources = scoped_resources.with_author(@author) if @author
-    @resources = @resources.standard_scope
+    @resources = scoped_resources.with_track(@track) if @track
+@resources = @resources.standard_scope
     @total = @resources.size
     return unless @resources.size > 75 && params[:view] != 'all'
 
@@ -78,8 +79,10 @@ class ResourcesController < ApplicationController
     category = params[:category]
     topic = params[:topic]
     author = params[:author]
+    track = params[:track]
     @category = Category.displayed.find(category) if category
     @topic = Topic.displayed.find(topic) if topic
     @author = Author.displayed.find(author) if author
+    @track = Track.displayed.find(track) if track
   end
 end
