@@ -53,6 +53,7 @@ class Rebuild < ApplicationRecord
     update_links_and_images
     Author.all.each(&:cleanup)
     update(names: Author.displayed.order(:alphabetized_name).map(&:contributions).flatten.map(&:display_name).uniq)
+    update(unpublished_files: SearchResult.where(rebuild_id: id, publish: false).map(&:path).join('<br />'))
     SearchResult.clear_index!
     SearchResult.displayed.reindex
     File.delete(file_path)
