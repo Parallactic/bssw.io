@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_16_161637) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_30_174553) do
   create_table "acronyms", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: nil, null: false
@@ -285,6 +285,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_16_161637) do
     t.string "commit_hash"
     t.text "names"
     t.text "slug_collisions"
+    t.text "unpublished_files"
   end
 
   create_table "resources", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

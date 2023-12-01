@@ -68,10 +68,15 @@ class MarkdownImport < GithubImport
     if val.match('yes')
       update_attribute(:publish, true)
     else
+      add_unpublished_to_log
       update_attribute(:publish, false)
     end
   end
 
+  def add_unpublished_to_log
+    rebuild.unpublished_files = rebuild.unpublished_files.to_s + "<br />#{self.path}" 
+  end
+  
   def add_pinned(val)
     update_attribute(:pinned, true) if val.downcase.match('y') && has_attribute?(:pinned)
   end
