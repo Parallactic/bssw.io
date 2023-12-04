@@ -52,7 +52,7 @@ class Rebuild < ApplicationRecord
     Author.all.each(&:cleanup)
     update(names: Author.displayed.order(:alphabetized_name).map(&:contributions).flatten.map(&:display_name).uniq)
     update(unpublished_files: Resource.where(rebuild_id: id,
-                                                 publish: false).map(&:path).delete_if(&:blank?).join('<br />'))
+                                             publish: false).map(&:path).delete_if(&:blank?).join('<br />'))
     SearchResult.clear_index!
     SearchResult.displayed.reindex
     File.delete(file_path)
@@ -98,6 +98,8 @@ class Rebuild < ApplicationRecord
       Quote.import(content)
     elsif path.match('Announcements')
       Announcement.import(content, id)
+    elsif path.match('BlogTracks')
+      Track.import(content)
     else
       resource = find_or_create_resource(path)
       resource.parse_and_update(content)
