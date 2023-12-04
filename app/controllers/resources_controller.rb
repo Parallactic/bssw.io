@@ -60,7 +60,7 @@ class ResourcesController < ApplicationController
     @resources = scoped_resources.with_category(@category) if @category
     @resources = scoped_resources.with_author(@author) if @author
     @resources = scoped_resources.with_track(@track) if @track
-@resources = @resources.standard_scope
+    @resources = @resources.standard_scope
     @total = @resources.size
     return unless @resources.size > 75 && params[:view] != 'all'
 

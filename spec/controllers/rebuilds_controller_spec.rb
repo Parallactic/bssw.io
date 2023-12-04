@@ -30,12 +30,10 @@ RSpec.describe RebuildsController, type: :controller do
       FactoryBot.create(:author)
       post :import
 
-      puts "errors: #{Rebuild.last.errors_encountered}"        
-            
+      puts "errors: #{Rebuild.last.errors_encountered}"
 
-            puts "collis: #{Rebuild.last.slug_collisions}"
-                                                  puts "pub: #{Rebuild.last.unpublished_files}"
-
+      puts "collis: #{Rebuild.last.slug_collisions}"
+      puts "pub: #{Rebuild.last.unpublished_files}"
 
       # these are specific checks to our resource library...
       # using variables defined at top of this file
@@ -79,15 +77,13 @@ RSpec.describe RebuildsController, type: :controller do
 
       expect(Author.displayed.where(website: @author_slug).first.resource_listing).not_to eq '0 resources'
 
-      puts "tracks: ...."
+      puts 'tracks: ....'
       SiteItem.displayed.each do |si|
         unless si.tracks.empty?
           puts si.tracks.map(&:name)
           puts si.base_path
         end
       end
-
-
 
       expect(Staff.displayed.select do |a|
                a.website.try(

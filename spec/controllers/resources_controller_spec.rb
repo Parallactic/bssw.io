@@ -40,7 +40,7 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     it 'sets the preview val' do
-      @request.host = 'preview.bssw.io'
+      request.host = 'preview.bssw.io'
       name = Rails.application.credentials[:preview][:name]
       pw = Rails.application.credentials[:preview][:password]
       credentials = ActionController::HttpAuthentication::Basic.encode_credentials name, pw

@@ -14,14 +14,13 @@ class SiteItem < SearchResult
 
   has_many :features
 
-
   def listed_tracks
     tracks.where(listed: true)
   end
-  
-def rss_date
-super || published_at
-end
+
+  def rss_date
+    super || published_at
+  end
 
   def categories
     topics.map(&:category).uniq

@@ -7,12 +7,12 @@ class Rebuild < ApplicationRecord
   after_create :set_location
 
   def set_location
-    unless ip.blank?
-      update_attribute(
-        :location,
-        Geocoder.search(ip).try(:first).try(:data).try(:[], 'city')
-      )
-    end
+    return if ip.blank?
+
+    update_attribute(
+      :location,
+      Geocoder.search(ip).try(:first).try(:data).try(:[], 'city')
+    )
   end
 
   def self.in_progress
@@ -44,8 +44,6 @@ class Rebuild < ApplicationRecord
   end
 
   def clean(file_path)
- 
-
     Category.displayed.each { |category| category.update(slug: nil) }
     AuthorUtility.all_custom_info(id, file_path)
     clear_old
@@ -53,7 +51,8 @@ class Rebuild < ApplicationRecord
     update_links_and_images
     Author.all.each(&:cleanup)
     update(names: Author.displayed.order(:alphabetized_name).map(&:contributions).flatten.map(&:display_name).uniq)
-    update(unpublished_files: SearchResult.where(rebuild_id: id, publish: false).map(&:path).delete_if{|p| p.blank? }.join('<br />'))
+    update(unpublished_files: Resource.where(rebuild_id: id,
+                                                 publish: false).map(&:path).delete_if(&:blank?).join('<br />'))
     SearchResult.clear_index!
     SearchResult.displayed.reindex
     File.delete(file_path)

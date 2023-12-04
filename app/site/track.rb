@@ -14,21 +14,19 @@ class Track < GithubImport
 
   def self.import(content, rebuild_id)
     doc = GithubImporter.parse_html_from(content)
-    doc.css("li").each do |elem|
+    doc.css('li').each do |elem|
       next if elem.text.blank?
 
-      track = self.from_name(elem.text, rebuild_id)
+      track = from_name(elem.text, rebuild_id)
       track.update(listed: true)
     end
   end
 
-
-  
   def self.from_name(track_name, rebuild_id)
     return if track_name.match(Regexp.new(/\[(.*)\]/))
-    
+
     name = track_name.strip.titleize
-    
+
     track = find_or_create_by(
       name:,
       rebuild_id:
@@ -36,5 +34,4 @@ class Track < GithubImport
     track.slug = name.parameterize
     track
   end
-  
 end

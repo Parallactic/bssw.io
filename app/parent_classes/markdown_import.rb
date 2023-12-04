@@ -34,7 +34,7 @@ class MarkdownImport < GithubImport
   def update_associates(array, _rebuild)
     array.each_cons(2) do |string, names|
       method = "add_#{string.strip}".downcase.tr(' ', '_')
-      puts method
+      Rails.logger.debug method
       if method == 'add_topics'
         names = CSV.parse(names.gsub(/,\s+"/, ',"'), liberal_parsing: true).first
         save if new_record?
@@ -73,7 +73,6 @@ class MarkdownImport < GithubImport
     end
   end
 
-  
   def add_pinned(val)
     update_attribute(:pinned, true) if val.downcase.match('y') && has_attribute?(:pinned)
   end

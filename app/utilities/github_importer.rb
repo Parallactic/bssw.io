@@ -63,7 +63,7 @@ class GithubImporter < ApplicationRecord
         #        puts file.full_name
       end
     end
-    puts 'time to complete'
+    Rails.logger.debug 'time to complete'
     RebuildStatus.complete(rebuild, file_path)
   end
 end

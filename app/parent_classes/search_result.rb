@@ -3,8 +3,6 @@
 class SearchResult < MarkdownImport
   include AlgoliaSearch
 
-
-
   algoliasearch per_environment: true, sanitize: true, auto_index: false, if: :searchable? do
     attributes :name, :content, :author_list_without_links, :published_at
     searchableAttributes %w[name author_list_without_links content]
@@ -38,14 +36,14 @@ class SearchResult < MarkdownImport
 
   def resolve_friendly_id_conflict(candidates)
     if rebuild && candidates.first
-      rebuild.slug_collisions = rebuild.slug_collisions.to_s + "<li><strong>Slug:</strong> #{candidates.first.inspect}  <strong>Filename of item trying to use slug:</strong> #{base_path} <br /><strong>Filename of conflicting item:</strong> #{SearchResult.where(rebuild_id:, slug: candidates.first.to_s).first.base_path}</li>"
+      rebuild.slug_collisions = rebuild.slug_collisions.to_s + "<li><strong>Slug:</strong> #{candidates.first.inspect}  <strong>Filename of item trying to use slug:</strong> #{base_path} <br /><strong>Filename of conflicting item:</strong> #{SearchResult.where(
+        rebuild_id:, slug: candidates.first.to_s
+      ).first.base_path}</li>"
 
       rebuild.save
     end
     super
   end
-
-    
 
   def should_generate_new_friendly_id?
     custom_slug_changed? || name_changed? || super
@@ -64,8 +62,8 @@ class SearchResult < MarkdownImport
   }
 
   scope :with_track, lambda { |track|
-                               joins([:tracks]).where('tracks.id = ?', track) if track.present?
-                               }
+                       joins([:tracks]).where('tracks.id = ?', track) if track.present?
+                     }
 
   scope :with_category, lambda { |category|
     joins([:topics]).joins([:searchresults_topics]).where('topics.category_id = ?', category)

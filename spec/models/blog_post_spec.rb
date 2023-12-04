@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe BlogPost, type: :model do
-  let(:content) {
+  let(:content) do
     "# Foo \n#### Publication date: Jan 1, 2017
 \n#### Contributed by [Jane Does](https://github.com)\n \n bar
 \n
@@ -19,7 +19,7 @@ Track: Deep dive
 Publish: true
 
 -->"
-  }
+  end
 
   let(:res) { Rebuild.create.find_or_create_resource('Blog/FooPost.md') }
 

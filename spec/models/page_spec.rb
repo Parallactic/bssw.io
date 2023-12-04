@@ -16,8 +16,7 @@ Publish: true
 --->"
   end
 
-  let(:res) { Page.last }
-  
+  let(:res) { described_class.last }
 
   before do
     resource = Rebuild.create.find_or_create_resource('Site/Homepage.md')
@@ -27,7 +26,6 @@ Publish: true
   end
 
   it 'can create itself from content' do
-
     expect(res).to be_a(described_class)
   end
 
