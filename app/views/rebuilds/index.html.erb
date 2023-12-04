@@ -1,17 +1,17 @@
 <div class='container'>
-    <div class='row' >
+  <div class='row' >
 
-	<% if Rebuild.in_progress %>
-	    <div class='col-md-12'>
-		<br />
-		<h3>Another rebuild, started less than 10 minutes ago, is either currently in progress, or has failed. Please wait and reload this page after 10 minutes; if the existing rebuild is not complete by then, it has most likely failed, and you will be able to override.</h3>
-		<br />
-	    </div>
-	<% else %>
-	    <div class='col-md-4'>
-		<form action='/rebuilds/import' id='form' style='padding: 4em;' method='POST'>
-		    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-		    <%= submit_tag "Rebuild Now!", class: 'btn btn-primary',
+    <% if Rebuild.in_progress %>
+      <div class='col-md-12'>
+	<br />
+	<h3>Another rebuild, started less than 10 minutes ago, is either currently in progress, or has failed. Please wait and reload this page after 10 minutes; if the existing rebuild is not complete by then, it has most likely failed, and you will be able to override.</h3>
+	<br />
+      </div>
+    <% else %>
+      <div class='col-md-4'>
+	<form action='/rebuilds/import' id='form' style='padding: 4em;' method='POST'>
+	  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+	  <%= submit_tag "Rebuild Now!", class: 'btn btn-primary',
 			data: { confirm: "Do you really want to rebuild everything?"}, onclick: "$('#done').hide(); $('.alert').hide();" %>
 		</form>
 
@@ -122,7 +122,22 @@
 		    </script>
 
 		</td>
-				<td><%= r.unpublished_files.try(:html_safe) %></td>
+		<td>
+
+		    <p>
+		    <a href='#' id='showunpub<%= r.id %>' onclick="$('#unpub<%= r.id %>').show(); $('#hideunpub<%= r.id %>').show(); $('#showunpub<%= r.id %>').hide();">Show List</a>
+		    <a href='#' id='hideunpub<%= r.id %>' onclick="$('#unpub<%= r.id %>').hide(); $('#showunpub<%= r.id %>').show(); $('#hideunpub<%= r.id %>').hide();">Hide List</a>
+		    </p>
+		    <div id='unpub<%= r.id %>'>
+				  <%= r.unpublished_files.try(:html_safe) %>
+		    </div>
+		    <script type='text/javascript'>
+		     $('#unpub<%= r.id %>').hide();	
+	     $('#hideunpub<%= r.id %>').hide();
+		    </script>
+
+		  
+</td>
 		<td><%= r.errors_encountered.try(:html_safe) %></td>
 		<td><% if r != RebuildStatus.displayed_rebuild && Rebuild.first(10).include?(r) %> <%= button_to 'Set As Displayed', {:action => 'make_displayed', :id => r.id}, data: { confirm: "Do you really want to change the displayed rebuild?"} %> <% end  %>
 <% if r == RebuildStatus.displayed_rebuild %>
