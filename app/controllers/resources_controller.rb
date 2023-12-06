@@ -67,14 +67,6 @@ class ResourcesController < ApplicationController
     @resources = @resources.first(75)
   end
 
-  # def paginate
-  #   @resources = if params[:view] == 'all'
-  #                  @resources.paginate(page: 1, per_page: @resources.size)
-  #                else
-  #                  @resources.paginate(page: params[:page], per_page: 75)
-  #                end
-  # end
-
   def set_filters
     category = params[:category]
     topic = params[:topic]

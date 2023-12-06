@@ -7,12 +7,12 @@ class Rebuild < ApplicationRecord
   after_create :set_location
 
   def set_location
-    unless ip.blank?
-      update_attribute(
-        :location,
-        Geocoder.search(ip).try(:first).try(:data).try(:[], 'city')
-      )
-    end
+    return if ip.blank?
+
+    update_attribute(
+      :location,
+      Geocoder.search(ip).try(:first).try(:data).try(:[], 'city')
+    )
   end
 
   def self.in_progress
@@ -20,7 +20,6 @@ class Rebuild < ApplicationRecord
   end
 
   def process_file(file)
-    
     full_name = file.full_name
     begin
       resource = process_path(full_name, file.read)
@@ -46,7 +45,6 @@ class Rebuild < ApplicationRecord
   end
 
   def clean(file_path)
-
     Category.displayed.each { |category| category.update(slug: nil) }
     AuthorUtility.all_custom_info(id, file_path)
     clear_old
