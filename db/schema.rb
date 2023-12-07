@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_30_174553) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_07_171513) do
   create_table "acronyms", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: nil, null: false
@@ -499,6 +499,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_30_174553) do
     t.integer "rebuild_id"
     t.string "slug"
     t.boolean "listed", default: false
+    t.text "description"
   end
 
   create_table "what_is", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
