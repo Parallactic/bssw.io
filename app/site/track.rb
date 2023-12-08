@@ -18,20 +18,19 @@ class Track < GithubImport
       next if elem.text.blank?
 
       track = from_name(elem.text, rebuild_id)
+      track.update(description: elem.text.split(':').last)
       track.update(listed: true)
+      puts track.inspect
     end
   end
 
   def self.from_name(track_string, rebuild_id)
     return if track_string.match(Regexp.new(/\[(.*)\]/))
-    name = track_string.split(':').first
-    name = name.strip.titleize
-    description = track_string.split(':').last
+    name = track_string.split(':').first.strip.titleize
     track = find_or_create_by(
       name:,
       rebuild_id:
     )
-    track.description = description
     track.slug = name.parameterize
     track.save
     track
