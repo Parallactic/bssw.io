@@ -13,7 +13,7 @@ RSpec.describe BlogPost, type: :model do
 \n
 \n
 <!--
-Topics: \"first qutoe\", foo, bar, \"quoted, topic\", \"end quo\"
+Topics: \"First Qutoe\", Foo, Bar, \"Quoted, Topic\", \"End Quo\"
 Categories: Blah Blah
 Track: Deep dive
 Publish: true
