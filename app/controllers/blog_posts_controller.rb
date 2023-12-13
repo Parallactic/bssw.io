@@ -9,7 +9,7 @@ class BlogPostsController < ApplicationController
     if author
       @posts = @posts.with_author(Author.find_by(slug: author, rebuild_id: RebuildStatus.first.display_rebuild_id))
     end
-    @track = Track.find(params[:track]) if params[:track]
+    @track = Track.displayed.find(params[:track]) if params[:track]
     @posts = @posts.with_track(@track) if @track
     @posts = @posts.paginate(page: params[:page], per_page: 25)
   end
