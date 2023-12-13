@@ -65,7 +65,7 @@
 			    <div class="small-caps">
 			      <strong>Track</strong>
 
-<%= @post.listed_tracks.map{|t| link_to(t.name, site_items_path(track: t))}.to_sentence.html_safe %>
+<%= @post.listed_tracks.map{|t| link_to(t.name, blog_posts_path(track: t))}.to_sentence.html_safe %>
 
 			    </div>
 </div>

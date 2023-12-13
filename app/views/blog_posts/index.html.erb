@@ -1,4 +1,10 @@
-<%= render 'pages/page', :page => @page %>
+  <% if @track %>
+    <h1><%= @track.name %></h1>
+    <p><%= @track.description %></p>
+    
+  <% else %>
+    <%= render 'pages/page', :page => @page %>
+  <% end %>
 
 
 

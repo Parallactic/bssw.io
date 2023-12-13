@@ -33,9 +33,6 @@
 <% elsif @category  %>
     <h1><%= @category.name %></h1>
     <%= @category.overview.try(:html_safe) %>
-  <% elsif @track %>
-    <h1><%= @track.name %></h1>
-    <p><%= @track.description %></p>
 <% elsif controller.action_name != 'search' && !(@author)%>
     <h1 class="all_resources">All Resources</h1>
 <% end %>
