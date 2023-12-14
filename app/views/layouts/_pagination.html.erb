@@ -1,4 +1,4 @@
-<% @resources = @posts %>
+<% @resources = @posts if @posts && @resources.blank?  %>
 
 <% if @resources.respond_to?(:next_page) %>
   <%= will_paginate @resources %>
