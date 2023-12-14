@@ -1,7 +1,8 @@
-  <% if @track %>
+<% if @track %>
+  <div class='page-content blog-content'>
     <h1><%= @track.name %></h1>
     <p><%= @track.description %></p>
-    
+    </div>
   <% else %>
     <%= render 'pages/page', :page => @page %>
   <% end %>
