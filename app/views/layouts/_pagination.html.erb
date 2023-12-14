@@ -1,4 +1,4 @@
-
+<% @resources = @posts %>
 
 <% if @resources.respond_to?(:next_page) %>
   <%= will_paginate @resources %>

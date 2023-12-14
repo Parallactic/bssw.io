@@ -2,7 +2,7 @@
   <div class='page-content blog-content'>
     <h1><%= @track.name %></h1>
     <p><%= @track.description %></p>
-    </div>
+  </div>
   <% else %>
     <%= render 'pages/page', :page => @page %>
   <% end %>
@@ -24,7 +24,11 @@
 
 
 
-  <div class="posts-list" id="posts">
+<div class="posts-list" id="posts">
+      <div class="pagination pagination-top col-md-12">
+      <%= render :partial => '/layouts/pagination' %>
+    </div>
+
     <%= render 'posts', posts: @posts %>
     <div class="row"></div>
 </div>
