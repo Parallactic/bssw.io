@@ -12,7 +12,7 @@ class BlogPostsController < ApplicationController
     @track = Track.displayed.find(params[:track]) if params[:track]
     @posts = @posts.with_track(@track.id) if @track
     if params[:view] == 'all'
-      @posts = @posts.paginate(page:, per_page: @posts.size)
+      @posts = @posts.paginate(page: 1, per_page: @posts.size)
     else
       @posts = @posts.paginate(page: params[:page], per_page: 25)
     end
