@@ -30,10 +30,11 @@
 
 
 <div class="posts-list" id="posts">
+    <div class="container">
       <div class="pagination pagination-top col-md-12">
       <%= render :partial => '/layouts/pagination' %>
     </div>
-
+      </div>
     <%= render 'posts', posts: @posts %>
     <div class="row"></div>
 </div>
