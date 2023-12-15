@@ -1,48 +1,64 @@
 <% if @track %>
-  <div class='page-content blog-content'>
-    	<div class='container'>
-	    <div class='row'>
-		<div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-    <h1><%= @track.name %></h1>
-    <p><%= @track.description %></p>
-		</div>
-	    </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+	<div class="page-heading all"> 
+	  <div class="breadcrumbs">
+	    <ul>
+	      <li><a href="/">Home</a></li>
+	      <li><%= link_to 'Blog', blog_posts_path %></li>
+
+	    </ul>
+	  </div>
+	</div>
+      </div>
+    </div>
   </div>
+
+  <div class='page-content blog-content'>
+    <div class='container'>
+      <div class='row'>
+	<div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+	  <h1><%= @track.name %></h1>
+	  <p><%= @track.description %></p>
+	</div>
+      </div>
+    </div>
   <% else %>
     <%= render 'pages/page', :page => @page %>
-  <% end %>
+<% end %>
 
 
-
-<div class="sub-nav-container blog-sub-nav">
-  <div class="container">
-    <ul class="nav justify-content-end">
-      <li class="nav-item">
-        <a class="nav-link email-digest" href="/pages/receive-our-email-digest">Subscribe To Our Email Digest</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link rss-feed" href="/resources.rss">Follow Our RSS Feed</a>
-      </li>
-    </ul>
+<% unless @track %>
+  <div class="sub-nav-container blog-sub-nav">
+    <div class="container">
+      <ul class="nav justify-content-end">
+	<li class="nav-item">
+          <a class="nav-link email-digest" href="/pages/receive-our-email-digest">Subscribe To Our Email Digest</a>
+	</li>
+	<li class="nav-item">
+          <a class="nav-link rss-feed" href="/resources.rss">Follow Our RSS Feed</a>
+	</li>
+      </ul>
+    </div>
   </div>
-</div>
-
+<% end %>
 
 
 <div class="posts-list" id="posts">
-    <div class="container">
-      <div class="pagination pagination-top col-md-12">
+  <div class="container">
+    <div class="pagination pagination-top col-md-12">
       <%= render :partial => '/layouts/pagination' %>
     </div>
-      </div>
-    <%= render 'posts', posts: @posts %>
-    <div class="row"></div>
+  </div>
+  <%= render 'posts', posts: @posts %>
+  <div class="row"></div>
 </div>
 <div class='row bottom-event-blog-row'>
   <div class='container more-top'>
     <% if @posts.next_page %>
-		<%= render 'show_more',  :posts => @posts  %>
-		<a class="to-top" href="#top">To Top</a>
+      <%= render 'show_more',  :posts => @posts  %>
+      <a class="to-top" href="#top">To Top</a>
     <% end %>
 
 
@@ -63,33 +79,33 @@
 
 
 <% if @posts[0].try(:hero_image_url) %>
-<style type="text/css">
- #posts .event-blog-row:first-of-type a
- {
-   background:
-   linear-gradient(
-      rgba(52, 157, 255, 0.5), 
-      rgba(52, 157, 255, 0.5)
+  <style type="text/css">
+    #posts .event-blog-row:first-of-type a
+    {
+    background:
+    linear-gradient(
+    rgba(52, 157, 255, 0.5), 
+    rgba(52, 157, 255, 0.5)
     ),
     /* bottom, image */
 
     url(<%= @posts[0].hero_image_url %>) no-repeat center top;
     background-size: cover;
- }
+    }
 
- #posts .event-blog-row:first-of-type a:hover {
+    #posts .event-blog-row:first-of-type a:hover {
     background:#18187d;
     transition: none;
- }
-</style>
+    }
+  </style>
 <% else %>
-<style>
-   #posts .event-blog-rows:first-of-type a {
-      background:#18187d;
-   }
-   #posts .event-blog-row:first-of-type a:hover {
-      background: #3366cc;
-      transition: none;
-   }
+  <style>
+    #posts .event-blog-rows:first-of-type a {
+    background:#18187d;
+    }
+    #posts .event-blog-row:first-of-type a:hover {
+    background: #3366cc;
+    transition: none;
+    }
   </style>
 <% end %>
