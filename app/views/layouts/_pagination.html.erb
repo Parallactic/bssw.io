@@ -6,9 +6,9 @@
 <% elsif @resources.respond_to?(:next_page) || @resources.respond_to?(:prev_page) %>
   <%= will_paginate @resources %>
 
-  <% if @total > 25 %>   &nbsp;| <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
+  &nbsp;| <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
 
-<% end %>
+
 
 <% elsif params[:view] || params[:author] || params[:topic] || params[:category] %>
   1-<%= @resources.size %> of <%= @total %> Items
