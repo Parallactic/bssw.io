@@ -1,9 +1,9 @@
 <% @resources = @posts if @posts && @resources.blank?  %>
 
-<% if @resources.respond_to?(:next_page) %>
+<% if @resources.respond_to?(:next_page) || @resources.respond_to?(:prev_page) %>
   <%= will_paginate @resources %>
 
-  <% if @resources.size > 25 %>   &nbsp;| <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
+  <% if @resources.size  %>   &nbsp;| <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
   <% else %>
     1-<%= @resources.size %> of <%= @resources.size %> Items
 <% end %>
