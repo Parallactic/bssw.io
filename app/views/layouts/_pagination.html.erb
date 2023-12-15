@@ -3,7 +3,7 @@
 <% if @resources.respond_to?(:next_page) %>
   <%= will_paginate @resources %>
 
-  <% if @resources.total_pages != @resources.current_page %>   &nbsp;| <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
+  <% if @resources.size > 25 %>   &nbsp;| <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
   <% else %>
     1-<%= @resources.size %> of <%= @resources.size %> Items
 <% end %>
