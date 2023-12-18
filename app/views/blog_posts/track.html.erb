@@ -1,10 +1,26 @@
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <div class='page-content'>
-	<div class='container'>
-	  <h1><%= @track.name %></h1>
-	  <%= @track.description %>
+  <div class="main">
+    <div class="container">
+      <div class="row">
+	<div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+	  <div class="page-heading all"> 
+	    <div class="breadcrumbs">
+	      <ul>
+		<li><a href="/">Home</a></li>
+		<li><%= link_to 'Resources', site_items_path %></li>
+		
+	      </ul>
+	    </div>
+	  </div>
+	</div>
+      </div>
+      <div class="row">
+	<div class="col-12">
+	  <div class='page-content'>
+	    <div class='container'>
+	      <h1><%= @track.name %></h1>
+	      <%= @track.description %>
+	    </div>
+	  </div>
 	</div>
       </div>
     </div>
@@ -12,9 +28,14 @@
 </div>
 
 <div class="posts-list" >
+    1-<%= @posts.size %> of <%= @total %> Items
+  <% if @total > @posts.size %>
+      &nbsp;|
+ <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
+
     <%= render 'posts', posts: @posts %>
     <div class="row"></div>
-b<div class='row bottom-event-blog-row'>
+<div class='row bottom-event-blog-row'>
   <div class='container more-top'>
     <% if @posts.next_page %>
       <%= render 'show_more',  :posts => @posts  %>
