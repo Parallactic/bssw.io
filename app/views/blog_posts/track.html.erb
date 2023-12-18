@@ -32,7 +32,7 @@
   <% if @total > @posts.size %>
       &nbsp;|
  <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
-
+  <% end %>
     <%= render 'posts', posts: @posts %>
     <div class="row"></div>
 <div class='row bottom-event-blog-row'>
