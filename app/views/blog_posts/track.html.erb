@@ -25,10 +25,7 @@
       </div>
     </div>
   </div>
-</div>
-
-<div class="posts-list" >
-  <div class='container'>
+    <div class='container'>
   <div class='pagination'>
     1-<%= @posts.size %> of <%= @total %> Items
   <% if @total > @posts.size %>
@@ -37,6 +34,10 @@
   <% end %>
   </div>
   </div>
+
+</div>
+
+<div class="posts-list" >
     <%= render 'posts', posts: @posts %>
     <div class="row"></div>
 <div class='row bottom-event-blog-row'>
