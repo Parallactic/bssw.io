@@ -18,8 +18,14 @@ class BlogPostsController < ApplicationController
       @posts = @posts.paginate(page: params[:page], per_page: 25)
     end
     respond_to do |format|
-      format.js {}
-      format.html { render :track if @track  }
+      format.js { render :index }
+      format.html {
+        if @track  
+          render :track
+        else
+          render :index
+        end
+      }
     end
   end
 
