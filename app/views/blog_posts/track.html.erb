@@ -1,51 +1,46 @@
-  <div class="main">
-    <div class="container">
-      <div class="row">
-	<div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
-	  <div class="page-heading all"> 
-	    <div class="breadcrumbs">
-	      <ul>
-		<li><a href="/">Home</a></li>
-		<li><%= link_to 'Blog', blog_posts_path %></li>
-		
-	      </ul>
-	    </div>
+<div class="main">
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+	<div class="page-heading all"> 
+	  <div class="breadcrumbs">
+	    <ul>
+	      <li><a href="/">Home</a></li>
+	      <li><%= link_to 'Blog', blog_posts_path %></li>
+	    </ul>
 	  </div>
 	</div>
-      </div>
-      <div class="row">
-	<div class="col-12">
-	  <div class='page-heading'>
-	      <h1><%= @track.name %></h1>
-	      <%= @track.description %>
-	  </div>
+	<div class='page-heading'>
+	  <h1><%= @track.name %></h1>
+	  <%= @track.description %>
 	</div>
       </div>
     </div>
   </div>
-    <div class='container'>
+</div>
+<div class='container'>
   <div class='pagination pagination-top'>
     1-<%= @posts.size %> of <%= @total %> Items
-  <% if @total > @posts.size %>
+    <% if @total > @posts.size %>
       &nbsp;|
- <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
-  <% end %>
+      <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
+    <% end %>
   </div>
-  </div>
+</div>
 
 </div>
 
 <div class="tracks-list" id="posts">
-    <%= render 'posts', posts: @posts %>
-    <div class="row"></div>
-        <div class='container'>
-  <div class='pagination pagination-bottom'>
-    1-<%= @posts.size %> of <%= @total %> Items
-  <% if @total > @posts.size %>
-      &nbsp;|
- <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
-  <% end %>
-  </div>
+  <%= render 'posts', posts: @posts %>
+  <div class="row"></div>
+  <div class='container'>
+    <div class='pagination pagination-bottom'>
+      1-<%= @posts.size %> of <%= @total %> Items
+      <% if @total > @posts.size %>
+	&nbsp;|
+	<%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
+      <% end %>
+    </div>
   </div>
 
 </div>
