@@ -32,14 +32,16 @@
   <%= render 'posts', posts: @posts %>
   <div class="row"></div>
 </div>
-  <div class='container'>
-    <div class='pagination pagination-bottom'>
+</div>
+
+<div class='container'>
+  <div class='pagination pagination-bottom'>
       1-<%= @posts.size %> of <%= @total %> Items
       <% if @total > @posts.size %>
 	&nbsp;|
 	<%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
       <% end %>
-    </div>
   </div>
-
 </div>
+
+
