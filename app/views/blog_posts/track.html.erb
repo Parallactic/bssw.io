@@ -25,14 +25,14 @@
       <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
     <% end %>
   </div>
-</div>
+
 
 
 
 <div class="tracks-list" id="posts">
   <%= render 'posts', posts: @posts %>
 </div>
-
+</div>
 
 <div class="row bottom-event-blog-row">
   <div class="container">
