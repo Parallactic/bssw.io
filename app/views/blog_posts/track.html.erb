@@ -28,15 +28,14 @@
 
 
 
-  <div class="tracks-list" id="posts">
-    <%= render 'posts', posts: @posts %>
-  </div>
-
+    <div class="tracks-list" id="posts">
+      <%= render 'posts', posts: @posts %>
+    </div>
 
   </div>
 
   <div class="row bottom-event-blog-row">
-  <div class="container">
+    <div class="container">
     <div class='pagination pagination-bottom'>
       1-<%= @posts.size %> of <%= @total %> Items
       <% if @total > @posts.size %>
