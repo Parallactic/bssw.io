@@ -7,7 +7,7 @@ RSpec.describe RebuildsController, type: :controller do
     @min_site_item_count = 100
     @community_count = 6
     @topic_slug = 'revision-control'
-    @how_to_name = 'How to do Version Control with Git in your CSE Project'
+    @how_to_slug = 'version-control-with-git-in-cse-projects'
     @what_is_slug = 'what-is-revision-control'
     @category_name = 'Better Development'
     @blog_post_slug = 'improve-user-confidence-in-your-software-updates'
@@ -46,7 +46,7 @@ RSpec.describe RebuildsController, type: :controller do
       wi = SearchResult.displayed.find(@what_is_slug)
       expect(wi.topics).to include topic
       expect(topic.site_items).to include wi
-      expect(topic.site_items).to include HowTo.displayed.find_by(name: @how_to_name)
+      expect(topic.site_items).to include SearchResult.displayed.find(@how_to_slug)
       expect(topic.category).to eq Category.displayed.find_by(
         name: @category_name
       )
