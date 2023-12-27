@@ -7,6 +7,13 @@ RSpec.describe ResourcesController, type: :controller do
 
   let(:rebuild) { Rebuild.first }
   let(:request) { @request }
+  let(:bad_credentials) do
+    ActionController::HttpAuthentication::Basic.encode_credentials 'name', 'pw'
+  end
+  let(:good_credentials) do
+    ActionController::HttpAuthentication::Basic.encode_credentials Rails.application.credentials[:preview][:name],
+                                                                   Rails.application.credentials[:preview][:password]
+  end
 
   before do
     FactoryBot.create(:page, name: 'Resources')
@@ -23,24 +30,20 @@ RSpec.describe ResourcesController, type: :controller do
   describe 'preview' do
     it 'is invalid without auth' do
       request.host = 'preview.bssw.io'
-      credentials = ActionController::HttpAuthentication::Basic.encode_credentials 'name', 'pw'
-      request.env['HTTP_AUTHORIZATION'] = credentials
+      request.env['HTTP_AUTHORIZATION'] = bad_credentials
       get 'index'
       expect(response).not_to render_template 'index'
     end
 
     it 'is valid with auth' do
       request.host = 'preview.bssw.io'
-      name = Rails.application.credentials[:preview][:name]
-      pw = Rails.application.credentials[:preview][:password]
-      credentials = ActionController::HttpAuthentication::Basic.encode_credentials name, pw
-      request.env['HTTP_AUTHORIZATION'] = credentials
+      request.env['HTTP_AUTHORIZATION'] = good_credentials
       get 'index'
       expect(response).to render_template 'index'
     end
 
     it 'sets the preview val' do
-      @request.host = 'preview.bssw.io'
+      request.host = 'preview.bssw.io'
       name = Rails.application.credentials[:preview][:name]
       pw = Rails.application.credentials[:preview][:password]
       credentials = ActionController::HttpAuthentication::Basic.encode_credentials name, pw

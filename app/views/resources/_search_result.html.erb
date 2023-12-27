@@ -11,58 +11,65 @@
 	  <div class="row">
 	    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 	      
-	      <h3><% name = result.highlight_result['name']['value'].try(:html_safe)  %>
-		<%= name.blank? ? result.name : name %>
-	      </h3>
+		<h3><% name = result.highlight_result['name']['value'].try(:html_safe)  %>
+		    <%= name.blank? ? result.name : name %>
+		</h3>
+		<% if result.respond_to?(:listed_tracks) %>
+	  <% unless result.listed_tracks.empty? %>
+	      <h4><%= 			    result.listed_tracks.map(&:name).to_sentence %>
+	      </h4>
+	      <% end %>
+	      <% end %>
 	    </div>
 	  </div>
+
 	  <div class="row">
-	    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-	      <p class="search-results-content">
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+<p class="search-results-content">
 
-	      <p class='small-caps'><%= result.highlight_result.keys.include?('author_list_without_links') ? result.highlight_result['author_list_without_links']['value'].try(:html_safe) : result.author_list_without_links %></p>
-
-
-	      <% [:location, :organizers].each do |facet| %>
-		<% if result.respond_to?(facet) && !(result.highlight_result.try(:[], facet).blank?) %>
-		  <p class='small-caps'><strong><%= facet %></strong>
-		    <%=  result.highlight_result[facet]['value'].try(:html_safe) %>
-		  </p>
-		<% end %>
-
-	      <% end %>
+<p class='small-caps'><%= result.highlight_result.keys.include?('author_list_without_links') ? result.highlight_result['author_list_without_links']['value'].try(:html_safe) : result.author_list_without_links %></p>
 
 
-	      <p class='search-results-content'>
-		<%= result.snippet_result['content'].try(:[], 'value').try(:html_safe) %>
-	      </p>
+<% [:location, :organizers].each do |facet| %>
+<% if result.respond_to?(facet) && !(result.highlight_result.try(:[], facet).blank?) %>
+<p class='small-caps'><strong><%= facet %></strong>
+<%=  result.highlight_result[facet]['value'].try(:html_safe) %>
+</p>
+<% end %>
 
-	      <p class="topics small-caps">
-		<strong>Type of Item</strong>
-		<% if result.is_a?(Event)  %>
-		  Event
-		<% elsif result.is_a?(BlogPost) %>
-		  Blog Post
-		<% elsif result.is_a?(Fellow) %>
-		  Fellow 
-		<% elsif result.is_a?(Author) %>
-		  Author
-		<% elsif result.is_a?(SiteItem) %>
-		  Resource
-		<% elsif result.is_a?(Page) %>
-		  Page
-		<% end %>
-	      </p>
-	      <% if result.published_at %>
-		<p class='topics small-caps'
-		   >
+<% end %>
 
-		  <strong>Published</strong>
-		  <%= result.try(:published_at).try(:strftime, '%F') %>
-		</p>
-	      <% end %>
-	    </div>
-	  </div>
+
+<p class='search-results-content'>
+<%= result.snippet_result['content'].try(:[], 'value').try(:html_safe) %>
+</p>
+
+<p class="topics small-caps">
+<strong>Type of Item</strong>
+<% if result.is_a?(Event)  %>
+Event
+<% elsif result.is_a?(BlogPost) %>
+Blog Post
+<% elsif result.is_a?(Fellow) %>
+Fellow 
+<% elsif result.is_a?(Author) %>
+Author
+<% elsif result.is_a?(SiteItem) %>
+Resource
+<% elsif result.is_a?(Page) %>
+Page
+<% end %>
+</p>
+<% if result.published_at %>
+<p class='topics small-caps'
+>
+
+<strong>Published</strong>
+<%= result.try(:published_at).try(:strftime, '%F') %>
+</p>
+<% end %>
+</div>
+</div>
 
 	</a>
       </div>

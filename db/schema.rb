@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_16_161637) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_07_171513) do
   create_table "acronyms", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: nil, null: false
@@ -285,6 +285,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_16_161637) do
     t.string "commit_hash"
     t.text "names"
     t.text "slug_collisions"
+    t.text "unpublished_files"
   end
 
   create_table "resources", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -422,6 +423,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_16_161637) do
     t.integer "site_item_id"
   end
 
+  create_table "site_items_tracks", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "track_id", null: false
+    t.bigint "site_item_id", null: false
+    t.index ["site_item_id", "track_id"], name: "index_site_items_tracks_on_site_item_id_and_track_id"
+  end
+
   create_table "staffs", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.string "website"
@@ -485,6 +492,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_16_161637) do
     t.string "slug"
     t.index ["name"], name: "index_topics_on_name"
     t.index ["rebuild_id"], name: "index_topics_on_rebuild_id"
+  end
+
+  create_table "tracks", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name"
+    t.integer "rebuild_id"
+    t.string "slug"
+    t.boolean "listed", default: false
+    t.text "description"
   end
 
   create_table "what_is", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

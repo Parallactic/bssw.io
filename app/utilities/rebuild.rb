@@ -7,12 +7,12 @@ class Rebuild < ApplicationRecord
   after_create :set_location
 
   def set_location
-    unless ip.blank?
-      update_attribute(
-        :location,
-        Geocoder.search(ip).try(:first).try(:data).try(:[], 'city')
-      )
-    end
+    return if ip.blank?
+
+    update_attribute(
+      :location,
+      Geocoder.search(ip).try(:first).try(:data).try(:[], 'city')
+    )
   end
 
   def self.in_progress
@@ -25,6 +25,7 @@ class Rebuild < ApplicationRecord
       resource = process_path(full_name, file.read)
 
       update_attribute(:files_processed, "#{files_processed}<li>#{resource.try(:path)}</li>")
+
       resource.try(:save)
     rescue StandardError => e
       record_errors(File.basename(full_name), e)
@@ -44,13 +45,6 @@ class Rebuild < ApplicationRecord
   end
 
   def clean(file_path)
-    if slug_collisions.present?
-      new_cols = slug_collisions.split('\n')
-      new_cols = new_cols.map(&:strip)
-      new_cols = new_cols.uniq
-      update(slug_collisions: new_cols.join('<br />'))
-    end
-
     Category.displayed.each { |category| category.update(slug: nil) }
     AuthorUtility.all_custom_info(id, file_path)
     clear_old
@@ -58,6 +52,8 @@ class Rebuild < ApplicationRecord
     update_links_and_images
     Author.all.each(&:cleanup)
     update(names: Author.displayed.order(:alphabetized_name).map(&:contributions).flatten.map(&:display_name).uniq)
+    update(unpublished_files: Resource.where(rebuild_id: id,
+                                             publish: false).map(&:path).delete_if(&:blank?).join('<br />'))
     SearchResult.clear_index!
     SearchResult.displayed.reindex
     File.delete(file_path)
@@ -75,6 +71,9 @@ class Rebuild < ApplicationRecord
     everything.each(&:destroy)
     Contribution.where(site_item_id: nil).each(&:destroy)
     Contribution.where(author_id: nil).each(&:destroy)
+    Contribution.all.each {|c|
+      c.destroy if c.author.nil?
+        }
   end
 
   def self.file_structure # rubocop:disable Metrics/MethodLength
@@ -103,6 +102,8 @@ class Rebuild < ApplicationRecord
       Quote.import(content)
     elsif path.match('Announcements')
       Announcement.import(content, id)
+    elsif path.match('BlogTracks')
+      Track.import(content, id)
     else
       resource = find_or_create_resource(path)
       resource.parse_and_update(content)

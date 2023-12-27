@@ -5,6 +5,14 @@ require 'rails_helper'
 RSpec.describe Event, type: :model do
   let(:rebuild) { FactoryBot.create(:rebuild) }
   let(:event) { rebuild.find_or_create_resource('stuff/Events/foo.md') }
+  let(:additional_content) do
+    "# Foo \n bar
+        \n* Dates: December 3, #{Time.zone.today.year} - January 5
+        \n* Submission Date: November 1, #{Time.zone.today.year}
+        \n* Poster Dates: November 2 2021 - November 3 2021
+        \n* Party dates: June 3 2022; July 4 2022
+        \n* Location: Place \n* \n* <!--- Publish: Yes --->"
+  end
 
   before do
     content = "# Foo \n bar
@@ -42,14 +50,7 @@ RSpec.describe Event, type: :model do
   end
 
   it 'can have additional dates' do
-    content = "# Foo \n bar
-        \n* Dates: December 3, #{Time.zone.today.year} - January 5
-        \n* Submission Date: November 1, #{Time.zone.today.year}
-        \n* Poster Dates: November 2 2021 - November 3 2021
-        \n* Party dates: June 3 2022; July 4 2022
-        \n* Location: Place \n* \n* <!--- Publish: Yes --->"
-
-    event.parse_and_update(content)
+    event.parse_and_update(additional_content)
     expect(
       event.additional_dates.map(&:additional_date_values).flatten.map(&:date).flatten
     ).to include(Chronic.parse('July 4 2022').to_date)

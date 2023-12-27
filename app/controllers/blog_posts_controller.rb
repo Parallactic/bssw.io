@@ -9,7 +9,24 @@ class BlogPostsController < ApplicationController
     if author
       @posts = @posts.with_author(Author.find_by(slug: author, rebuild_id: RebuildStatus.first.display_rebuild_id))
     end
-    @posts = @posts.paginate(page: params[:page], per_page: 25)
+    @track = Track.displayed.find(params[:track]) if params[:track]
+    @posts = @posts.with_track(@track.id) if @track
+    @total = @posts.size
+    if params[:view] == 'all'
+      @posts = @posts.paginate(page: 1, per_page: @posts.size)
+    else
+      @posts = @posts.paginate(page: params[:page], per_page: 25)
+    end
+    respond_to do |format|
+      format.js { render :index }
+      format.html {
+        if @track  
+          render :track
+        else
+          render :index
+        end
+      }
+    end
   end
 
   def show

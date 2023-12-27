@@ -33,7 +33,10 @@ class ResourcesController < ApplicationController
 
     @search = search_string
     @resources = []
+    #    (1..50).each do |i|
     @resources += SearchResult.algolia_search(search_string, hitsPerPage: 1000, page: 1)
+    #   @resources += @results
+    # end
     @resources = if params[:view] != 'all'
                    @resources.paginate(page:, per_page: 25)
                  else
@@ -65,6 +68,7 @@ class ResourcesController < ApplicationController
                    @resources.paginate(page: @page_num, per_page: @resources.size)
                  end
 
+
   end
 
 
@@ -72,9 +76,10 @@ class ResourcesController < ApplicationController
     category = params[:category]
     topic = params[:topic]
     author = params[:author]
-    @page_num = params[:page] || 1
+    track = params[:track]
     @category = Category.displayed.find(category) if category
     @topic = Topic.displayed.find(topic) if topic
     @author = Author.displayed.find(author) if author
+    @track = Track.displayed.find(track) if track
   end
 end

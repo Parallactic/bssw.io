@@ -4,7 +4,8 @@
   <%= link_to 'Load More',
 { :page => @posts.current_page.to_i + 1,
 :controller => controller.controller_name,
-  :action => controller.action_name},
+  :action => controller.action_name,
+:track => params[:track]},
   
   :id => 'show_more_link',
   :class => 'load-more',

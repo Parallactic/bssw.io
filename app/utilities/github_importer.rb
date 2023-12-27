@@ -52,7 +52,6 @@ class GithubImporter < ApplicationRecord
   def self.populate(branch)
     rebuild = RebuildStatus.in_progress_rebuild
     file_path = save_content(branch, rebuild)
-
     tar_extract(file_path).each do |file|
       next if File.extname(file.full_name) != '.md'
       next if GithubImporter.excluded_filenames.include?(File.basename(file.full_name))
@@ -64,7 +63,7 @@ class GithubImporter < ApplicationRecord
         #        puts file.full_name
       end
     end
-
+    Rails.logger.debug 'time to complete'
     RebuildStatus.complete(rebuild, file_path)
   end
 end

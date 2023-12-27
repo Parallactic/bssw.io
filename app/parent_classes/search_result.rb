@@ -36,10 +36,10 @@ class SearchResult < MarkdownImport
 
   def resolve_friendly_id_conflict(candidates)
     if rebuild && candidates.first
-
-      rebuild.slug_collisions = rebuild.slug_collisions.to_s + "\n#{candidates.first.inspect} #{base_path} #{SearchResult.where(
+      rebuild.slug_collisions = rebuild.slug_collisions.to_s + "<li><strong>Slug:</strong> #{candidates.first.inspect}  <strong>Filename of item trying to use slug:</strong> #{base_path} <br /><strong>Filename of conflicting item:</strong> #{SearchResult.where(
         rebuild_id:, slug: candidates.first.to_s
-      ).first.base_path}"
+      ).first.base_path}</li>"
+
       rebuild.save
     end
     super
@@ -60,6 +60,10 @@ class SearchResult < MarkdownImport
   scope :with_topic, lambda { |topic|
     joins([:topics]).where('topics.id = ?', topic) if topic.present?
   }
+
+  scope :with_track, lambda { |track|
+    joins([:tracks]).where('tracks.id = ?', track) if track.present?
+                     }
 
   scope :with_category, lambda { |category|
     joins([:topics]).joins([:searchresults_topics]).where('topics.category_id = ?', category)
@@ -90,8 +94,9 @@ class SearchResult < MarkdownImport
   }
 
   has_and_belongs_to_many :topics, lambda {
-                                     distinct
-                                   }, join_table: 'site_items_topics', dependent: :destroy, foreign_key: 'site_item_id'
+    distinct
+  }, join_table: 'site_items_topics', dependent: :destroy, foreign_key: 'site_item_id'
+  has_and_belongs_to_many :tracks, join_table: 'site_items_tracks', foreign_key: 'site_item_id'
   before_destroy { topics.clear }
   before_destroy { contributions.clear }
   has_many :contributions, join_table: 'contributions', dependent: :destroy, foreign_key: 'site_item_id'
@@ -136,5 +141,10 @@ class SearchResult < MarkdownImport
                               rebuild_id)
       topics << topic if topic
     end
+  end
+
+  def add_track(name)
+    tracks << Track.from_name(name.strip.gsub(/^"/, '').gsub(/"$/, ''),
+                              rebuild_id)
   end
 end

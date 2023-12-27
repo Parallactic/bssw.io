@@ -44,7 +44,7 @@ class Topic < GithubImport
     name = top_name.strip
 
     top = find_or_create_by(
-      name:,
+      name: name,
       rebuild_id:
     )
     top.slug = name.parameterize

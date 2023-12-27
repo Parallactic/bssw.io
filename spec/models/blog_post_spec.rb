@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe BlogPost, type: :model do
-  let(:content) {
+  let(:content) do
     "# Foo \n#### Publication date: Jan 1, 2017
 \n#### Contributed by [Jane Does](https://github.com)\n \n bar
 \n
@@ -13,12 +13,13 @@ RSpec.describe BlogPost, type: :model do
 \n
 \n
 <!--
-Topics: \"first qutoe\", foo, bar, \"quoted, topic\", \"end quo\"
+Topics: \"First Qutoe\", Foo, Bar, \"Quoted, Topic\", \"End Quo\"
 Categories: Blah Blah
+Track: Deep dive
 Publish: true
 
 -->"
-  }
+  end
 
   let(:res) { Rebuild.create.find_or_create_resource('Blog/FooPost.md') }
 
@@ -34,15 +35,15 @@ Publish: true
   end
 
   it 'gets quoted topics' do
-    expect(res.topics.map(&:name)).to include('quoted, topic')
+    expect(res.topics.map(&:name)).to include('Quoted, Topic')
   end
 
   it 'gets quoted topics at end of list' do
-    expect(res.topics.map(&:name)).to include('end quo')
+    expect(res.topics.map(&:name)).to include('End Quo')
   end
 
   it 'gets quoted topic at beginning of list' do
-    expect(res.topics.map(&:name)).to include('first qutoe')
+    expect(res.topics.map(&:name)).to include('First Qutoe')
   end
 
   it 'gets categories' do

@@ -38,6 +38,7 @@ class RebuildStatus < ApplicationRecord
   end
 
   def self.complete(rebuild, file_path)
+    Rails.logger.debug 'completing'
     first.update(display_rebuild_id: rebuild.id, in_progress_rebuild_id: nil)
 
     SiteItem.clean
