@@ -1614,6 +1614,7 @@ FEATURED
     .owl-nav {
 	text-align: left;
 	display: inline-block;
+	margin-top: -10px;
     }
     .owl-dots {
 	display: inline-block;
@@ -1633,6 +1634,7 @@ FEATURED
 .latest a { font-weight: bold; padding: 10px;
 	    &:hover { background: #aaa; 
 		    }
+	    margin-top: 10px; 
 	  }
 
 .owl-carousel  {
