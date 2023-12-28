@@ -1634,8 +1634,10 @@ FEATURED
 .latest a { font-weight: bold; padding: 10px;
 	    &:hover { background: #aaa; 
 		    }
-	    margin-top: 10px; 
+
 	  }
+.latest { margin-top: 1em;
+	}
 
 .owl-carousel  {
 		border-bottom: 2px solid #ebebeb;
