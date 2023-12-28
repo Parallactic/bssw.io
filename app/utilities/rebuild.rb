@@ -71,9 +71,9 @@ class Rebuild < ApplicationRecord
     everything.each(&:destroy)
     Contribution.where(site_item_id: nil).each(&:destroy)
     Contribution.where(author_id: nil).each(&:destroy)
-    Contribution.all.each {|c|
+    Contribution.all.each do |c|
       c.destroy if c.author.nil?
-        }
+    end
   end
 
   def self.file_structure # rubocop:disable Metrics/MethodLength
