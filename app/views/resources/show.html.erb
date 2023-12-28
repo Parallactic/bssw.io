@@ -48,18 +48,19 @@
 
 
                   <div class="post-content">
-                    <p><%= @resource.snippet %></p>
+                      <p><%= @resource.snippet %></p>
                   </div>
 
                   <%= render :partial => '/resources/topics', :locals => {:resource => @resource } %>
 
-                </div>
-              </div></div>
-
-              <%= render :partial => '/layouts/sidebar' %>
-
-
             </div>
+          </div>
+	</div>
+      </div>
+      <%= render :partial => '/layouts/sidebar' %>
+
+
+      
           </div>
         </div>
 
@@ -73,6 +74,7 @@
               </div>
             </div>
           </div>
+	  </div>
           <div class="container">
             <div class='row'>
               <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
@@ -84,4 +86,4 @@
               </div>
             </div>
           </div>
-        </div>
+
