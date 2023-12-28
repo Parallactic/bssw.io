@@ -1618,7 +1618,7 @@ FEATURED
     .owl-dots {
 	display: inline-block;
 	text-align: left;
-	top: 4px;
+	top: -4px;
 	position: relative;
 	outline: none;
 	.owl-dot {
@@ -1630,11 +1630,16 @@ FEATURED
     }
 }
 
+.latest a { font-weight: bold; padding: 10px;
+	    &:hover { background: #aaa; 
+		    }
+	  }
+
 .owl-carousel  {
-    border-bottom: 2px solid #ebebeb;
+		border-bottom: 2px solid #ebebeb;
 
 
-}
+		}
 
 .owl-item {
     background: #fff;
