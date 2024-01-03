@@ -8,13 +8,13 @@
     1-<%= @resources.size %> of <%= @resources.size %> Items
 <% end %>
 
-<% elsif params[:view] || params[:author] || params[:topic] || params[:category] %>
+<% elsif @total > @resources.size %>
   1-<%= @resources.size %> of <%= @total %> Items
-  <% if @total > @resources.size %>
+
       &nbsp;|
  <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
 <% end %>
-  <% end %>
+
 
 
 
