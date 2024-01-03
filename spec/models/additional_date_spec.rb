@@ -3,24 +3,22 @@
 require 'rails_helper'
 
 RSpec.describe AdditionalDate, type: :model do
-  it 'exists' do
-    event = FactoryBot.create(:event)
-    date = FactoryBot.create(:additional_date,
-                             additional_date_values:
-                               [FactoryBot.build(:additional_date_value,
-                                                 date: 1.week.ago)],
-                             label: 'Date',
-                             event_id: event.id)
+  let(:event) { FactoryBot.create(:event) }
+  let(:one_week_ago) do
+    FactoryBot.build(:additional_date_value,
+                     date: 1.week.ago)
+  end
 
+  it 'exists' do
+    date = FactoryBot.create(:additional_date,
+                             additional_date_values: [one_week_ago],
+                             label: 'Date', event_id: event.id)
     expect(date).to be_valid
   end
 
   describe 'additional date values' do
-    event = FactoryBot.create(:event)
-
     past1 = FactoryBot.create(:additional_date,
-                              additional_date_values:
-                                [FactoryBot.build(:additional_date_value, date: 1.week.ago)],
+                              additional_date_values: [one_week_ago],
                               label: 'Date',
                               event_id: event.id)
     past2 = FactoryBot.create(:additional_date,
