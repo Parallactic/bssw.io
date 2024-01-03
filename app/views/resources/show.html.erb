@@ -1,5 +1,7 @@
 <div class="main event-hero post-event-hero <% if @resource %>single-item-hero<% end %>">
+
   <div class="container">
+
     <div class="row">
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
         <div class="page-heading all"> 
@@ -34,24 +36,24 @@
                 <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
                   <h3 class="small-caps">
                     <!--<strong>Date</strong>--><%= @resource.published_at.try(:strftime, "%b %d, %Y") %></h3>
-                  </div>
-                  <div class="col-xl-9 col-lg-9 col-md-6 col-sm-6 col-6">
-                    <h3 class="small-caps">
-<strong><%= "Author".pluralize(@resource.authors.count) %></strong><%= author_list(@resource) %>
+                </div>
+                <div class="col-xl-9 col-lg-9 col-md-6 col-sm-6 col-6">
+                  <h3 class="small-caps">
+		    <strong><%= "Author".pluralize(@resource.authors.count) %></strong><%= author_list(@resource) %>
 
-                    </h3>
-                    </div>
+                  </h3>
+                </div>
 
-                  </div>
-
-
+              </div>
 
 
-                  <div class="post-content">
-                      <p><%= @resource.snippet %></p>
-                  </div>
 
-                  <%= render :partial => '/resources/topics', :locals => {:resource => @resource } %>
+
+              <div class="post-content">
+                <p><%= @resource.snippet %></p>
+              </div>
+
+              <%= render :partial => '/resources/topics', :locals => {:resource => @resource } %>
 
             </div>
           </div>
@@ -61,28 +63,28 @@
 
 
       
+    </div>
+  </div>
+</div>
+
+<div class="page-content single-item-content">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-3 offset-xl-9 col-lg-3 offset-lg-9 col-md-3 offset-md-9 col-sm-12 col-12">
+          <!-- Fake Sidebar -->
+          <div class="faux-sidebar"></div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class='row'>
+        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+          <div class="content">
+
+            <%= @resource.main %>
+
           </div>
         </div>
-
-
-        <div class="page-content single-item-content">
-          <div class="container">
-            <div class="row">
-              <div class="col-xl-3 offset-xl-9 col-lg-3 offset-lg-9 col-md-3 offset-md-9 col-sm-12 col-12">
-                <!-- Fake Sidebar -->
-                <div class="faux-sidebar"></div>
-              </div>
-            </div>
-          </div>
-          <div class="container">
-            <div class='row'>
-              <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
-                <div class="content">
-
-                  <%= @resource.main %>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      </div>
+    </div>
+  </div>
