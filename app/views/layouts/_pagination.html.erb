@@ -6,13 +6,14 @@
   <% if @resources.total_pages != @resources.current_page %>   &nbsp;| <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
   <% else %>
     1-<%= @resources.size %> of <%= @resources.size %> Items
-<% end %>
+  <% end %>
 
-<% elsif @total > @resources.size %>
+<% else %>
   1-<%= @resources.size %> of <%= @total %> Items
-
-      &nbsp;|
- <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
+<%  if @total > @resources.size %>
+  &nbsp;|
+  <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
+  <% end %>
 <% end %>
 
 
