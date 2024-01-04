@@ -11,7 +11,7 @@ RSpec.describe RebuildsController, type: :controller do
     let(:what_is_slug) { 'what-is-revision-control' }
     let(:category_name) { 'Better Development' }
     let(:blog_post_slug) do
-      'i-love-user-confidence-in-your-software-updates'
+      'improve-user-confidence-in-your-software-updates'
     end
     let(:author_slug) { 'https://github.com/curfman' }
     let(:search_expectations) do
@@ -38,20 +38,20 @@ RSpec.describe RebuildsController, type: :controller do
 
         # these are specific checks to our resource library...
         # using variables defined at top of this file
-        expect(SiteItem.count).to be > @min_site_item_count
+        expect(SiteItem.count).to be > min_site_item_count
         #      expect(RebuildStatus.first.display_rebuild_id).to eq Rebuild.last.id
         expect(SiteItem.last.rebuild_id).to eq RebuildStatus.first.display_rebuild_id
-        expect(SiteItem.displayed.count).to be > @min_site_item_count
-        expect(Community.displayed.count).to eq @community_count
+        expect(SiteItem.displayed.count).to be > min_site_item_count
+        expect(Community.displayed.count).to eq community_count
 
         expect(Community.first.resources).not_to be_empty
-        topic = Topic.displayed.where(slug: @topic_slug).first
-        wi = SearchResult.displayed.find(@what_is_slug)
+        topic = Topic.displayed.where(slug: topic_slug).first
+        wi = SearchResult.displayed.find(what_is_slug)
         expect(wi.topics).to include topic
         expect(topic.site_items).to include wi
-        expect(topic.site_items).to include SiteItem.displayed.find_by(slug: @how_to_slug)
+        expect(topic.site_items).to include SiteItem.displayed.find_by(slug: how_to_slug)
         expect(topic.category).to eq Category.displayed.find_by(
-          name: @category_name
+          name: category_name
         )
 
         expect(Fellow.all).not_to be_empty

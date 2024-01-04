@@ -202,15 +202,18 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     describe 'get authors' do
-      it 'renders template' do
+      before do
         author = FactoryBot.create(:author, rebuild_id: rebuild.id)
         resource = FactoryBot.create(:resource, rebuild_id: rebuild.id)
         resource.contributions << Contribution.create(author:, display_name: author.display_name)
-        RebuildStatus.all.each(&:destroy)
-        RebuildStatus.create(display_rebuild_id: rebuild.id)
+        # RebuildStatus.all.each(&:destroy)
+        # RebuildStatus.create(display_rebuild_id: rebuild.id)
+      end
+
+      it 'renders template' do
         FactoryBot.create(:page, name: 'Contributors', path: 'Contributors.md', rebuild_id: rebuild.id)
         get :authors
-        expect(response.body).to match(author.display_name)
+        expect(response.body).to match(Author.last.display_name)
       end
     end
 
