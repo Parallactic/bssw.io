@@ -50,34 +50,53 @@ RSpec.describe ResourcesController, type: :controller do
   end
 
   describe 'get search' do
-    it 'searches' do
+    before do
       name = Rails.application.credentials[:preview][:name]
       pw = Rails.application.credentials[:preview][:password]
       credentials = ActionController::HttpAuthentication::Basic.encode_credentials name, pw
       request.env['HTTP_AUTHORIZATION'] = credentials
+    end
 
+    it 'searches' do
       resource = FactoryBot.create(:resource, publish: true, type: 'Resource')
-      expect(SiteItem.published.displayed).to include(resource)
-
       SearchResult.reindex!
       sleep(10)
       get :search, params: { search_string: resource.name }
       expect(assigns(:resources)).to include(resource)
     end
 
-    it 'finds fellows' do
-      request.env['HTTP_AUTHORIZATION'] = "Basic {Base64.encode64('preview-bssw:SoMyCodeWillSeeTheFuture!!')}"
-      resource = FactoryBot.create(:resource, publish: true, type: 'Resource', name: 'Blorgon')
+    describe 'finds fellows' do
+      let(:resource) { FactoryBot.create(:resource, publish: true, type: 'Resource', name: 'Blorgon') }
 
-      fellow = FactoryBot.create(:fellow, name: 'Joe Blow', rebuild_id: RebuildStatus.displayed_rebuild.id,
-                                          publish: true)
-      SearchResult.reindex
-      sleep(5)
+      let(:fellow) do
+        FactoryBot.create(:fellow, name: 'Joe Blow', rebuild_id: RebuildStatus.displayed_rebuild.id,
+                                   publish: true)
+      end
 
-      get :search, params: { search_string: 'Joe' }
+      before do
+        request.env['HTTP_AUTHORIZATION'] = "Basic {Base64.encode64('preview-bssw:SoMyCodeWillSeeTheFuture!!')}"
 
-      expect(assigns(:resources)).to include(fellow)
-      expect(assigns(:resources)).not_to include(resource)
+        fellow
+        resource
+      end
+
+      it 'has fellow' do
+        SearchResult.reindex
+        sleep(5)
+
+        get :search, params: { search_string: 'Joe' }
+
+        expect(assigns(:resources)).to include(fellow)
+      end
+
+      it 'does not have resource' do
+        SearchResult.reindex
+        sleep(5)
+
+        get :search, params: { search_string: 'Joe' }
+
+        expect(assigns(:resources)).not_to include(resource)
+      end
     end
 
     describe 'finds pages' do

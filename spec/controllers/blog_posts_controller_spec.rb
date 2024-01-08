@@ -6,14 +6,14 @@ RSpec.describe BlogPostsController, type: :controller do
   render_views
 
   before do
-    @rebuild = Rebuild.create
+    rebuild = Rebuild.create
     RebuildStatus.all.each(&:destroy)
-    RebuildStatus.create(display_rebuild_id: @rebuild.id)
+    RebuildStatus.create(display_rebuild_id: rebuild.id)
   end
 
   describe 'preview' do
     it 'sets the preview val' do
-      FactoryBot.create(:page, name: 'BSSw Blog', rebuild_id: @rebuild.id)
+      FactoryBot.create(:page, name: 'BSSw Blog', rebuild_id: rebuild.id)
       @request.env['HTTP_AUTHORIZATION'] = "Basic #{Base64.encode64('preview-bssw:SoMyCodeWillSeeTheFuture!!')}"
       @request.host = 'preview.bssw.io'
       get :index
@@ -23,10 +23,10 @@ RSpec.describe BlogPostsController, type: :controller do
 
   describe 'index' do
     it 'gets index' do
-      FactoryBot.create(:page, name: 'BSSw Blog', rebuild_id: @rebuild.id)
-      bp = FactoryBot.create(:blog_post, rebuild_id: @rebuild.id)
+      FactoryBot.create(:page, name: 'BSSw Blog', rebuild_id: rebuild.id)
+      bp = FactoryBot.create(:blog_post, rebuild_id: rebuild.id)
       expect(bp).to be_valid
-      author = FactoryBot.create(:author, rebuild_id: @rebuild.id)
+      author = FactoryBot.create(:author, rebuild_id: rebuild.id)
       bp.authors << author
       expect(BlogPost.published).to include(bp)
       get :index
@@ -35,16 +35,16 @@ RSpec.describe BlogPostsController, type: :controller do
     end
 
     it 'displays pages' do
-      150.times { FactoryBot.create(:blog_post, rebuild_id: @rebuild.id) }
+      150.times { FactoryBot.create(:blog_post, rebuild_id: rebuild.id) }
       get :index, xhr: true
       expect(response).to render_template :index
     end
 
     it 'gets index with author' do
       FactoryBot.create(:page, name: 'BSSw Blog')
-      a = FactoryBot.create(:author, rebuild_id: @rebuild.id)
-      bp = FactoryBot.create(:blog_post, rebuild_id: @rebuild.id)
-      bp2 = FactoryBot.create(:blog_post, rebuild_id: @rebuild.id)
+      a = FactoryBot.create(:author, rebuild_id: rebuild.id)
+      bp = FactoryBot.create(:blog_post, rebuild_id: rebuild.id)
+      bp2 = FactoryBot.create(:blog_post, rebuild_id: rebuild.id)
       bp2.authors = [a]
       get :index, params: { author: a.slug }
       expect(assigns(:posts)).to include bp2
@@ -54,10 +54,10 @@ RSpec.describe BlogPostsController, type: :controller do
 
   describe 'show' do
     it 'shows' do
-      first_post = FactoryBot.create(:blog_post, rebuild_id: @rebuild.id)
-      next_post = FactoryBot.create(:blog_post, rebuild_id: @rebuild.id)
-      topic = FactoryBot.create(:topic, rebuild_id: @rebuild.id)
-      author = FactoryBot.create(:author, rebuild_id: @rebuild.id)
+      first_post = FactoryBot.create(:blog_post, rebuild_id: rebuild.id)
+      next_post = FactoryBot.create(:blog_post, rebuild_id: rebuild.id)
+      topic = FactoryBot.create(:topic, rebuild_id: rebuild.id)
+      author = FactoryBot.create(:author, rebuild_id: rebuild.id)
       first_post.topics << topic
       next_post.topics << topic
       BlogPost.last.authors << author
