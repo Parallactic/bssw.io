@@ -20,19 +20,18 @@ class Track < GithubImport
       track = from_name(elem.text, rebuild_id)
       track.update(description: elem.text.split(':').last)
       track.update(listed: true)
-      Rails.logger.debug track.inspect
+      puts track.inspect
     end
   end
 
   def self.from_name(track_string, rebuild_id)
     return if track_string.match(Regexp.new(/\[(.*)\]/))
-
-    name = track_string.split(':').first.strip.titleize
+    slug = track_string.split(':').first.strip.parameterize
     track = find_or_create_by(
-      name:,
+      slug:,
       rebuild_id:
     )
-    track.slug = name.parameterize
+    track.name = track_string.split(':').first.strip
     track.save
     track
   end
