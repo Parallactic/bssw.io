@@ -78,5 +78,6 @@ class ResourcesController < ApplicationController
     @topic = Topic.displayed.find(topic) if topic
     @author = Author.displayed.find(author) if author
     @track = Track.displayed.find(track) if track
+    @page_num = params[:page] ? params[:page].to_i : 1
   end
 end
