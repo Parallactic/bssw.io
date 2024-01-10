@@ -9,9 +9,8 @@ class Rebuild < ApplicationRecord
   def set_location
     return if ip.blank?
 
-    update_attribute(
-      :location,
-      Geocoder.search(ip).try(:first).try(:data).try(:[], 'city')
+    update(
+      location: Geocoder.search(ip).try(:first).try(:data).try(:[], 'city')
     )
   end
 
@@ -22,10 +21,10 @@ class Rebuild < ApplicationRecord
   def process_file(file)
     full_name = file.full_name
     begin
+      return if full_name.match('utils/') || full_name.match('test/') || full_name.match('docs/')
+
       resource = process_path(full_name, file.read)
-
-      update_attribute(:files_processed, "#{files_processed}<li>#{resource.try(:path)}</li>")
-
+      update(files_processed: "#{files_processed}<li>#{resource.try(:path)}</li>")
       resource.try(:save)
     rescue StandardError => e
       record_errors(File.basename(full_name), e)
@@ -33,8 +32,8 @@ class Rebuild < ApplicationRecord
   end
 
   def record_errors(file_name, error)
-    update_attribute(:errors_encountered,
-                     "#{errors_encountered}
+    update(errors_encountered:
+             "#{errors_encountered}
                        <h4>#{file_name}:</h4>
                        <h5>#{error}</h5> #{error.backtrace.join('<br />')}<hr />")
   end
@@ -51,9 +50,8 @@ class Rebuild < ApplicationRecord
 
     update_links_and_images
     Author.all.each(&:cleanup)
-    update(names: Author.displayed.order(:alphabetized_name).map(&:contributions).flatten.map(&:display_name).uniq)
-    update(unpublished_files: Resource.where(rebuild_id: id,
-                                             publish: false).map(&:path).delete_if(&:blank?).join('<br />'))
+    update(names: Author.display_names)
+    update(unpublished_files: Resource.unpublished_paths(self.id))
     SearchResult.clear_index!
     SearchResult.displayed.reindex
     File.delete(file_path)
@@ -64,19 +62,15 @@ class Rebuild < ApplicationRecord
     classes = [Community, Category, Topic, Announcement, Author, Quote, SearchResult, FeaturedPost, Fellow, Page]
     everything = Rebuild.where(['id NOT IN (?)', rebuild_ids])
     classes.each do |klass|
-      Rails.logger.debug everything += klass.where(['rebuild_id NOT IN (?)', rebuild_ids])
+      everything += klass.where(['rebuild_id NOT IN (?)', rebuild_ids])
       everything += klass.where(rebuild_id: nil)
     end
 
     everything.each(&:destroy)
-    Contribution.where(site_item_id: nil).each(&:destroy)
-    Contribution.where(author_id: nil).each(&:destroy)
-    Contribution.all.each do |c|
-      c.destroy if c.author.nil?
-    end
+    Contribution.clean
   end
 
-  def self.file_structure # rubocop:disable Metrics/MethodLength
+  def self.file_structure         # rubocop:disable Metrics/MethodLength
     {
       'CuratedContent/WhatIs' => WhatIs,
       'CuratedContent/WhatAre' => WhatIs,
@@ -96,8 +90,6 @@ class Rebuild < ApplicationRecord
   end
 
   def process_path(path, content)
-    return if path.match('utils/') || path.match('test/') || path.match('docs/') || content.nil?
-
     if path.match('Quote')
       Quote.import(content)
     elsif path.match('Announcements')
@@ -105,10 +97,14 @@ class Rebuild < ApplicationRecord
     elsif path.match('BlogTracks')
       Track.import(content, id)
     else
-      resource = find_or_create_resource(path)
-      resource.parse_and_update(content)
-      resource
+      process_resource(path, content)
     end
+  end
+
+  def process_resource(path, content)
+    resource = find_or_create_resource(path)
+    resource.parse_and_update(content)
+    resource
   end
 
   def find_or_create_resource(path)

@@ -17,6 +17,12 @@ class Author < SearchResult
     where("#{table_name}.rebuild_id = ?", RebuildStatus.first.display_rebuild_id)
   }
 
+
+  def self.display_names
+    displayed.order(:alphabetized_name).map(&:contributions).flatten.map(&:display_name).uniq
+  end
+
+
   def should_generate_new_friendly_id?
     (new_record? || slug.blank?) && last_name.present?
   end

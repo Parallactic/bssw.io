@@ -18,19 +18,23 @@ class AuthorUtility
     [first_name.strip, last_name.strip]
   end
 
-  def self.do_overrides(comment, rebuild)
+  def self.do_overrides(comment, _rebuild)
     comment.text.split(/\n/).collect do |text|
-      next if text.match?(/Overrides/i)
+      return if text.match?(/Overrides/i)
 
-      vals = text.split(',').map { |val| val.delete('"') }
-      next if vals.map(&:blank?).all?
-
-      alpha_name = vals[1].try(:strip)
-      display_name = vals.last
-
-      author = Author.find_from_vals(vals.first, display_name, rebuild)
-      author&.do_overrides(alpha_name, display_name)
+      text_overrides(text)
     end
+  end
+
+  def self.text_overrides(text)
+    vals = text.split(',').map { |val| val.delete('"') }
+    return if vals.map(&:blank?).all?
+
+    alpha_name = vals[1].try(:strip)
+    display_name = vals.last
+
+    author = Author.find_from_vals(vals.first, display_name, rebuild)
+    author&.do_overrides(alpha_name, display_name)
   end
 
   def self.process_overrides(doc, rebuild)

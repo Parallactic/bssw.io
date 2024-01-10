@@ -34,7 +34,7 @@ class RebuildStatus < ApplicationRecord
     end
     rebuild.update(content_branch: branch)
     status = first || create
-    status.update_attribute(:in_progress_rebuild_id, rebuild.id)
+    status.update(in_progress_rebuild_id: rebuild.id)
   end
 
   def self.complete(rebuild, file_path)

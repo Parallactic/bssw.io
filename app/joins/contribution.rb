@@ -7,4 +7,13 @@ class Contribution < ApplicationRecord
   def link
     "<a class='author' href='/items?author=#{author.slug}'>#{display_name} </a>"
   end
+
+  def self.clean
+    all.each do |c|
+      c.destroy if c.author.nil? || c.site_item.nil?
+    end
+  end
+
+
+  
 end
