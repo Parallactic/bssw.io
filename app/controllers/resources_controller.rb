@@ -60,7 +60,9 @@ class ResourcesController < ApplicationController
     @resources = scoped_resources.with_category(@category) if @category
     @resources = scoped_resources.with_author(@author) if @author
     @resources = @resources.standard_scope
-    @resources = @resources.order('published_at desc') if params[:recent]
+    if params[:recent]
+      @resources = Resource.displayed.published.order('published_at desc')
+    end
     @total = @resources.size
     @resources = if params[:view] != 'all'
                    @resources.paginate(page: @page_num, per_page: 75)
