@@ -121,8 +121,11 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     it 'shows recent' do
+
+10.times { FactoryBot.create(:resource, rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true, published_at: (rand (1..10)).weeks.ago ) 
+}
       get :index, params: { recent: true }
-      expect(response).to render_template :index
+      expect(assigns(:resources).first.published_at).to be_later_than assigns(:resources)[3].published_at
     end
 
     it 'performs an empty search' do

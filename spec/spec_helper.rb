@@ -18,6 +18,8 @@ Gem.path.each do |path|
   Warning.ignore(/.*lostisland.*/, path)
 end
 
+require 'human_time/rspec_matchers'
+
 require 'simplecov'
 SimpleCov.start 'rails'
 
