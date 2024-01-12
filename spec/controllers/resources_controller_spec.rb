@@ -124,7 +124,7 @@ RSpec.describe ResourcesController, type: :controller do
 
 10.times { FactoryBot.create(:resource, rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true, published_at: (rand (1..10)).weeks.ago ) 
 }
-      get :index, params: { recent: true }
+      get :index, params: { view: 'recent' }
       puts assigns(:resources).first.published_at
       puts assigns(:resources).last.published_at
 expect(assigns(:resources).first.published_at.to_date).to be_later_than assigns(:resources).last.published_at.to_date
@@ -354,7 +354,7 @@ expect(assigns(:resources).first.published_at.to_date).to be_later_than assigns(
         old_resource = FactoryBot.create(:resource, published_at: 1.week.ago, name: 'AA', rebuild_id: rebuild.id)
         FactoryBot.create(:resource, published_at: 2.weeks.ago, rebuild_id: rebuild.id)
         new_resource = FactoryBot.create(:resource, published_at: Time.zone.today, name: 'BB', rebuild_id: rebuild.id)
-        get :index, params: {recent: true}
+        get :index, params: {view: :recent}
         expect(Resource.displayed.order('published_at desc').first).to eq(new_resource)
 #expect(Resource.standard_scope.order('published_at desc').first).to eq(new_resource)
 expect(assigns(:resources)).to include(new_resource)
