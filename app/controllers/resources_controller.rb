@@ -62,7 +62,7 @@ class ResourcesController < ApplicationController
     @resources = @resources.standard_scope
     @resources = SearchResult.displayed.published.order('published_at desc') if params[:recent].to_s == 'true'
     @total = @resources.size
-    @resources = if params[:view] != 'all' && params[:recent] != 'true'
+    @resources = if params[:view] != 'all'
                    @resources.paginate(page: @page_num, per_page: 75)
                  else
                    @resources.paginate(page: @page_num, per_page: @resources.size)
