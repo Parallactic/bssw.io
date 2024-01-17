@@ -1,7 +1,7 @@
 
 
-<% if @resources.respond_to?(:next_page) %>
-  <%= will_paginate @resources, params: { recent: params[:recent] } %>
+<% if @resources.respond_to?(:next_page) && !(params[:recent]) %>
+  <%= will_paginate @resources %>
 
   <% if @total != @resources.size %>   &nbsp;| <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
   <% else %>
