@@ -23,6 +23,7 @@ class Fellow < SearchResult
       begin
         s.update(:slug, nil)
       rescue StandardError
+        # skip if problems
       end
     end
     self.slug = name.try(:parameterize).force_encoding('UTF-8')
@@ -33,7 +34,7 @@ class Fellow < SearchResult
   end
 
   def set_hm
-    update_attribute(:honorable_mention, base_path.to_s.match?('HM'))
+    update(honorable_mention: base_path.to_s.match?('HM'))
   end
 
   def modified_path

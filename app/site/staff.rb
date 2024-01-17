@@ -11,7 +11,7 @@ class Staff < MarkdownImport
     node.css('a').each do |link|
       auth = Staff.find_or_create_by(website: link['href'], rebuild_id: rebuild)
       #      auth.update_attribute(:type, 'Staff')
-      auth.update_attribute(:section, val)
+      auth.update(section: val)
       auth.update_from_github
       Staff.find(auth.id).update_from_link(link.parent.children)
     end
@@ -20,7 +20,7 @@ class Staff < MarkdownImport
   def process_kid(kid)
     text = kid.text
     kid.remove if text.blank? || kid.name == 'br'
-    update_attribute(:title, text.gsub('Title: ', '')) if kid && text.match?('Title')
+    update(title: text.gsub('Title: ', '')) if kid && text.match?('Title')
     kid.try(:remove)
   end
 
@@ -35,10 +35,10 @@ class Staff < MarkdownImport
 
   def update_affiliation(siblings)
     if siblings[2].text.match('Title')
-      update_attribute(:affiliation,
+      update(affiliation:
                        siblings[4].text.strip)
     else
-      update_attribute(:affiliation,
+      update(affiliation:
                        siblings[2].text.strip)
     end
   end

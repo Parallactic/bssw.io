@@ -44,14 +44,13 @@ class Rebuild < ApplicationRecord
   end
 
   def clean(file_path)
-    Category.displayed.each { |category| category.update(slug: nil) }
+    #    Category.displayed.each { |category| category.update(slug: nil) }
     AuthorUtility.all_custom_info(id, file_path)
     clear_old
 
     update_links_and_images
-    Author.all.each(&:cleanup)
-    update(names: Author.display_names)
-    update(unpublished_files: Resource.unpublished_paths(self.id))
+
+    update(names: Author.display_names, unpublished_files: Resource.unpublished_paths(id))
     SearchResult.clear_index!
     SearchResult.displayed.reindex
     File.delete(file_path)
@@ -68,6 +67,7 @@ class Rebuild < ApplicationRecord
 
     everything.each(&:destroy)
     Contribution.clean
+    Author.all.each(&:cleanup)
   end
 
   def self.file_structure         # rubocop:disable Metrics/MethodLength

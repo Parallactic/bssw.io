@@ -26,16 +26,16 @@ class ApplicationController < ActionController::Base
   end
 
   def send_error(exception)
-    respond_to do |format|
-      format.any do
-        if exception.is_a?(ActionController::RoutingError) ||
-           exception.is_a?(ActiveRecord::RecordNotFound)
-          not_found(exception)
-        else
-          render_error(exception)
-        end
-      end
+    # respond_to do |format|
+    #   format.any do
+    if exception.is_a?(ActionController::RoutingError) ||
+       exception.is_a?(ActiveRecord::RecordNotFound)
+      not_found(exception)
+    else
+      render_error(exception)
     end
+    #   end
+    # end
   end
 
   def render_error(exception = nil)

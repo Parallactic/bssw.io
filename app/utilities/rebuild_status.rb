@@ -31,6 +31,7 @@ class RebuildStatus < ApplicationRecord
       Staff.all.each(&:delete)
       FellowLink.all.each(&:delete)
     rescue StandardError
+      # skip if problems deleting
     end
     rebuild.update(content_branch: branch)
     status = first || create

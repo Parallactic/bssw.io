@@ -18,7 +18,7 @@ class MarkdownImport < GithubImport
 
     html = doc.to_html.to_s
 
-    update_attribute(:content, html) unless content == html
+    update(content: html) unless content == html
   end
 
   def update_taxonomy(doc, rebuild)
@@ -47,12 +47,12 @@ class MarkdownImport < GithubImport
   end
 
   def add_opengraph_image(val)
-    update_attribute(:open_graph_image_tag, MarkdownUtility.modified_path(val))
+    update(open_graph_image_tag: MarkdownUtility.modified_path(val))
   end
 
   def add_rss_update(val)
     date = Chronic.parse(val)
-    update_attribute(:rss_date, date)
+    update(rss_date: date)
   end
 
   def add_slug(val)
@@ -61,20 +61,20 @@ class MarkdownImport < GithubImport
   end
 
   def add_aggregate(val)
-    update_attribute(:aggregate, val) if has_attribute?(:aggregate)
+    update(aggregate: val) if has_attribute?(:aggregate)
   end
 
   def add_publish(val)
     val = val.strip.downcase
     if val.match('yes')
-      update_attribute(:publish, true)
+      update(publish: true)
     else
-      update_attribute(:publish, false)
+      update(publish: false)
     end
   end
 
   def add_pinned(val)
-    update_attribute(:pinned, true) if val.downcase.match('y') && has_attribute?(:pinned)
+    update(pinned: true) if val.downcase.match('y') && has_attribute?(:pinned)
   end
 
   def update_date(doc)
@@ -86,7 +86,7 @@ class MarkdownImport < GithubImport
     return unless node
 
     date = Chronic.parse(node.content.split(':').last)
-    self.published_at = date
+    update(published_at: date)
     node.try(:remove)
   end
 
@@ -94,7 +94,7 @@ class MarkdownImport < GithubImport
     update_date(doc)
     return if !has_attribute?(:published_at) || is_a?(Event) || published_at.present?
 
-    update_attribute(:published_at,
+    update(published_at:
                      GithubImporter.github.commits(
                        Rails.application.credentials[:github][:repo],
                        rebuild.content_branch,

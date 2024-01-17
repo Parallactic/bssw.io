@@ -13,7 +13,4 @@ class Contribution < ApplicationRecord
       c.destroy if c.author.nil? || c.site_item.nil?
     end
   end
-
-
-  
 end

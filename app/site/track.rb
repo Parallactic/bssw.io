@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
+# Blog Tracks
 class Track < GithubImport
   scope :displayed, lambda {
-    where("#{table_name}.rebuild_id = ?", RebuildStatus.first.display_rebuild_id)
-  }
+                      where("#{table_name}.rebuild_id = ?", RebuildStatus.first.display_rebuild_id)
+                    }
 
   has_and_belongs_to_many :site_items, -> { distinct }, join_table: 'site_items_tracks'
   validates_presence_of :name

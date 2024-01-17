@@ -12,11 +12,9 @@ RSpec.describe CommunitiesController, type: :controller do
       RebuildStatus.create(display_rebuild_id: rebuild.id)
     end
 
+    let(:rebuild) { RebuildStatus.displayed_rebuild }
 
-  let(:rebuild) { RebuildStatus.displayed_rebuild }
-
-    
-it 'renders the show template' do
+    it 'renders the show template' do
       FactoryBot.create(:page, name: 'Communities Overview', rebuild_id: rebuild.id)
       community = FactoryBot.create(:community, rebuild_id: rebuild.id)
       get :show, params: { id: community }

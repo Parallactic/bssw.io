@@ -20,7 +20,7 @@ class AuthorUtility
 
   def self.do_overrides(comment, _rebuild)
     comment.text.split(/\n/).collect do |text|
-      return if text.match?(/Overrides/i)
+      break if text.match?(/Overrides/i)
 
       text_overrides(text)
     end
@@ -108,7 +108,6 @@ class AuthorUtility
 
     auth = Author.find_by(website:, rebuild_id: rebuild)
     unless auth
-      #      last_name = names.last
       auth = Author.find_or_create_by(rebuild_id: rebuild, last_name: names.last, first_name: names.first)
       auth.update(website:, alphabetized_name: names.last)
     end

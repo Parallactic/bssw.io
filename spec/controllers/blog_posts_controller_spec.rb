@@ -30,9 +30,9 @@ RSpec.describe BlogPostsController, type: :controller do
     end
 
     let(:bp) { FactoryBot.create(:blog_post, rebuild_id: rebuild.id) }
-    let(:author)  { FactoryBot.create(:author, rebuild_id: rebuild.id) }
+    let(:author) { FactoryBot.create(:author, rebuild_id: rebuild.id) }
     let(:a) { FactoryBot.create(:author, rebuild_id: rebuild.id) }
-    let(:bp2) { FactoryBot.create(:blog_post, rebuild_id: rebuild.id)}
+    let(:bp2) { FactoryBot.create(:blog_post, rebuild_id: rebuild.id) }
 
     it 'gets index with blog post' do
       get :index

@@ -9,23 +9,23 @@ class Event < SiteItem
   scope :upcoming, lambda {
     left_outer_joins(:additional_dates).includes(:additional_date_values).where(
       'additional_date_values.date >= ?',
-      Date.today
+      Time.zone.today
     ).order('additional_date_values.date asc')
   }
 
   scope :past, lambda {
     left_outer_joins(:additional_dates).includes(:additional_date_values).where(
       'additional_date_values.date < ?',
-      Date.today
+      Time.zone.today
     ).order('additional_date_values.date desc')
   }
 
   def next_date
-    additional_date_values.joins(:additional_date).where('date >= ?', Date.today).first
+    additional_date_values.joins(:additional_date).where('date >= ?', Time.zone.today).first
   end
 
   def prev_date
-    additional_date_values.joins(:additional_date).where('date < ?', Date.today).where(
+    additional_date_values.joins(:additional_date).where('date < ?', Time.zone.today).where(
       'additional_dates.label not LIKE ?', '%End %'
     ).last
   end
@@ -45,8 +45,6 @@ class Event < SiteItem
   def end_at
     end_date.try(:additional_date_values).try(:first).try(:date)
   end
-
-  #  self.table_name = 'site_items'
 
   def update_from_content(doc, rebuild)
     update_details(doc)
@@ -81,8 +79,10 @@ class Event < SiteItem
     url = node.text
     match = url.match('\[(.*?)\](.*)')
     if match
-      update_attribute(:website_label, match[1])
-      update_attribute(:website, match[2])
+      update(
+        website_label: match[1],
+        website: match[2]
+      )
       node.remove
     else
       self.website = (url.split(':').last)
