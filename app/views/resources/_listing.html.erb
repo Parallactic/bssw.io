@@ -15,23 +15,23 @@
           <div class="row">
 	    <% if @latest %>
 	      <div class='col-3'>
-		<%= result.try(:published_at).try(:strftime, '%F') %>
+		<%= resource.try(:published_at).try(:strftime, '%F') %>
 		</div>
 	                  <div class="col-3">
 
 	      <p class="topics small-caps">
 <strong>Type of Item</strong>
-<% if result.is_a?(Event)  %>
+<% if resource.is_a?(Event)  %>
 Event
-<% elsif result.is_a?(BlogPost) %>
+<% elsif resource.is_a?(BlogPost) %>
 Blog Post
-<% elsif result.is_a?(Fellow) %>
+<% elsif resource.is_a?(Fellow) %>
 Fellow 
-<% elsif result.is_a?(Author) %>
+<% elsif resource.is_a?(Author) %>
 Author
-<% elsif result.is_a?(SiteItem) %>
+<% elsif resource.is_a?(SiteItem) %>
 Resource
-<% elsif result.is_a?(Page) %>
+<% elsif resource.is_a?(Page) %>
 Page
 <% end %>
 </p>
