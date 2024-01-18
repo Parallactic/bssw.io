@@ -11,19 +11,22 @@
   <div class="main <% if !@category && !@topic && controller.action_name != 'search' %>all_resources_page<% end %>" >
     <div class="container">
       <div class="row">
-	<div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
-	  <div class="page-heading all"> 
-	    <div class="breadcrumbs">
+	<% if @latest %>
+	  <div class='col-12'>
+	  <% else %>
+	    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+	<% end %>
+	<div class="page-heading all"> 
+	  <div class="breadcrumbs">
 	      <ul>
 		<li><a href="/">Home</a></li>
 		<li><%= link_to 'Resources', site_items_path %></li>
-
 	      </ul>
 	    </div>
-
 	    <%= render :partial => 'pages/page', :locals =>
-			{:page => Page.find_by_name('Resources')} %>
-			
+  {:page => Page.find_by_name('Resources')} %>
+	</div>
+
 <% end %>
 
 
@@ -41,11 +44,8 @@
 
 
 <div id='resources' <% if params[:author] || params[:search_string] %>class='container'<% end %>>
-    <%= render 'resources', :resources => @resources, :results => (@search? @results : nil), cached: true %>
+  <%= render 'resources', :resources => @resources, :results => (@search? @results : nil), cached: true %>
 </div>
-
-		    </div>
-		</div>
 		<%if controller.action_name === 'search' %>
 		    <div class="posts-list to-top-after-load">
 			<div class="container">
@@ -64,6 +64,4 @@
 
 	    <% end %>
 
-</div>
-</div>
 
