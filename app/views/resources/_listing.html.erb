@@ -14,13 +14,13 @@
             </div>
             <div class="row">
 	      <% if @latest %>
-		<div class='col-4'>
-		  <p class="topics small-caps">
+		<div class='col-3'>
+		  <p class="small-caps">
 
 		    <%= resource.try(:published_at).try(:strftime, '%F') %>
 		  </p>
 		</div>
-	        <div class="col-4">
+	        <div class="col-3">
 
 		  <p class="small-caps">
 		    <strong>Type of Item</strong>
@@ -40,9 +40,8 @@
 		  </p>
 		</div>
 		
-		<div class='col-3'>
+		<div class='col-5'>
 		  <p class="topics small-caps">
-		    <strong>Topics</strong>
 		    <%= resource.topic_list %>
 		  </p>
 		</div>
