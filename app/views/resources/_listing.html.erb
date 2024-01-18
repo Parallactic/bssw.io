@@ -13,6 +13,35 @@
             </div>
           </div>
           <div class="row">
+	    <% if @latest %>
+	      <div class='col-3'>
+		<%= result.try(:published_at).try(:strftime, '%F') %>
+		</div>
+	                  <div class="col-3">
+
+	      <p class="topics small-caps">
+<strong>Type of Item</strong>
+<% if result.is_a?(Event)  %>
+Event
+<% elsif result.is_a?(BlogPost) %>
+Blog Post
+<% elsif result.is_a?(Fellow) %>
+Fellow 
+<% elsif result.is_a?(Author) %>
+Author
+<% elsif result.is_a?(SiteItem) %>
+Resource
+<% elsif result.is_a?(Page) %>
+Page
+<% end %>
+</p>
+			  </div>
+			  
+			  <div class='col-3'>
+			    <strong>Topics</strong>
+			    		<%= resource.topic_list %>
+</div>
+	  <% else %>
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
               <p class="topics small-caps">
                 <% if @community || @search %>
@@ -23,6 +52,7 @@
 		<%= resource.topic_list %>
               </p>
             </div>
+	    <% end %>
           </div>
 
         </div>

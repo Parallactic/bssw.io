@@ -59,7 +59,7 @@
 		<% end %>
 
 
-	    <% if controller.action_name != 'search' && !(@author)%>
+	    <% if controller.action_name != 'search' && !(@author) && !(@latest) %>
 		<%= render :partial => '/layouts/sidebar' %>
 	</div>
     </div>
