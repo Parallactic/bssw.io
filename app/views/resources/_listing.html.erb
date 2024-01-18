@@ -1,63 +1,68 @@
 <% if resource.slug %>
-<div class="<% if @search %>event-blog-row search-row<% else %>resource<% end %>">
-  <div class="container">
-    <a href="<%= site_item_url(resource.slug) %>">
-      <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-          <% if resource.pinned && !(@search) %>
-          <span class="recommended"><span class="dot"></span> Recommended</span>
-          <% end %>
-          <div class="row">
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-              <h3><%= resource.name %></h3>
+  <div class="<% if @search %>event-blog-row search-row<% else %>resource<% end %>">
+    <div class="container">
+      <a href="<%= site_item_url(resource.slug) %>">
+	<div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <% if resource.pinned && !(@search) %>
+              <span class="recommended"><span class="dot"></span> Recommended</span>
+            <% end %>
+            <div class="row">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+		<h3><%= resource.name %></h3>
+              </div>
             </div>
-          </div>
-          <div class="row">
-	    <% if @latest %>
-	      <div class='col-3'>
-		<%= resource.try(:published_at).try(:strftime, '%F') %>
+            <div class="row">
+	      <% if @latest %>
+		<div class='col-4'>
+		  <p class="topics small-caps">
+
+		    <%= resource.try(:published_at).try(:strftime, '%F') %>
+		  </p>
 		</div>
-	                  <div class="col-3">
+	        <div class="col-4">
 
-	      <p class="topics small-caps">
-<strong>Type of Item</strong>
-<% if resource.is_a?(Event)  %>
-Event
-<% elsif resource.is_a?(BlogPost) %>
-Blog Post
-<% elsif resource.is_a?(Fellow) %>
-Fellow 
-<% elsif resource.is_a?(Author) %>
-Author
-<% elsif resource.is_a?(SiteItem) %>
-Resource
-<% elsif resource.is_a?(Page) %>
-Page
-<% end %>
-</p>
-			  </div>
-			  
-			  <div class='col-3'>
-			    <strong>Topics</strong>
-			    		<%= resource.topic_list %>
-</div>
-	  <% else %>
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-              <p class="topics small-caps">
-                <% if @community || @search %>
-                  <strong>Topics </strong>
-                <% else %>
-                 <strong><% "Topic".pluralize(resource.topics_count) %>&nbsp; </strong>
-                <% end %>
-		<%= resource.topic_list %>
-              </p>
+		  <p class="small-caps">
+		    <strong>Type of Item</strong>
+		    <% if resource.is_a?(Event)  %>
+		      Event
+		    <% elsif resource.is_a?(BlogPost) %>
+		      Blog Post
+		    <% elsif resource.is_a?(Fellow) %>
+		      Fellow 
+		    <% elsif resource.is_a?(Author) %>
+		      Author
+		    <% elsif resource.is_a?(SiteItem) %>
+		      Resource
+		    <% elsif resource.is_a?(Page) %>
+		      Page
+		    <% end %>
+		  </p>
+		</div>
+		
+		<div class='col-3'>
+		  <p class="topics small-caps">
+		    <strong>Topics</strong>
+		    <%= resource.topic_list %>
+		  </p>
+		</div>
+	      <% else %>
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+		  <p class="topics small-caps">
+                    <% if @community || @search %>
+                      <strong>Topics </strong>
+                    <% else %>
+                      <strong><% "Topic".pluralize(resource.topics_count) %>&nbsp; </strong>
+                    <% end %>
+		    <%= resource.topic_list %>
+		  </p>
+		</div>
+	      <% end %>
             </div>
-	    <% end %>
+	    
           </div>
-
-        </div>
-      </div>
-    </a>
+	</div>
+      </a>
+    </div>
   </div>
-</div>
 <% end %>
