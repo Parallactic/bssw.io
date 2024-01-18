@@ -1,27 +1,27 @@
 
 <% if controller.action_name == 'search' %>
-    <%= render :partial => 'search_hero' %>
+  <%= render :partial => 'search_hero' %>
 
 
 
 <% elsif @author %>
-    <%= render :partial => 'author_hero' %>
+  <%= render :partial => 'author_hero' %>
 <% else %>
 
-    <div class="main <% if !@category && !@topic && controller.action_name != 'search' %>all_resources_page<% end %>" >
-	<div class="container">
-	    <div class="row">
-		<div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
-		    <div class="page-heading all"> 
-			<div class="breadcrumbs">
-			    <ul>
-				<li><a href="/">Home</a></li>
-				<li><%= link_to 'Resources', site_items_path %></li>
+  <div class="main <% if !@category && !@topic && controller.action_name != 'search' %>all_resources_page<% end %>" >
+    <div class="container">
+      <div class="row">
+	<div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
+	  <div class="page-heading all"> 
+	    <div class="breadcrumbs">
+	      <ul>
+		<li><a href="/">Home</a></li>
+		<li><%= link_to 'Resources', site_items_path %></li>
 
-			    </ul>
-			</div>
+	      </ul>
+	    </div>
 
-			<%= render :partial => 'pages/page', :locals =>
+	    <%= render :partial => 'pages/page', :locals =>
 			{:page => Page.find_by_name('Resources')} %>
 			
 <% end %>
@@ -61,9 +61,9 @@
 
 	    <% if controller.action_name != 'search' && !(@author) && !(@latest) %>
 		<%= render :partial => '/layouts/sidebar' %>
-	</div>
-    </div>
 
 	    <% end %>
 
+</div>
+</div>
 

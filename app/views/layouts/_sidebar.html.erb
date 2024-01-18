@@ -1,36 +1,39 @@
 <div class="sidebar-col col-xl-3 col-lg-3 col-md-3 col-sm-3 pr-0">
-    <div id="sidebar" class="sidebar">
-	<div class="sidebar-inner">
-	    <h3>Resources by Topic</h3>
-	    <div class="accordion panel-group" id="accordionSidebar" role='tablist'>
-		<% Category.displayed.includes([:topics]).each_with_index do |category, index| 
-		cat = category.name.split(' ') %>
-		<div class="card panel">
-		    <div class="card-header" id="heading-<%= index %>" >
-			<h2 class="mb-0">
-			    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse-<%= index %>" aria-expanded="false" aria-controls="collapse-<%= index %>">
-				<%= category.name %>
-			    </button>
-			</h2>
-		    </div>
-		    <div id="collapse-<%= index %>" class="collapse" aria-labelledby="heading-<%= index %>" data-parent="#accordionSidebar">
-			<div class="card-body">
-			    <ul class="caret-list">
-				<li><a href="/items?category=<%= category.slug %>">All <%= cat.second %> Resources</a></li>
-				<% category.topics.each_with_index do |topic| %>
-				    <li><%= link_to topic.name, '/items?topic='+topic.slug.to_s %></li>
-				<% end %>
-			    </ul>
-			</div>
-		    </div>
-		</div>
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+      <h3>Resources by Topic</h3>
+      <div class="accordion panel-group" id="accordionSidebar" role='tablist'>
+	<% Category.displayed.includes([:topics]).each_with_index do |category, index| 
+  cat = category.name.split(' ') %>
+	<div class="card panel">
+	  <div class="card-header" id="heading-<%= index %>" >
+	    <h2 class="mb-0">
+	      <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse-<%= index %>" aria-expanded="false" aria-controls="collapse-<%= index %>">
+		<%= category.name %>
+	      </button>
+	    </h2>
+	  </div>
+	  <div id="collapse-<%= index %>" class="collapse" aria-labelledby="heading-<%= index %>" data-parent="#accordionSidebar">
+	    <div class="card-body">
+	      <ul class="caret-list">
+		<li><a href="/items?category=<%= category.slug %>">All <%= cat.second %> Resources</a></li>
+		<% category.topics.each_with_index do |topic| %>
+		  <li><%= link_to topic.name, '/items?topic='+topic.slug.to_s %></li>
 		<% end %>
+	      </ul>
 	    </div>
+	  </div>
 	</div>
 
-	<ul class="caret-list">
-	    <li><a href="/items">View All Resources</a></li>
-	</ul>
+<% end %>
+</div>
+</div>
 
-    </div>
+
+
+
+<ul class="caret-list">
+  <li><a href="/items">View All Resources</a></li>
+</ul>
+</div>
 </div>
