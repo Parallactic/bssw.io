@@ -18,21 +18,21 @@
 	<% end %>
 	<div class="page-heading all"> 
 	  <div class="breadcrumbs">
-<<<<<<< HEAD
+
 	    <ul>
 	      <li><a href="/">Home</a></li>
 	      <li><%= link_to 'Resources', site_items_path %></li>
 	    </ul>
 	  </div>
 	  <%= render :partial => 'pages/page', :locals =>
-=======
+
 	      <ul>
 		<li><a href="/">Home</a></li>
 		<li><%= link_to 'Resources', site_items_path %></li>
 	      </ul>
 	    </div>
 	    <%= render :partial => 'pages/page', :locals =>
->>>>>>> parent of e9de007 (resource view)
+
   {:page => Page.find_by_name('Resources')} %>
 	</div>
 
@@ -55,7 +55,7 @@
 <div id='resources' <% if params[:author] || params[:search_string] %>class='container'<% end %>>
   <%= render 'resources', :resources => @resources, :results => (@search? @results : nil), cached: true %>
 </div>
-<<<<<<< HEAD
+
 <%if controller.action_name === 'search' %>
   <div class="posts-list to-top-after-load">
     <div class="container">
@@ -72,7 +72,7 @@
   <%= render :partial => '/layouts/sidebar' %>
   
 <% end %>
-=======
+
 		<%if controller.action_name === 'search' %>
 		    <div class="posts-list to-top-after-load">
 			<div class="container">
@@ -90,7 +90,7 @@
 		<%= render :partial => '/layouts/sidebar' %>
 
 	    <% end %>
->>>>>>> parent of e9de007 (resource view)
+
 
 
 </div>
