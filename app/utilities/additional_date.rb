@@ -18,4 +18,22 @@ class AdditionalDate < ApplicationRecord
       date.additional_date_values << AdditionalDateValue.new(date: Chronic.parse(datetime).try(:to_date))
     end
   end
+
+  def self.do_multiple_dates(dates, label_text, event)
+    end_year = dates.last.match(/\d{4}/)
+    dates = ["#{dates.first} #{end_year}", dates.last] unless dates.first.match(/\d{4}/)
+    dates = month_dates(dates)
+    AdditionalDate.make_date("Start #{label_text}", dates.first, event)
+    AdditionalDate.make_date("End #{label_text}", dates.last, event)
+  end
+
+  def self.month_dates(dates)
+    our_month, end_month = nil
+    Date::MONTHNAMES.slice(1..-1).map(&:to_s).map { |m| m[0, 3] }.each do |month|
+      our_month = month if dates.first.match(month)
+      Rails.logger.debug end_month = true if dates.last.match(month)
+    end
+    dates = [dates.first, "#{our_month} #{dates.last}"] if our_month && !end_month
+    dates
+  end
 end

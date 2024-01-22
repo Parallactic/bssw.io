@@ -5,7 +5,7 @@ class Announcement < MarkdownImport
   self.table_name = 'announcements'
 
   scope :for_today, lambda {
-                      where('start_date <= ? and end_date >= ?', Date.today, Date.today)
+                      where('start_date <= ? and end_date >= ?', Time.zone.today, Time.zone.today)
                     }
 
   def self.import(content, rebuild_id)
@@ -44,6 +44,6 @@ class Announcement < MarkdownImport
       start_date: Chronic.parse(dates.first),
       end_date: date
     )
-    return if date && date > Date.today
+    return if date && date > Time.zone.today
   end
 end

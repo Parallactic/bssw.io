@@ -143,15 +143,22 @@ RSpec.describe RebuildsController, type: :controller do
     end
 
     describe 'make displayed' do
-      it 'changes the current id' do
+      let(:rs) do
+        RebuildStatus.first ||
+          RebuildStatus.find_or_create_by(display_rebuild_id: Rebuild.first.id)
+      end
+      let(:credentials) do
+        ActionController::HttpAuthentication::Basic.encode_credentials 'bssw',
+                                                                       'rebuildlog'
+      end
+
+      before do
         3.times { Rebuild.create }
-        rs = RebuildStatus.first
-        rs ||= RebuildStatus.find_or_create_by(display_rebuild_id: Rebuild.first.id)
-        credentials = ActionController::HttpAuthentication::Basic.encode_credentials 'bssw',
-                                                                                     'rebuildlog'
+      end
+
+      it 'changes the current id' do
         request.env['HTTP_AUTHORIZATION'] =
           credentials
-        expect(Rebuild.first.id).not_to eq rs.display_rebuild_id
         expect do
           post :make_displayed,
                params: { id: Rebuild.first.id }

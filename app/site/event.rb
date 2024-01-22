@@ -113,27 +113,9 @@ class Event < SiteItem
               date_text.split('-')
             end
     if dates.size > 1
-      do_multiple_dates(dates, label_text)
+      AdditionalDate.do_multiple_dates(dates, label_text, self)
     else
       AdditionalDate.make_date(label_text, date_text, self)
     end
-  end
-
-  def do_multiple_dates(dates, label_text)
-    end_year = dates.last.match(/\d{4}/)
-    dates = ["#{dates.first} #{end_year}", dates.last] unless dates.first.match(/\d{4}/)
-    dates = month_dates(dates)
-    AdditionalDate.make_date("Start #{label_text}", dates.first, self)
-    AdditionalDate.make_date("End #{label_text}", dates.last, self)
-  end
-
-  def month_dates(dates)
-    our_month, end_month = nil
-    Date::MONTHNAMES.slice(1..-1).map(&:to_s).map { |m| m[0, 3] }.each do |month|
-      our_month = month if dates.first.match(month)
-      end_month = true if dates.last.match(month)
-    end
-    dates = [dates.first, "#{our_month} #{dates.last}"] if our_month && !end_month
-    dates
   end
 end
