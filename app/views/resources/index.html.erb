@@ -26,13 +26,6 @@
 	  </div>
 	  <%= render :partial => 'pages/page', :locals =>
 
-	      <ul>
-		<li><a href="/">Home</a></li>
-		<li><%= link_to 'Resources', site_items_path %></li>
-	      </ul>
-	    </div>
-	    <%= render :partial => 'pages/page', :locals =>
-
   {:page => Page.find_by_name('Resources')} %>
 	</div>
 
