@@ -1,31 +1,31 @@
 <%= render 'pages/deck', page: page %>
 
 <% if page.regular %>
-  <div class='page-content
-	      <% if page.home? %> home-content<% end %>
-	      <% if page.slug == 'bssw-blog' %> blog-content<% end %>
-	      <% if page.slug == 'bssw-fellowship-program' %> fellowship-content<% end %>
-	      <% if page.slug == 'contributors' %> contributors-content<% end %>
-	      <% if page.slug == 'team' %> about-content<% end %>
-	      <% if page.slug == 'policies' %> policies-content<% end %>
-	      <% if page.slug == 'contribute-to-the-better-scientific-software-site' %> contributions-content<% end %>
-	      <% if page.name.match("Email") %> email-content<% end %>'>
-    <div class='container'>
-      <div class='row'>
-	<div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-	  <div class='content <% if page.slug == 'communities-overview' %>communities-overview<% end %>'>
-	    <% if @page.name == ("Team") %>
-	      <%= render 'pages/team', page: @page %>
-	    <% else %>
-	      <%= page.main %>
-	    <% end %>
-	    <% if page.name.match("Email") %>
-	      <%= render 'email_signup' %>
-	    <% end %>
-	  </div>
+    <div class='page-content
+		<% if page.home? %> home-content<% end %>
+		<% if page.slug == 'bssw-blog' %> blog-content<% end %>
+		<% if page.slug == 'bssw-fellowship-program' %> fellowship-content<% end %>
+		<% if page.slug == 'contributors' %> contributors-content<% end %>
+		<% if page.slug == 'team' %> about-content<% end %>
+		<% if page.slug == 'policies' %> policies-content<% end %>
+		<% if page.slug == 'contribute-to-the-better-scientific-software-site' %> contributions-content<% end %>
+		<% if page.name.match("Email") %> email-content<% end %>'>
+	<div class='container'>
+	    <div class='row'>
+		<div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+		    <div class='content <% if page.slug == 'communities-overview' %>communities-overview<% end %>'>
+			<% if @page.name == ("Team") %>
+			    <%= render 'pages/team', page: @page %>
+			<% else %>
+			    <%= page.main %>
+			<% end %>
+			<% if page.name.match("Email") %>
+			    <%= render 'email_signup' %>
+			<% end %>
+		    </div>
+		</div>
+	    </div>
 	</div>
-      </div>
     </div>
-  </div>
 <% end %>
 

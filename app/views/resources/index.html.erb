@@ -18,12 +18,21 @@
 	<% end %>
 	<div class="page-heading all"> 
 	  <div class="breadcrumbs">
+<<<<<<< HEAD
 	    <ul>
 	      <li><a href="/">Home</a></li>
 	      <li><%= link_to 'Resources', site_items_path %></li>
 	    </ul>
 	  </div>
 	  <%= render :partial => 'pages/page', :locals =>
+=======
+	      <ul>
+		<li><a href="/">Home</a></li>
+		<li><%= link_to 'Resources', site_items_path %></li>
+	      </ul>
+	    </div>
+	    <%= render :partial => 'pages/page', :locals =>
+>>>>>>> parent of e9de007 (resource view)
   {:page => Page.find_by_name('Resources')} %>
 	</div>
 
@@ -39,13 +48,14 @@
   <% elsif @latest %>
     <h1>Recent Resources</h1>
 <% elsif controller.action_name != 'search' && !(@author)%>
-  <h1 class="all_resources">All Resources</h1>
+    <h1 class="all_resources">All Resources</h1>
 <% end %>
 
 
 <div id='resources' <% if params[:author] || params[:search_string] %>class='container'<% end %>>
   <%= render 'resources', :resources => @resources, :results => (@search? @results : nil), cached: true %>
 </div>
+<<<<<<< HEAD
 <%if controller.action_name === 'search' %>
   <div class="posts-list to-top-after-load">
     <div class="container">
@@ -62,6 +72,25 @@
   <%= render :partial => '/layouts/sidebar' %>
   
 <% end %>
+=======
+		<%if controller.action_name === 'search' %>
+		    <div class="posts-list to-top-after-load">
+			<div class="container">
+			    <div class="row">
+				<div class="col-xl-12 col-lg-12 col-nd-12 col-sm-12 col-12">
+				    <a class="to-top" href="#top">To Top</a>
+				</div>
+			    </div>
+			</div>
+		    </div>
+		<% end %>
+
+
+	    <% if controller.action_name != 'search' && !(@author) && !(@latest) %>
+		<%= render :partial => '/layouts/sidebar' %>
+
+	    <% end %>
+>>>>>>> parent of e9de007 (resource view)
 
 
 </div>
