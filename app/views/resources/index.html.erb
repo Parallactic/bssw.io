@@ -24,16 +24,16 @@
 	      <li><%= link_to 'Resources', site_items_path %></li>
 	    </ul>
 	  </div>
-	  <%= render :partial => 'pages/page', :locals =>
-
-  {:page => Page.find_by_name('Resources')} %>
+	  <%= render :partial => 'pages/page', :locals =>  {:page => Page.find_by_name('Resources')} %>
 	</div>
-
+	</div>
+	</div>
+	</div>
 <% end %>
 
 
 <% if @topic %>
-    <h1><%= @topic.name %></h1>
+  <h1><%= @topic.name %></h1>
     <%= @topic.overview.try(:html_safe) %>
 <% elsif @category  %>
     <h1><%= @category.name %></h1>
