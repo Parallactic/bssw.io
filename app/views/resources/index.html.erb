@@ -61,10 +61,7 @@
   </div>
 <% end %>
 
-<% if controller.action_name != 'search' && !(@author) && !(@latest) %>
-  <%= render :partial => '/layouts/sidebar' %>
-  
-<% end %>
+
 
 		<%if controller.action_name === 'search' %>
 		    <div class="posts-list to-top-after-load">
