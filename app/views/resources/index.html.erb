@@ -47,7 +47,7 @@
 	</div>
 <div id='resources' <% if params[:author] || params[:search_string] %>class='container'<% end %>>
   <%= render 'resources', :resources => @resources, :results => (@search? @results : nil), cached: true %>
-</div>
+
 
 <%if controller.action_name === 'search' %>
   <div class="posts-list to-top-after-load">
@@ -78,7 +78,7 @@
 
 <% if @latest %>
 </div>
-
+</div>
 </div>
 <% end %>
 	    <% if controller.action_name != 'search' && !(@author) && !(@latest) %>
