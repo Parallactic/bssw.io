@@ -39,7 +39,7 @@
     </div>
   <% end %>
   <div class='container'>
-  <div id='resources' <% if params[:author] || params[:search_string] %>class='container'<% end %>>
+    <div id='resources' <% if params[:author] || params[:search_string] %>class='container'<% end %>>
     <%= render 'resources', :resources => @resources, :results => (@search? @results : nil), cached: true %>
   </div>
   <%if controller.action_name === 'search' %>
@@ -70,9 +70,9 @@
 
 
   </div>
-
+</div>
   <% if controller.action_name != 'search' && !(@author) && !(@latest) %>
     <%= render :partial => '/layouts/sidebar' %>
     
   <% end %>
-</div>
+
