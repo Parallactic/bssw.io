@@ -76,11 +76,8 @@
 		<% end %>
 
 </div>
-<% if @latest %>
-
 </div>
 </div>
-<% end %>
 	    <% if controller.action_name != 'search' && !(@author) && !(@latest) %>
 		<%= render :partial => '/layouts/sidebar' %>
 
