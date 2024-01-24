@@ -24,7 +24,7 @@
 
 	  
 	  <% if @topic %>
-	  <h1><%= @topic.name %></h1>
+	    <h1><%= @topic.name %></h1>
 	  <%= @topic.overview.try(:html_safe) %>
 	<% elsif @category  %>
 	  <h1><%= @category.name %></h1>
@@ -53,11 +53,12 @@
 	  </div>
 	<% end %>
       </div>
-      <% if controller.action_name != 'search' && !(@author) && !(@latest) %>
+      </div>
+            <% if controller.action_name != 'search' && !(@author) && !(@latest) %>
 	<%= render :partial => '/layouts/sidebar' %>
       <% end %>
       
-      </div>
+
     </div>
   </div>
   
