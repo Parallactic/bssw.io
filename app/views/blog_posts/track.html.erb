@@ -25,16 +25,16 @@
 	    <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
 	  <% end %>
 	</div>
-      </div>
 
 
-      <div class="tracks-list" id="posts">
+
+	<div class="tracks-list" id="posts">
 	<%= render 'posts', posts: @posts %>
       </div>
 
 
 
-      <div class='container'>
+
 
 	<div class='pagination pagination-bottom'>
 	    1-<%= @posts.size %> of <%= @total %> Items
