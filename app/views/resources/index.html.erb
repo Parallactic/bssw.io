@@ -21,9 +21,9 @@
 	    <%= render :partial => 'pages/page', :locals =>  {:page => Page.find_by_name('Resources')} %>
 	  </div>
 
-	</div>
-	
-	<% if @topic %>
+
+	  
+	  <% if @topic %>
 	  <h1><%= @topic.name %></h1>
 	  <%= @topic.overview.try(:html_safe) %>
 	<% elsif @category  %>
@@ -53,14 +53,14 @@
 	  </div>
 	<% end %>
       </div>
-      	  <% if controller.action_name != 'search' && !(@author) && !(@latest) %>
-	    <%= render :partial => '/layouts/sidebar' %>
-	  <% end %>
-
+      <% if controller.action_name != 'search' && !(@author) && !(@latest) %>
+	<%= render :partial => '/layouts/sidebar' %>
+      <% end %>
+      
+      </div>
     </div>
   </div>
-
-
+  
   <%if controller.action_name === 'search' %>
     <div class="posts-list to-top-after-load">
       <div class="container">
@@ -72,7 +72,7 @@
       </div>
     </div>
   <% end %>
-
+  
 </div>
 
 
