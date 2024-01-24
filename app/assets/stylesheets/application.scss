@@ -1631,9 +1631,12 @@ FEATURED
     }
 }
 
-.latest a { font-weight: bold; padding: 10px;
-	    &:hover { background: #aaa; 
-		    }
+.latest a { font-weight: 700; padding: 22px 14px;
+	    font-size: 18px;
+	    color: #349dff;
+	    &:hover { background: #eee;
+		      color: #19197d;
+				  }
 
 	  }
 .latest { margin-top: 7px;
