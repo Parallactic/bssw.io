@@ -17,7 +17,7 @@
       </div>
 
 
-      
+      <div class="container">
       <div class='pagination pagination-top'>
 	1-<%= @posts.size %> of <%= @total %> Items
 	<% if @total > @posts.size %>
@@ -25,7 +25,7 @@
 	  <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
 	<% end %>
       </div>
-
+      </div>
     </div>
 
   </div>
