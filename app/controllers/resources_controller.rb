@@ -61,7 +61,7 @@ class ResourcesController < ApplicationController
     @resources = scoped_resources.with_author(@author) if @author
     @resources = @resources.standard_scope
     @latest = params[:recent].to_s == 'true'
-    @resources = SearchResult.displayed.published.order('published_at desc') if @latest
+    @resources = SearchResult.displayed.published.where.not(type: 'Page').order('published_at desc') if @latest
 
     @total = @resources.size
     @resources = if params[:view] != 'all'
