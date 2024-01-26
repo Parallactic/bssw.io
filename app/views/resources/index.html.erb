@@ -19,7 +19,7 @@
 	      </ul>
 	    </div>
 	    <%= render :partial => 'pages/page', :locals =>  {:page => Page.find_by_name('Resources')} %>
-	  </div>
+
 
 
 	  
@@ -37,7 +37,7 @@
 
       <% end %>
 
-
+      </div>
       <div id='resources' <% if params[:author] || params[:search_string] %>class='container'<% end %>>
 	<%= render 'resources', :resources => @resources, :results => (@search? @results : nil), cached: true %>
 

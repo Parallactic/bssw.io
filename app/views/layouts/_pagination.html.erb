@@ -1,6 +1,6 @@
 
 
-<% if @resources.respond_to?(:next_page) && !(params[:recent]) %>
+<% if @resources.respond_to?(:next_page) && (params[:search]) %>
   <%= will_paginate @resources %>
 
   <% if @total != @resources.size %>   &nbsp;| <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
