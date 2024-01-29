@@ -4,10 +4,11 @@
 
 <% elsif @author %>
   <%= render :partial => 'author_hero' %>
+<% else %>
   
   <div class="container">
     <div class="row">
-    <% else %>
+
       <div class="main <% if !@category && !@topic && !(@author) && controller.action_name != 'search' %>all_resources_page<% end %>" >
 
 	<div class="<% unless @latest %>col-xl-9 col-lg-9 col-md-9<% end %> col-sm-12 col-12">
