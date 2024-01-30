@@ -1,6 +1,10 @@
 <div class="container">
   <div class="row">
-    
+    		
+	      <% if @author %>
+		<%= render :partial => 'author_hero' %>
+	      <% end %>
+
     <div class="main <% if !@category && !@topic && !(@author) && controller.action_name != 'search' %>all_resources_page<% end %>" >
       <div class="container">
 	<div class="row">
@@ -17,11 +21,8 @@
 	      <% end %>
 	      <% if controller.action_name == 'search' %>
 		<%= render :partial => 'search_hero' %>
-		
-		
-	      <% elsif @author %>
-		<%= render :partial => 'author_hero' %>
-	      <% else %>
+	      <% end %>
+	      <% if !(controller.action_name == 'search') && !(@author) %>
 		
 		
 
