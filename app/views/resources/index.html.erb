@@ -5,6 +5,7 @@
       <div class="container">
 	<div class="row">
 	  <div class="<% unless @latest %>col-xl-9 col-lg-9 col-md-9<% end %> col-sm-12 col-12">
+	    <% unless @author %>
 	    <div class="page-heading all"> 
 	      <div class="breadcrumbs">
 
@@ -13,7 +14,7 @@
 		  <li><%= link_to 'Resources', site_items_path %></li>
 		</ul>
 	      </div>
-
+	      <% end %>
 	      <% if controller.action_name == 'search' %>
 		<%= render :partial => 'search_hero' %>
 		
