@@ -9,7 +9,7 @@
 	      <% if @search && @resources.respond_to?(:total_entries) %>
 		Results found for <i><%= @search %></i> (<%= @resources.total_entries %>)
 	      <% else %>
-		All Resources (<%= @resources.size %>)
+		All Resources (<%= @total %>)
 	      <% end %>
 
 
