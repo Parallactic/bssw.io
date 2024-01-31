@@ -3,9 +3,10 @@
 <% if @resources.respond_to?(:next_page) && controller.action_name == 'search' %>
   <%= will_paginate @resources %>
 
-<% end %>
+<% else %>
 
-1-<%= @resources.size %> of <%= @total %> Items
+  1-<%= @resources.size %> of <%= @total %> Items
+  <% end %>
 <%  if @total > @resources.size %>
   &nbsp;|
   <%= link_to "View All", params.merge(:view => 'all', :page => 1).permit! %>
