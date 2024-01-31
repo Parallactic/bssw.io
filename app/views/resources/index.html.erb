@@ -1,9 +1,10 @@
-<div class="container">
-  <div class="row">
-    		
 	      <% if @author %>
 		<%= render :partial => 'author_hero' %>
 	      <% end %>
+
+<div class="container">
+  <div class="row">
+    		
 
     <div class="main <% if !@category && !@topic && !(@author) && controller.action_name != 'search' %>all_resources_page<% end %>" >
       <div class="container">
