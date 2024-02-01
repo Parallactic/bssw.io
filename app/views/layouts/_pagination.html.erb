@@ -1,6 +1,6 @@
 
 
-<% if @resources.respond_to?(:next_page) && controller.action_name == 'search' %>
+<% if @total > @resources.size && controller.action_name == 'search' %>
   <%= will_paginate @resources %>
 
 <% else %>
