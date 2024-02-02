@@ -6,7 +6,7 @@ GIT
       activerecord (>= 3.0)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     actioncable (7.0.4)
       actionpack (= 7.0.4)
@@ -590,7 +590,6 @@ DEPENDENCIES
   algoliasearch-rails
   attempt
   awesome_print
-  base64 (= 0.1.1)
   bcrypt_pbkdf
   bootstrap-sass
   brakeman
