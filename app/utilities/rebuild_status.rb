@@ -31,10 +31,11 @@ class RebuildStatus < ApplicationRecord
       Staff.all.each(&:delete)
       FellowLink.all.each(&:delete)
     rescue StandardError
+      # skip if problems deleting
     end
     rebuild.update(content_branch: branch)
     status = first || create
-    status.update_attribute(:in_progress_rebuild_id, rebuild.id)
+    status.update(in_progress_rebuild_id: rebuild.id)
   end
 
   def self.complete(rebuild, file_path)

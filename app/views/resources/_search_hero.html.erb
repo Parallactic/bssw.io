@@ -1,39 +1,39 @@
 <div class="row hero-row hero-search">
-	<div class="container">
-	    <div class="row">
-		<div class="col-md-9">
-		    <h1>Search </h1>
-		    <div class="deck">
-			<% if @resources %>
-			    <p>
-			      <% if @search && @resources.respond_to?(:total_entries) %>
-				Results found for <i><%= @search %></i> (<%= @resources.total_entries %>)
-			      <% else %>
-				All Resources (<%= @resources.size %>)
-			      <% end %>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-9">
+	<h1>Search </h1>
+	<div class="deck">
+	  <% if @resources %>
+	    <p>
+	      <% if @search && @resources.respond_to?(:total_entries) %>
+		Results found for <i><%= @search %></i> (<%= @resources.total_entries %>)
+	      <% else %>
+		All Resources (<%= @total %>)
+	      <% end %>
 
 
-			    </p>
-			<% else %>
-			    <p>No results found </p>
-			<% end %>
-		    </div>
-		</div>
-	    </div>
-	    
-	    <div class="row search-form-row">
-		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-		    <form class="search-page-form" role="search" method="get" action="/items/search">
-			<div class="input-group">
-			    <input type="text" class="form-control" placeholder="Search" name="search_string" value="">
-			    <div class="input-group-btn">
-				<button class="btn" type="submit"><i class="fa fa-search fa-flip-horizontal"></i></button>
-			    </div>
-			</div>
-		    </form>
-
-		</div>
-	    </div>
-<div class='search_instruction'>Use quotes to search phrases and exact spellings.</div>
+	    </p>
+	  <% else %>
+	    <p>No results found </p>
+	  <% end %>
 	</div>
+      </div>
     </div>
+    
+    <div class="row search-form-row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+	<form class="search-page-form" role="search" method="get" action="/items/search">
+	  <div class="input-group">
+	    <input type="text" class="form-control" placeholder="Search" name="search_string" value="">
+	    <div class="input-group-btn">
+	      <button class="btn" type="submit"><i class="fa fa-search fa-flip-horizontal"></i></button>
+	    </div>
+	  </div>
+	</form>
+
+      </div>
+    </div>
+    <div class='search_instruction'>Use quotes to search phrases and exact spellings.</div>
+  </div>
+</div>

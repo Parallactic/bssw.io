@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
+# Blog Tracks
 class Track < GithubImport
   scope :displayed, lambda {
-    where("#{table_name}.rebuild_id = ?", RebuildStatus.first.display_rebuild_id)
-  }
+                      where("#{table_name}.rebuild_id = ?", RebuildStatus.first.display_rebuild_id)
+                    }
 
   has_and_belongs_to_many :site_items, -> { distinct }, join_table: 'site_items_tracks'
   validates_presence_of :name
@@ -20,12 +21,13 @@ class Track < GithubImport
       track = from_name(elem.text, rebuild_id)
       track.update(description: elem.text.split(':').last)
       track.update(listed: true)
-      puts track.inspect
+      Rails.logger.debug track.inspect
     end
   end
 
   def self.from_name(track_string, rebuild_id)
     return if track_string.match(Regexp.new(/\[(.*)\]/))
+
     slug = track_string.split(':').first.strip.parameterize
     track = find_or_create_by(
       slug:,

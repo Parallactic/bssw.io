@@ -19,3 +19,11 @@ Metrics/BlockLength:
       - 'Rakefile'
       - '**/*.rake'
       - 'spec/**/*.rb'
+
+Rails/UnknownEnv:
+  Environments:
+    - production
+    - development
+    - test
+    - staging
+    - preview

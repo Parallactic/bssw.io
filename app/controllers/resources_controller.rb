@@ -37,6 +37,7 @@ class ResourcesController < ApplicationController
     @resources += SearchResult.algolia_search(search_string, hitsPerPage: 1000, page: 1)
     #   @resources += @results
     # end
+    @total = @resources.size
     @resources = if params[:view] != 'all'
                    @resources.paginate(page:, per_page: 25)
                  else
@@ -59,12 +60,16 @@ class ResourcesController < ApplicationController
     @resources = scoped_resources.joins(:searchresults_topics).with_topic(@topic) if @topic
     @resources = scoped_resources.with_category(@category) if @category
     @resources = scoped_resources.with_author(@author) if @author
-
     @resources = @resources.standard_scope
-    @total = @resources.size
-    return unless @resources.size > 75 && params[:view] != 'all'
+    @latest = params[:recent].to_s == 'true'
+    @resources = SearchResult.displayed.published.where.not(type: 'Page').order('published_at desc') if @latest
 
-    @resources = @resources.first(75)
+    @total = @resources.size
+    @resources = if params[:view] != 'all'
+                   @resources.paginate(page: @page_num, per_page: 75)
+                 else
+                   @resources.paginate(page: @page_num, per_page: @resources.size)
+                 end
   end
 
   def set_filters
@@ -76,5 +81,6 @@ class ResourcesController < ApplicationController
     @topic = Topic.displayed.find(topic) if topic
     @author = Author.displayed.find(author) if author
     @track = Track.displayed.find(track) if track
+    @page_num = params[:page] ? params[:page].to_i : 1
   end
 end

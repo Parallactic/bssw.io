@@ -31,8 +31,7 @@ class GithubImporter < ApplicationRecord
 
   def self.save_content(branch, rebuild)
     rebuild.update(commit_hash: github.commit(Rails.application.credentials[:github][:repo], branch)['sha'])
-    time = Time.now.to_i.to_s
-    file_path = "#{Rails.root}/tmp/repo-#{branch}-#{rebuild.commit_hash}-#{time}.tar.gz"
+    file_path = Rails.root.join("/tmp/repo-#{branch}-#{rebuild.commit_hash}-#{Time.now.to_i}.tar.gz")
     agent.get(github.archive_link(Rails.application.credentials[:github][:repo],
                                   ref: branch)).save(file_path)
   end

@@ -9,23 +9,23 @@ class Event < SiteItem
   scope :upcoming, lambda {
     left_outer_joins(:additional_dates).includes(:additional_date_values).where(
       'additional_date_values.date >= ?',
-      Date.today
+      Time.zone.today
     ).order('additional_date_values.date asc')
   }
 
   scope :past, lambda {
     left_outer_joins(:additional_dates).includes(:additional_date_values).where(
       'additional_date_values.date < ?',
-      Date.today
+      Time.zone.today
     ).order('additional_date_values.date desc')
   }
 
   def next_date
-    additional_date_values.joins(:additional_date).where('date >= ?', Date.today).first
+    additional_date_values.joins(:additional_date).where('date >= ?', Time.zone.today).first
   end
 
   def prev_date
-    additional_date_values.joins(:additional_date).where('date < ?', Date.today).where(
+    additional_date_values.joins(:additional_date).where('date < ?', Time.zone.today).where(
       'additional_dates.label not LIKE ?', '%End %'
     ).last
   end
@@ -45,8 +45,6 @@ class Event < SiteItem
   def end_at
     end_date.try(:additional_date_values).try(:first).try(:date)
   end
-
-  #  self.table_name = 'site_items'
 
   def update_from_content(doc, rebuild)
     update_details(doc)
@@ -81,8 +79,10 @@ class Event < SiteItem
     url = node.text
     match = url.match('\[(.*?)\](.*)')
     if match
-      update_attribute(:website_label, match[1])
-      update_attribute(:website, match[2])
+      update(
+        website_label: match[1],
+        website: match[2]
+      )
       node.remove
     else
       self.website = (url.split(':').last)
@@ -113,27 +113,9 @@ class Event < SiteItem
               date_text.split('-')
             end
     if dates.size > 1
-      do_multiple_dates(dates, label_text)
+      AdditionalDate.do_multiple_dates(dates, label_text, self)
     else
       AdditionalDate.make_date(label_text, date_text, self)
     end
-  end
-
-  def do_multiple_dates(dates, label_text)
-    end_year = dates.last.match(/\d{4}/)
-    dates = ["#{dates.first} #{end_year}", dates.last] unless dates.first.match(/\d{4}/)
-    dates = month_dates(dates)
-    AdditionalDate.make_date("Start #{label_text}", dates.first, self)
-    AdditionalDate.make_date("End #{label_text}", dates.last, self)
-  end
-
-  def month_dates(dates)
-    our_month, end_month = nil
-    Date::MONTHNAMES.slice(1..-1).map(&:to_s).map { |m| m[0, 3] }.each do |month|
-      our_month = month if dates.first.match(month)
-      end_month = true if dates.last.match(month)
-    end
-    dates = [dates.first, "#{our_month} #{dates.last}"] if our_month && !end_month
-    dates
   end
 end

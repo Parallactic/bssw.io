@@ -1,9 +1,9 @@
 <div>
 
 
-    <div class="pagination pagination-top col-md-12">
-      <%= render :partial => '/layouts/pagination' %>
-    </div>
+  <div class="pagination pagination-top col-md-12">
+    <%= render :partial => '/layouts/pagination' %>
+  </div>
 </div>
 
 <div class="resources">
@@ -12,7 +12,7 @@
   <% @resources.each do |resource| %>
     <% if controller.action_name == 'search' %>
 
-	<%= render 'search_result', result: resource %>
+      <%= render 'search_result', result: resource %>
 
     <% elsif @author %>
       <%= render 'author_listing', :resource => resource  %>
@@ -22,7 +22,7 @@
   <% end %>
 </div>
 <div>
-    <div class="pagination pagination-bottom col-md-12">
-      <%= render :partial => '/layouts/pagination' %>
-    </div>
+  <div class="pagination pagination-bottom col-md-12">
+    <%= render :partial => '/layouts/pagination' %>
+  </div>
 </div>

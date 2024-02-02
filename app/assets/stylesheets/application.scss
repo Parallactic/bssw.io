@@ -1614,6 +1614,7 @@ FEATURED
     .owl-nav {
 	text-align: left;
 	display: inline-block;
+	margin-top: -10px;
     }
     .owl-dots {
 	display: inline-block;
@@ -1630,10 +1631,22 @@ FEATURED
     }
 }
 
-.owl-carousel .owl-stage-outer {
-    border-bottom: 2px solid #ebebeb;
-    padding-bottom: 20px;
-}
+.latest a { font-weight: 700; padding: 22px 14px;
+	    font-size: 18px;
+	    color: #349dff;
+	    &:hover { background: #eee;
+		      color: #19197d;
+				  }
+
+	  }
+.latest { margin-top: 18px;
+	}
+
+.owl-carousel  {
+		border-bottom: 2px solid #ebebeb;
+
+
+		}
 
 .owl-item {
     background: #fff;

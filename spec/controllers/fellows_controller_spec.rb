@@ -6,14 +6,16 @@ RSpec.describe FellowsController, type: :controller do
   render_views
 
   before do
-    @rebuild = Rebuild.create
+    rebuild = Rebuild.create
     RebuildStatus.all.each(&:destroy)
-    RebuildStatus.create(display_rebuild_id: @rebuild.id)
+    RebuildStatus.create(display_rebuild_id: rebuild.id)
   end
+
+  let(:rebuild) { RebuildStatus.displayed_rebuild }
 
   describe 'get show' do
     it 'renders the show template' do
-      fellow = FactoryBot.create(:fellow, rebuild_id: @rebuild.id, honorable_mention: nil)
+      fellow = FactoryBot.create(:fellow, rebuild_id: rebuild.id, honorable_mention: nil)
       get :show, params: { id: fellow.slug }
 
       expect(response).to render_template 'show'
@@ -22,7 +24,7 @@ RSpec.describe FellowsController, type: :controller do
 
   describe 'get index' do
     it 'renders the index template' do
-      FactoryBot.create(:fellow, rebuild_id: @rebuild.id)
+      FactoryBot.create(:fellow, rebuild_id: rebuild.id)
       get :index
       expect(response).to render_template 'index'
     end

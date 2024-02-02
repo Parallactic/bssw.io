@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 # resources, events, and blog posts
-
 class SiteItem < SearchResult
   require 'csv'
 
