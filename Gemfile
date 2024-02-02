@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 ruby '3.2.0'
 
 git_source(:github) do |repo_name|
@@ -132,3 +132,4 @@ gem 'ed25519'
 gem 'algoliasearch-rails'
 gem 'faraday', '1.10.3'
 gem 'human_time'
+gem 'base64', '0.1.1'
