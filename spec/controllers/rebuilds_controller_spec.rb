@@ -122,21 +122,21 @@ RSpec.describe RebuildsController, type: :controller do
     end
 
     describe 'index' do
+      let(:credentials) do
+        ActionController::HttpAuthentication::Basic.encode_credentials Rails.application.credentials[:import][:name],
+                                                                       Rails.application.credentials[:import][:password]
+      end
+
       it 'gets index' do
-        name = Rails.application.credentials[:import][:name]
-        pw = Rails.application.credentials[:import][:password]
-        credentials = ActionController::HttpAuthentication::Basic.encode_credentials name,
-                                                                                     pw
         request.env['HTTP_AUTHORIZATION'] = credentials
         get :index
         expect(response).to have_http_status(:success)
       end
 
       it 'does not get index w/o pw' do
-        credentials = ActionController::HttpAuthentication::Basic.encode_credentials 'bssw',
-                                                                                     'wrong'
-        request.env['HTTP_AUTHORIZATION'] =
-          credentials
+        bad_credentials = ActionController::HttpAuthentication::Basic.encode_credentials 'bssw',
+                                                                                         'wrong'
+        request.env['HTTP_AUTHORIZATION'] = bad_credentials
         get :index
         expect(response).not_to have_http_status(:success)
       end
@@ -157,14 +157,12 @@ RSpec.describe RebuildsController, type: :controller do
       end
 
       it 'changes the current id' do
-        request.env['HTTP_AUTHORIZATION'] =
-          credentials
+        request.env['HTTP_AUTHORIZATION'] = credentials
         expect do
           post :make_displayed,
                params: { id: Rebuild.first.id }
           rs.reload
-        end.to change(rs,
-                      :display_rebuild_id)
+        end.to change(rs, :display_rebuild_id)
       end
     end
   end
