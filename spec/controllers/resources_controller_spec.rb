@@ -17,7 +17,7 @@ RSpec.describe ResourcesController, type: :controller do
   before do
     FactoryBot.create(:page, name: 'Resources')
     Rebuild.create
-    RebuildStatus.all.each(&:destroy)
+    RebuildStatus.all.find_each(&:destroy)
     RebuildStatus.create(display_rebuild_id: rebuild.id)
   end
 

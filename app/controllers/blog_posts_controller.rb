@@ -20,13 +20,13 @@ class BlogPostsController < ApplicationController
     # respond_to do |format|
     #   format.js { render :index }
     #   format.html do
-        if @track
-          render :track
-        else
-          render :index
-        end
-#      end
-#    end
+    if @track
+      render :track
+    else
+      render :index
+    end
+    #      end
+    #    end
   end
 
   def show

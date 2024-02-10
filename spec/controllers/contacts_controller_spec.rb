@@ -7,7 +7,7 @@ RSpec.describe ContactsController, type: :controller do
 
   before do
     @rebuild = Rebuild.create
-    RebuildStatus.all.each(&:destroy)
+    RebuildStatus.all.find_each(&:destroy)
     RebuildStatus.create(display_rebuild_id: @rebuild.id)
     page = Page.create(name: 'Contact BSSw', rebuild_id: @rebuild.id, path: 'Contact.md')
     page.save
@@ -33,7 +33,7 @@ RSpec.describe ContactsController, type: :controller do
       end.to change(ActionMailer::Base.deliveries, :count)
     end
 
-    it "won't send without name" do
+    it 'does not send without name' do
       session[:invisible_captcha_timestamp] = Time.zone.now.iso8601
       sleep InvisibleCaptcha.timestamp_threshold
 

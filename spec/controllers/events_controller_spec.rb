@@ -8,7 +8,7 @@ RSpec.describe EventsController, type: :controller do
   let(:rebuild) { Rebuild.create }
 
   before do
-    RebuildStatus.all.each(&:destroy)
+    RebuildStatus.all.find_each(&:destroy)
     RebuildStatus.create(display_rebuild_id: rebuild.id)
   end
 

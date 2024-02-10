@@ -9,7 +9,7 @@ class Contribution < ApplicationRecord
   end
 
   def self.clean
-    all.each do |c|
+    all.find_each do |c|
       c.destroy if c.author.nil? || c.site_item.nil?
     end
   end

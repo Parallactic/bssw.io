@@ -132,4 +132,3 @@ gem 'ed25519'
 gem 'algoliasearch-rails'
 gem 'faraday', '1.10.3'
 gem 'human_time'
-

@@ -7,7 +7,7 @@ RSpec.describe FellowsController, type: :controller do
 
   before do
     rebuild = Rebuild.create
-    RebuildStatus.all.each(&:destroy)
+    RebuildStatus.all.find_each(&:destroy)
     RebuildStatus.create(display_rebuild_id: rebuild.id)
   end
 

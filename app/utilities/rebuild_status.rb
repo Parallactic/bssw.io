@@ -28,8 +28,8 @@ class RebuildStatus < ApplicationRecord
 
   def self.start(rebuild, branch)
     begin
-      Staff.all.each(&:delete)
-      FellowLink.all.each(&:delete)
+      Staff.all.find_each(&:delete)
+      FellowLink.all.find_each(&:delete)
     rescue StandardError
       # skip if problems deleting
     end

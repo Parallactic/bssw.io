@@ -6,7 +6,7 @@ RSpec.describe BlogPostsController, type: :controller do
   render_views
 
   before do
-    RebuildStatus.all.each(&:destroy)
+    RebuildStatus.all.find_each(&:destroy)
     RebuildStatus.create(display_rebuild_id: Rebuild.create.id)
   end
 

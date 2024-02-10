@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
     render(
       template: 'errors/internal_server_error',
       layout: 'layouts/application',
-      status: '500',
+      status: :internal_server_error,
       formats: [:html]
     )
   end

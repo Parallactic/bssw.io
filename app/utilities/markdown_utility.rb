@@ -33,7 +33,7 @@ class MarkdownUtility < ApplicationRecord
   end
 
   def self.get_title_chunk(doc)
-    title_chunk = (doc.at_css('h1') || doc.at_css('h2') || doc.at_css('h3'))
+    title_chunk = doc.at_css('h1') || doc.at_css('h2') || doc.at_css('h3')
     return unless title_chunk
 
     string = title_chunk.content.strip

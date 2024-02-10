@@ -44,6 +44,6 @@ class Announcement < MarkdownImport
       start_date: Chronic.parse(dates.first),
       end_date: date
     )
-    return if date && date > Time.zone.today
+    nil if date && date > Time.zone.today
   end
 end

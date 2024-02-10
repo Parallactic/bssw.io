@@ -3,7 +3,7 @@
 # utility methods for processing authors
 class AuthorUtility
   def self.all_custom_info(rebuild_id, file_path)
-    Author.where(rebuild_id:).each(&:update_from_github)
+    Author.where(rebuild_id:).find_each(&:update_from_github)
     custom_staff_info(file_path, rebuild_id)
     custom_author_info(file_path, rebuild_id)
   end

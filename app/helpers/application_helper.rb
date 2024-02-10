@@ -25,21 +25,24 @@ module ApplicationHelper
     return @post.name if @post
     return @page.name if @page
     return @event.name if @event
-    return @resource.name if @resource
+
+    @resource&.name
   end
 
   def social_image
     return @post.open_graph_image_tag if @post
     return @event.open_graph_image_tag if @event
     return @page.open_graph_image_tag if @page
-    return @resource.open_graph_image_tag if @resource.respond_to?(:open_graph_image_tag)
+
+    @resource.open_graph_image_tag if @resource.respond_to?(:open_graph_image_tag)
   end
 
   def social_description
     return strip_tags(@post.snippet) if @post
     return strip_tags(@page.snippet) if @page
     return strip_tags(@event.snippet) if @event
-    return strip_tags(@resource.snippet) if @resource
+
+    strip_tags(@resource.snippet) if @resource
   end
 
   def author_list(resource)

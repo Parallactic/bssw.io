@@ -67,10 +67,10 @@ class Rebuild < ApplicationRecord
 
     everything.each(&:destroy)
     Contribution.clean
-    Author.all.each(&:cleanup)
+    Author.all.find_each(&:cleanup)
   end
 
-  def self.file_structure         # rubocop:disable Metrics/MethodLength
+  def self.file_structure # rubocop:disable Metrics/MethodLength
     {
       'CuratedContent/WhatIs' => WhatIs,
       'CuratedContent/WhatAre' => WhatIs,
