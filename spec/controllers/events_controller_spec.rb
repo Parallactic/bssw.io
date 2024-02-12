@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe EventsController, type: :controller do
@@ -101,10 +103,11 @@ RSpec.describe EventsController, type: :controller do
                                 additional_dates: [
                                   FactoryBot.build(:additional_date,
                                                    label: 'Start Date',
-                                                   additional_date_values: [FactoryBot.build(:additional_date_value,
-                                                                                             date: Time.zone.today.change(
-                                                                                               month: 6, day: 1
-                                                                                             ))]),
+                                                   additional_date_values:
+                                                     [FactoryBot.build(:additional_date_value,
+                                                                       date: Time.zone.today.change(
+                                                                         month: 6, day: 1
+                                                                       ))]),
                                   FactoryBot.build(:additional_date,
                                                    label: 'End Date',
                                                    additional_date_values:

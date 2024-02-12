@@ -13,7 +13,7 @@ RSpec.describe PagesController, type: :controller do
 
   let(:rebuild) { RebuildStatus.displayed_rebuild }
 
-  describe 'get show' do
+  describe 'get about page' do
     it 'renders the show template' do
       FactoryBot.create(:page, rebuild_id: rebuild.id, name: 'Team')
       get :show, params: { id: 'about' }
@@ -21,7 +21,7 @@ RSpec.describe PagesController, type: :controller do
     end
   end
 
-  describe 'get show' do
+  describe 'get nonexistent page' do
     it 'renders the show template' do
       get :show, params: { id: 'nonexistent' }
       expect(response.status).to eq(404)

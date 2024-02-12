@@ -5,7 +5,7 @@ class Contribution < ApplicationRecord
   belongs_to :site_item, dependent: :destroy
 
   def link
-    "<a class='author' href='/items?author=#{author.slug}'>#{display_name} </a>"
+    "<a class='author' href='/items?author=#{author.slug}'>#{display_name}</a>"
   end
 
   def self.clean

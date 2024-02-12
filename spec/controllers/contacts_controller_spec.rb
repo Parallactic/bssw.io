@@ -6,10 +6,10 @@ RSpec.describe ContactsController, type: :controller do
   render_views
 
   before do
-    @rebuild = Rebuild.create
+    rebuild = Rebuild.create
     RebuildStatus.all.find_each(&:destroy)
-    RebuildStatus.create(display_rebuild_id: @rebuild.id)
-    page = Page.create(name: 'Contact BSSw', rebuild_id: @rebuild.id, path: 'Contact.md')
+    RebuildStatus.create(display_rebuild_id: rebuild.id)
+    page = Page.create(name: 'Contact BSSw', rebuild_id: rebuild.id, path: 'Contact.md')
     page.save
     InvisibleCaptcha.init!
     InvisibleCaptcha.timestamp_threshold = 1
