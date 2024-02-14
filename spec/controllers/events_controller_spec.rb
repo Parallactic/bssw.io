@@ -8,6 +8,13 @@ RSpec.describe EventsController, type: :controller do
   render_views
 
   let(:rebuild) { Rebuild.create }
+  let(:past_date) do
+    FactoryBot.create(
+      :additional_date_value,
+      date: 1.week.ago,
+      additional_date: event.additional_dates.first
+    )
+  end
 
   before do
     RebuildStatus.all.find_each(&:destroy)
@@ -52,11 +59,7 @@ RSpec.describe EventsController, type: :controller do
     it 'shows past' do
       event = FactoryBot.create(:event, publish: true, rebuild_id: rebuild.id)
       event.additional_dates << FactoryBot.create(:additional_date, label: 'foo', event:)
-      event.additional_dates.first.additional_date_values << FactoryBot.create(
-        :additional_date_value,
-        date: 1.week.ago,
-        additional_date: event.additional_dates.first
-      )
+      event.additional_dates.first.additional_date_values << past_date
       get :index, params: { past: true }
 
       expect(assigns(:past_events)).to include(event)
@@ -67,20 +70,17 @@ RSpec.describe EventsController, type: :controller do
       author.save
       event = FactoryBot.create(:event, publish: true, rebuild_id: rebuild.id)
       event.authors << author
-      expect(Event.displayed).to include(event)
-      expect(Event.displayed.with_author(author)).to include(event)
+      get :index, params: { author: author.slug }
+      expect(response.body).to include(event.name)
+    end
+
+    it 'can update dates' do
+      event = FactoryBot.create(:event, publish: true, rebuild_id: rebuild.id)
       doc = Nokogiri::XML('<ul><li>Dates: January 10 - January 10</li></ul>')
       event.send(:update_dates, doc.css("li:contains('Dates:')"))
 
       event.save
-
-      expect(event.authors).to include(author)
-      expect(Author.find_by(slug: author.slug)).to eq author
-
-      expect(Event.displayed.published.with_author(author)).to include(event)
-
-      get :index, params: { author: author.slug }
-      expect(response.body).to include(event.name)
+      expect(Event.displayed.published).to include(event)
     end
 
     it 'gets unpaginated' do

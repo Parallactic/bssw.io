@@ -9,6 +9,11 @@ RSpec.describe PagesController, type: :controller do
     rebuild = Rebuild.create
     RebuildStatus.all.find_each(&:destroy)
     RebuildStatus.create(display_rebuild_id: rebuild.id)
+    FactoryBot.create(:page,
+                      name: 'Homepage',
+                      path: 'Homepage.md',
+                      slug: 'homepage',
+                      rebuild_id: rebuild.id)
   end
 
   let(:rebuild) { RebuildStatus.displayed_rebuild }
@@ -29,31 +34,40 @@ RSpec.describe PagesController, type: :controller do
   end
 
   it 'gets quote' do
-    page = FactoryBot.create(:page,
-                             name: 'Homepage',
-                             path: 'Homepage.md',
-                             slug: 'homepage',
-                             rebuild_id: rebuild.id)
     quote = FactoryBot.create(:quote, rebuild_id: rebuild.id)
-    FactoryBot.create(:announcement,
-                      start_date: 1.day.from_now,
-                      end_date: 3.days.from_now,
-                      rebuild_id: rebuild.id)
-    get :show, params: { id: page.slug }
+    get :show, params: { id: 'homepage' }
     expect(assigns(:quote)).to eq quote
-    expect(assigns(:announcement)).to be_nil
   end
 
-  it 'gets announcement' do
-    page = FactoryBot.create(:page, name: 'Homepage', rebuild_id: rebuild.id)
-    announcement = FactoryBot.create(:announcement,
-                                     start_date: 1.day.ago,
-                                     end_date: 3.days.from_now,
-                                     rebuild_id: rebuild.id,
-                                     path: FactoryBot.create(:site_item).path)
-    get :show, params: { id: page.slug }
-    expect(assigns(:quote)).to be_nil
-    expect(assigns(:announcement)).to eq announcement
+  describe 'announcements' do
+    let(:current_announcement) do
+      FactoryBot.create(:announcement,
+                        start_date: 1.day.ago,
+                        end_date: 3.days.from_now,
+                        rebuild_id: rebuild.id,
+                        path: FactoryBot.create(:site_item).path)
+    end
+    let(:future_announcement) do
+      FactoryBot.create(:announcement,
+                        start_date: 1.day.from_now,
+                        end_date: 3.days.from_now,
+                        rebuild_id: rebuild.id)
+    end
+    let(:page) do
+      Page.find_or_create_by(name: 'Homepage', rebuild_id: rebuild.id)
+    end
+
+    it 'gets announcement' do
+      announcement = current_announcement
+      get :show, params: { id: page.slug }
+      expect(assigns(:announcement)).to eq announcement
+    end
+
+    it 'does not show announcement in future' do
+      future_announcement
+      get :show, params: { id: page.slug }
+      expect(assigns(:announcement)).to be_nil
+    end
   end
 
   it 'gets contact' do
