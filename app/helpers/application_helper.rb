@@ -29,28 +29,24 @@ module ApplicationHelper
     @resource&.name
   end
 
-  def social_image
-    return @post.open_graph_image_tag if @post
-    return @event.open_graph_image_tag if @event
-    return @page.open_graph_image_tag if @page
-
-    @resource.open_graph_image_tag if @resource.respond_to?(:open_graph_image_tag)
+  def social_image(page_item)
+    page_item.open_graph_image_tag if page_item.respond_to?(:open_graph_image_tag)
   end
 
-  def social_description
-    return strip_tags(@post.snippet) if @post
-    return strip_tags(@page.snippet) if @page
-    return strip_tags(@event.snippet) if @event
+  # def social_description
+  #   return strip_tags(@post.snippet) if @post
+  #   return strip_tags(@page.snippet) if @page
+  #   return strip_tags(@event.snippet) if @event
 
-    strip_tags(@resource.snippet) if @resource
-  end
+  #   strip_tags(@resource.snippet) if @resource
+  # end
 
   def author_list(resource)
-    resource.author_list.html_safe
+    resource.author_list
   end
 
   def author_list_without_links(resource)
-    resource.author_list_without_links.html_safe
+    resource.author_list_without_links
   end
 
   def formatted_additionals(event)

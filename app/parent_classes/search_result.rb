@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# searchable thru algolia
 class SearchResult < MarkdownImport
   include AlgoliaSearch
 
@@ -113,7 +114,7 @@ class SearchResult < MarkdownImport
       '<strong>By</strong> BSSw Community'.html_safe
     else
       "<strong>By</strong> #{contributions.map(&:display_name).to_sentence}
-      ".html_safe
+      "
     end
   end
 
@@ -121,7 +122,7 @@ class SearchResult < MarkdownImport
     if authors.empty?
       'BSSw Community'
     else
-      contributions.map { |c| c.link.html_safe }.to_sentence.html_safe
+      contributions.map { |c| c.link.html_safe }.to_sentence
     end
   end
 
@@ -131,20 +132,5 @@ class SearchResult < MarkdownImport
 
   def basic?
     is_a?(WhatIs) || is_a?(HowTo)
-  end
-
-  def add_topics(names)
-    names.each do |top_name|
-      next if top_name.blank?
-
-      topic = Topic.from_name(top_name.strip.gsub(/^"/, '').gsub(/"$/, ''),
-                              rebuild_id)
-      topics << topic if topic
-    end
-  end
-
-  def add_track(name)
-    tracks << Track.from_name(name.strip.gsub(/^"/, '').gsub(/"$/, ''),
-                              rebuild_id)
   end
 end

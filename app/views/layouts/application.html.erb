@@ -2,20 +2,20 @@
 <html lang="en">
     <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	
-	<meta name="twitter:title" content="<%= social_title %>" />
-	<meta name="twitter:description" content="<%= social_description %>" />
-	<meta property="og:title" content="<%= social_title %>" />
-	<meta property="og:description" content="<%= social_description %>" /> 
+	<meta name="twitter:title" content="<%= page_item.try(:name) %>" />
+	<meta name="twitter:description" content="<%= strip_tags(page_item.try(:snippet)) %>" />
+	<meta property="og:title" content="<%= page_item.try(:name) %>" />
+	<meta property="og:description" content="<%= strip_tags(page_item.try(:snippet)) %>" /> 
 
 	<meta property="og:url" content="<%= request.url %>" />
 	<meta name="twitter:card" content="summary_large_image" />
 
-	<% if social_image.blank? %>
+	<% if social_image(page_item).blank? %>
 	    <meta property="og:image" content="<%= image_url('bssw.png') %>" />
 	    <meta name="twitter:image" content="<%= image_url('bssw.png') %>" />
 	<% else %>
-	    <meta property="og:image" content="<%= social_image %>" />
-	    <meta name="twitter:image" content="<%= social_image %>" />
+	    <meta property="og:image" content="<%= social_image(page_item) %>" />
+	    <meta name="twitter:image" content="<%= social_image(page_item) %>" />
 	<% end %>
 
 	<title><%= social_title.blank? ? "Better Scientific Software" : social_title %></title>

@@ -22,7 +22,7 @@ class GithubImport < ApplicationRecord
     update_taxonomy(doc, rebuild)
 
     content_string = doc.css('body').to_s + "\n<!-- file path: #{path} -->".html_safe
-    update_attribute(:content, content_string)
+    update(content: content_string)
   end
 
   def snippet

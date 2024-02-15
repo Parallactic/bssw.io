@@ -101,4 +101,19 @@ class MarkdownImport < GithubImport
                        path: "/#{path}"
                      ).try(:first).try(:commit).try(:author).try(:date))
   end
+
+  def add_topics(names)
+    names.each do |top_name|
+      next if top_name.blank?
+
+      topic = Topic.from_name(top_name.strip.gsub(/^"/, '').gsub(/"$/, ''),
+                              rebuild_id)
+      topics << topic if topic
+    end
+  end
+
+  def add_track(name)
+    tracks << Track.from_name(name.strip.gsub(/^"/, '').gsub(/"$/, ''),
+                              rebuild_id)
+  end
 end

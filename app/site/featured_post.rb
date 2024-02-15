@@ -11,11 +11,11 @@ class FeaturedPost < ApplicationRecord
   end
 
   def image
-    "<img src='#{MarkdownUtility.modified_path(path)}' />".html_safe
+    ActionController::Base.helpers.image_tag(MarkdownUtility.modified_path(path))
   end
 
   def site_item
-    SiteItem.displayed.find_by(base_path: File.basename(path.to_s)) ||
-      SiteItem.displayed.find_by(slug: path.to_s.split('/').last)
+    SearchResult.displayed.find_by(base_path: File.basename(path.to_s)) ||
+      SearchResult.displayed.find_by(slug: path.to_s.split('/').last)
   end
 end

@@ -8,7 +8,6 @@ RSpec.describe EventsController, type: :controller do
   render_views
 
   let(:rebuild) { Rebuild.create }
-    
 
   before do
     RebuildStatus.all.find_each(&:destroy)
@@ -51,7 +50,7 @@ RSpec.describe EventsController, type: :controller do
     end
 
     it 'shows past' do
-      event = FactoryBot.create(:event, rebuild: rebuild)
+      event = FactoryBot.create(:event, rebuild:)
       AdditionalDate.make_date('some date', 1.week.ago.to_s, event)
       FactoryBot.create(:page, name: 'Past Events', rebuild_id: rebuild.id)
       get :index, params: { past: true }

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# join authors / site items with a display name
 class Contribution < ApplicationRecord
   belongs_to :author, dependent: :destroy
   belongs_to :site_item, dependent: :destroy

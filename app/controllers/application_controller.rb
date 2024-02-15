@@ -14,6 +14,11 @@ class ApplicationController < ActionController::Base
 
   rescue_from StandardError, with: :send_error
 
+
+  def page_item
+    @resource || @page || @event || @post
+  end
+  
   def not_found(_exception = nil)
     request.format = :html
     render(
@@ -54,11 +59,12 @@ class ApplicationController < ActionController::Base
   before_action :check_auth
   helper_method :scoped_resources
   helper_method :scoped_blog
+  helper_method :page_item
 
-  def robots
-    robots = File.read(Rails.root + "config/robots/#{Rails.env}.txt")
-    render plain: robots
-  end
+def robots
+robots = File.read(Rails.root + "config/robots/#{Rails.env}.txt")
+render plain: robots
+end
 
   private
 
