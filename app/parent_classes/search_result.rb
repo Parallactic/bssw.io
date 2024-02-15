@@ -122,7 +122,7 @@ class SearchResult < MarkdownImport
     if authors.empty?
       'BSSw Community'
     else
-      contributions.map { |c| c.link.html_safe }.to_sentence
+      contributions.map { |c| c.link.html_safe }.to_sentence.html_safe
     end
   end
 
