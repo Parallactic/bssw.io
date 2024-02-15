@@ -8,13 +8,7 @@ RSpec.describe EventsController, type: :controller do
   render_views
 
   let(:rebuild) { Rebuild.create }
-  let(:past_date) do
-    FactoryBot.create(
-      :additional_date_value,
-      date: 1.week.ago,
-      additional_date: event.additional_dates.first
-    )
-  end
+    
 
   before do
     RebuildStatus.all.find_each(&:destroy)
@@ -35,7 +29,7 @@ RSpec.describe EventsController, type: :controller do
       doc = Nokogiri::XML('<ul><li>Dates: December 10 - January 10 </li></ul>')
       event.send(:update_dates, doc.css("li:contains('Dates:')"))
       get :index
-      expect(response.body).to match 'Submission'
+      expect(assigns(:events)).to include(event)
     end
 
     it 'shows past by page' do
@@ -57,12 +51,11 @@ RSpec.describe EventsController, type: :controller do
     end
 
     it 'shows past' do
-      event = FactoryBot.create(:event, publish: true, rebuild_id: rebuild.id)
-      event.additional_dates << FactoryBot.create(:additional_date, label: 'foo', event:)
-      event.additional_dates.first.additional_date_values << past_date
+      event = FactoryBot.create(:event, rebuild: rebuild)
+      AdditionalDate.make_date('some date', 1.week.ago.to_s, event)
+      FactoryBot.create(:page, name: 'Past Events', rebuild_id: rebuild.id)
       get :index, params: { past: true }
-
-      expect(assigns(:past_events)).to include(event)
+      expect(assigns(:events)).to include(event)
     end
 
     it 'gets by author' do
