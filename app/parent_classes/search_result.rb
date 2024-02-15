@@ -114,7 +114,7 @@ class SearchResult < MarkdownImport
       '<strong>By</strong> BSSw Community'.html_safe
     else
       "<strong>By</strong> #{contributions.map(&:display_name).to_sentence}
-      "
+      ".html_safe
     end
   end
 
