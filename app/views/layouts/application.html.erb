@@ -18,7 +18,7 @@
 	    <meta name="twitter:image" content="<%= social_image(page_item) %>" />
 	<% end %>
 
-	<title><%= social_title.blank? ? "Better Scientific Software" : social_title %></title>
+	<title><%= page_item.try(:name).blank? ? "Better Scientific Software" : page_item.name %></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><!-- Bootstrap -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<%= csrf_meta_tags %>

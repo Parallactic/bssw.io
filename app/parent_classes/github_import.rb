@@ -27,12 +27,12 @@ class GithubImport < ApplicationRecord
 
   def snippet
     pars = Nokogiri::HTML.parse(content, nil, 'UTF-8')
-    pars.css('p').select{|par| !(par.content.blank?) }.try(:first).to_s.html_safe
+    pars.css('p').reject { |par| par.content.blank? }.try(:first).to_s.html_safe
   end
 
   def main
     pars = Nokogiri::HTML.parse(content, nil, 'UTF-8')
-    pars.css('p').select{|par| !(par.content.blank?) }.try(:first).try(:remove)
+    pars.css('p').reject { |par| par.content.blank? }.try(:first).try(:remove)
     pars.to_s.html_safe
   end
 

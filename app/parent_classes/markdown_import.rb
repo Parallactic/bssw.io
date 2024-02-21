@@ -116,4 +116,8 @@ class MarkdownImport < GithubImport
     tracks << Track.from_name(name.strip.gsub(/^"/, '').gsub(/"$/, ''),
                               rebuild_id)
   end
+
+  def basic?
+    is_a?(WhatIs) || is_a?(HowTo)
+  end
 end

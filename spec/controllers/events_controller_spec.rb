@@ -59,7 +59,6 @@ RSpec.describe EventsController, type: :controller do
 
     it 'gets by author' do
       author = FactoryBot.create(:author, rebuild_id: rebuild.id)
-      author.save
       event = FactoryBot.create(:event, publish: true, rebuild_id: rebuild.id)
       event.authors << author
       get :index, params: { author: author.slug }

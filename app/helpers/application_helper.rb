@@ -21,14 +21,6 @@ module ApplicationHelper
     end
   end
 
-  def social_title
-    return @post.name if @post
-    return @page.name if @page
-    return @event.name if @event
-
-    @resource&.name
-  end
-
   def social_image(page_item)
     page_item.open_graph_image_tag if page_item.respond_to?(:open_graph_image_tag)
   end
@@ -61,20 +53,17 @@ module ApplicationHelper
   end
 
   def formatted_standard_dates(event)
-    [if event.start_at.blank?
-       ''
-     else
-       (if event.end_at.blank?
-          "<strong>#{event.start_date.label.gsub('Start',
-                                                 '')}</strong>"
-        else
-          "<strong>#{event.start_date.label.gsub(
-            'Start', ''
-          ).pluralize}</strong>"
-        end) + date_range(
-          event.start_at, event.end_at
-        ).to_s.html_safe
-     end]
+    return [''] if event.start_at.blank?
+
+    [safe_join((if event.end_at.blank?
+                  "<strong>#{event.start_date.label.gsub('Start', '')}</strong>"
+                else
+                  "<strong>#{event.start_date.label.gsub(
+                    'Start', ''
+                  ).pluralize}</strong>"
+                end), date_range(
+                        event.start_at, event.end_at
+                      ))]
   end
 
   def show_dates(event)

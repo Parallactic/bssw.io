@@ -129,8 +129,4 @@ class SearchResult < MarkdownImport
   def topic_list
     topics.map(&:name).join(', ')
   end
-
-  def basic?
-    is_a?(WhatIs) || is_a?(HowTo)
-  end
 end
