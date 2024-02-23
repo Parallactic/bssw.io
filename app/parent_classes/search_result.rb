@@ -2,7 +2,18 @@
 
 # searchable thru algolia
 class SearchResult < MarkdownImport
-  include AlgoliaSearch
+
+
+  def author_list_without_links
+    if authors.empty?
+      ActionController::Base.helpers.content_tag('strong', 'By').concat ' BSSw Community'
+    else
+      ActionController::Base.helpers.content_tag('strong', 'By').concat contributions.map(&:display_name).to_sentence
+    end
+  end
+
+  
+include AlgoliaSearch
 
   algoliasearch per_environment: true, sanitize: true, auto_index: false, if: :searchable? do
     attributes :name, :content, :author_list_without_links, :published_at
@@ -16,9 +27,9 @@ class SearchResult < MarkdownImport
     advancedSyntax true
   end
 
-  def searchable_content
-    ActionView::Base.full_sanitizer.sanitize(content).gsub("\n", ' ').gsub(',', '')
-  end
+  # def searchable_content
+  #   ActionView::Base.full_sanitizer.sanitize(content).gsub("\n", ' ').gsub(',', '')
+  # end
 
   extend FriendlyId
   friendly_id :slug_candidates, use: %i[finders slugged scoped], scope: :rebuild_id
@@ -108,25 +119,4 @@ class SearchResult < MarkdownImport
   validates :path, uniqueness: { case_sensitive: false, scope: :rebuild_id, allow_blank: true }
 
   has_many :announcements, foreign_key: 'site_item_id'
-
-  def author_list_without_links
-    if authors.empty?
-      '<strong>By</strong> BSSw Community'.html_safe
-    else
-      "<strong>By</strong> #{contributions.map(&:display_name).to_sentence}
-      ".html_safe
-    end
-  end
-
-  def author_list
-    if authors.empty?
-      'BSSw Community'
-    else
-      contributions.map { |c| c.link.html_safe }.to_sentence.html_safe
-    end
-  end
-
-  def topic_list
-    topics.map(&:name).join(', ')
-  end
 end

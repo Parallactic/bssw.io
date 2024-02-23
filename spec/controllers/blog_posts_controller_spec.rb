@@ -11,11 +11,15 @@ RSpec.describe BlogPostsController, type: :controller do
   end
 
   let(:rebuild) { RebuildStatus.displayed_rebuild }
+  let(:credentials) do
+    ActionController::HttpAuthentication::Basic.encode_credentials Rails.application.credentials[:preview][:name],
+                                                                   Rails.application.credentials[:preview][:password]
+  end
 
   describe 'preview' do
     it 'sets the preview val' do
       FactoryBot.create(:page, name: 'BSSw Blog', rebuild_id: rebuild.id)
-      @request.env['HTTP_AUTHORIZATION'] = "Basic #{Base64.encode64('preview-bssw:SoMyCodeWillSeeTheFuture!!')}"
+      @request.env['HTTP_AUTHORIZATION'] = credentials
       @request.host = 'preview.bssw.io'
       get :index
       expect(session[:preview]).to be true

@@ -148,8 +148,8 @@ RSpec.describe RebuildsController, type: :controller do
           RebuildStatus.find_or_create_by(display_rebuild_id: Rebuild.first.id)
       end
       let(:credentials) do
-        ActionController::HttpAuthentication::Basic.encode_credentials 'bssw',
-                                                                       'rebuildlog'
+        ActionController::HttpAuthentication::Basic.encode_credentials Rails.application.credentials[:import][:name],
+                                                                       Rails.application.credentials[:import][:password]
       end
 
       before do
@@ -159,8 +159,7 @@ RSpec.describe RebuildsController, type: :controller do
       it 'changes the current id' do
         request.env['HTTP_AUTHORIZATION'] = credentials
         expect do
-          post :make_displayed,
-               params: { id: Rebuild.first.id }
+          post :make_displayed, params: { id: Rebuild.first.id }
           rs.reload
         end.to change(rs, :display_rebuild_id)
       end

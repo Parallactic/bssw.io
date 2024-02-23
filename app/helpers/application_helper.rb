@@ -44,11 +44,13 @@ module ApplicationHelper
   def formatted_additionals(event)
     used_dates = []
     event.special_additional_dates.map do |date|
-      val = "<strong>#{date.additional_date.label}</strong> " +
-            date.additional_date.additional_date_values.map { |adv| date_range(adv.date, nil) }.join('; ')
-      val = '' if used_dates.include?(date.additional_date)
-      used_dates << date.additional_date
-      val
+      if used_dates.include?(date.additional_date)
+        ''
+      else
+        used_dates << date.additional_date
+        content_tag('strong', date.additional_date.label) +
+          date.additional_date.additional_date_values.map { |adv| date_range(adv.date, nil) }.safe_join('; ')
+      end
     end
   end
 
@@ -56,11 +58,9 @@ module ApplicationHelper
     return [''] if event.start_at.blank?
 
     [safe_join((if event.end_at.blank?
-                  "<strong>#{event.start_date.label.gsub('Start', '')}</strong>"
+                  content_tag('strong', event.start_date.label.gsub('Start', ''))
                 else
-                  "<strong>#{event.start_date.label.gsub(
-                    'Start', ''
-                  ).pluralize}</strong>"
+                  content_tag('strong', event.start_date.label.gsub('Start', '').pluralize)
                 end), date_range(
                         event.start_at, event.end_at
                       ))]

@@ -25,6 +25,19 @@ class SiteItem < SearchResult
     topics.map(&:category).uniq
   end
 
+
+  def author_list
+    if authors.empty?
+      'BSSw Community'
+    else
+      contributions.map(&:link).to_sentence.html_safe
+    end
+  end
+
+  def topic_list
+    topics.map(&:name).join(', ')
+  end
+
   def self.clean
     items = where(name: nil)
     items.each(&:delete)

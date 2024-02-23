@@ -27,9 +27,13 @@ class AdditionalDate < ApplicationRecord
     AdditionalDate.make_date("End #{label_text}", dates.last, event)
   end
 
+  def self.month_names
+    Date::MONTHNAMES.slice(1..-1).map(&:to_s).map { |m| m[0, 3] }
+  end
+
   def self.month_dates(dates)
     our_month, end_month = nil
-    Date::MONTHNAMES.slice(1..-1).map(&:to_s).map { |m| m[0, 3] }.each do |month|
+    month_names.each do |month|
       our_month = month if dates.first.match(month)
       end_month = true if dates.last.match(month)
     end
