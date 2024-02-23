@@ -27,13 +27,13 @@ class GithubImport < ApplicationRecord
 
   def snippet
     pars = Nokogiri::HTML.parse(content, nil, 'UTF-8')
-    pars.css('p').reject { |par| par.content.blank? }.try(:first).try(:to_xml)
+    pars.css('p').reject { |par| par.content.blank? }.try(:first).try(:to_xml).try(:html_safe)
   end
 
   def main
     pars = Nokogiri::HTML.parse(content, nil, 'UTF-8')
     pars.css('p').reject { |par| par.content.blank? }.try(:first).try(:remove)
-    pars.try(:to_xml)
+    pars.try(:to_xml).try(:html_safe)
   end
 
   def update_author(node, rebuild)

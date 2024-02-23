@@ -7,8 +7,11 @@ class BlogPostsController < ApplicationController
     author = params[:author]
     @track = Track.displayed.find(params[:track]) if params[:track]
     @posts = scoped_resources.blog
-    @posts =  @posts.with_track(@track.id) if @track
-    @posts = @posts.with_author(Author.find_by(slug: author, rebuild_id: RebuildStatus.first.display_rebuild_id)) if author
+    @posts = @posts.with_track(@track.id) if @track
+    if author
+      @posts = @posts.with_author(Author.find_by(slug: author,
+                                                 rebuild_id: RebuildStatus.first.display_rebuild_id))
+    end
     @total = @posts.size
     @posts = if params[:view] == 'all'
                @posts.paginate(page: 1, per_page: @posts.size)

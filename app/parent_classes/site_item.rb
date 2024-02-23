@@ -25,7 +25,6 @@ class SiteItem < SearchResult
     topics.map(&:category).uniq
   end
 
-
   def author_list
     if authors.empty?
       'BSSw Community'

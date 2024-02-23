@@ -2,8 +2,6 @@
 
 # searchable thru algolia
 class SearchResult < MarkdownImport
-
-
   def author_list_without_links
     if authors.empty?
       ActionController::Base.helpers.content_tag('strong', 'By').concat ' BSSw Community'
@@ -12,8 +10,7 @@ class SearchResult < MarkdownImport
     end
   end
 
-  
-include AlgoliaSearch
+  include AlgoliaSearch
 
   algoliasearch per_environment: true, sanitize: true, auto_index: false, if: :searchable? do
     attributes :name, :content, :author_list_without_links, :published_at
