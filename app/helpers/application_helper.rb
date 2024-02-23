@@ -68,17 +68,16 @@ module ApplicationHelper
 
   def show_dates(event)
     (formatted_standard_dates(event) + formatted_additionals(event)
-    ).delete_if(&:blank?).join('<br />').html_safe
+    ).delete_if(&:blank?).safe_join('<br />')
   end
 
   def show_date(date_value)
     date = date_value.additional_date
     if date.label =~ /Start/
       date_range(date.event.start_at,
-                 date.event.end_at).to_s.html_safe
+                 date.event.end_at)
     else
-      date_range(date_value.date, nil).to_s.html_safe
-
+      date_range(date_value.date, nil)
     end
   end
 
@@ -94,7 +93,7 @@ module ApplicationHelper
     return unless start_at
 
     start_date = start_at.strftime('%b %e, %Y')
-    return start_date.html_safe if start_at == end_at || !end_at
+    return start_date if start_at == end_at || !end_at
 
     start_date = start_at.strftime('%b %e') if start_at.year == end_at.year
     end_date = if end_at.month == start_at.month
@@ -102,7 +101,7 @@ module ApplicationHelper
                else
                  end_at.strftime('%b %e, %Y')
                end
-    "#{start_date}&ndash;#{end_date}".html_safe
+    "#{start_date}&ndash;#{end_date}"
   end
 
   def show_page(path, next_page)

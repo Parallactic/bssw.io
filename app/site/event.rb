@@ -79,11 +79,7 @@ class Event < SiteItem
     url = node.text
     match = url.match('\[(.*?)\](.*)')
     if match
-      update(
-        website_label: match[1],
-        website: match[2]
-      )
-      node.remove
+      update(website_label: match[1], website: match[2])
     else
       self.website = (url.split(':').last)
     end
