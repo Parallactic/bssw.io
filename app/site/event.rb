@@ -87,6 +87,7 @@ class Event < SiteItem
   end
 
   def update_dates(doc)
+    doc.xpath('//comment()').each(&:remove)
     get_date_nodes(doc).each do |date_node|
       text = date_node.text.split(':')
       process_dates(text.last, text.first)

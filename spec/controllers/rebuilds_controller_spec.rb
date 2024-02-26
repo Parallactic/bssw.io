@@ -87,7 +87,7 @@ RSpec.describe RebuildsController, type: :controller do
                end.first.affiliation).to eq "Sandia National Labs and St. John's University"
 
         expect(Category.displayed.first.slug).to eq 'better-planning'
-
+        puts SiteItem.displayed.last.inspect
         expect(SiteItem.displayed.last.topic_list).not_to be_empty
         expect(Event.where(
           base_path: '2021-10-wosss21.md'

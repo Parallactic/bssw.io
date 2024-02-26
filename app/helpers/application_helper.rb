@@ -49,7 +49,7 @@ module ApplicationHelper
       else
         used_dates << date.additional_date
         content_tag('strong', date.additional_date.label) +
-          date.additional_date.additional_date_values.map { |adv| date_range(adv.date, nil) }.safe_join('; ')
+          date.additional_date.additional_date_values.map { |adv| date_range(adv.date, nil) }.join('; ')
       end
     end
   end
