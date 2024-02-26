@@ -68,7 +68,7 @@ module ApplicationHelper
 
   def show_dates(event)
     (formatted_standard_dates(event) + formatted_additionals(event)
-    ).delete_if(&:blank?).safe_join('<br />')
+    ).delete_if(&:blank?).join('<br />').html_safe
   end
 
   def show_date(date_value)
