@@ -87,10 +87,18 @@ class Event < SiteItem
   end
 
   def update_dates(doc)
-    doc.xpath('//comment()').each(&:remove)
     get_date_nodes(doc).each do |date_node|
-      text = date_node.text.split(':')
-      process_dates(text.last, text.first)
+      text_node = Loofah.xml_fragment((date_node.text))
+      text_node.scrub!(:prune)
+      text = text_node.text.split(':')
+if self.path && self.path.match('Sample')
+        puts text.inspect
+end
+process_dates(text.last, text.first)
+       if self.path && self.path.match('Sample')
+         puts '...'
+         puts additional_dates.inspect
+       end
       date_node.try(:remove)
     end
     fix_end_year(start_date, end_date)

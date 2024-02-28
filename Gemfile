@@ -61,6 +61,7 @@ end
 gem 'github_api'
 gem 'nikkou'
 gem 'nokogiri'
+gem 'loofah'
 
 gem 'redcarpet'
 

@@ -42,6 +42,7 @@ RSpec.describe RebuildsController, type: :controller do
         #      expect(RebuildStatus.first.display_rebuild_id).to eq Rebuild.last.id
         expect(SiteItem.last.rebuild_id).to eq RebuildStatus.first.display_rebuild_id
         expect(SiteItem.displayed.count).to be > min_site_item_count
+        puts Community.displayed.map{|c| [c.name, c.publish]}
         expect(Community.displayed.count).to eq community_count
 
         expect(Community.first.resources).not_to be_empty
@@ -88,6 +89,8 @@ RSpec.describe RebuildsController, type: :controller do
 
         expect(Category.displayed.first.slug).to eq 'better-planning'
         puts SiteItem.displayed.last.inspect
+        puts SiteItem.displayed.last.topics.inspect
+        expect(SiteItem.displayed.last.topics).not_to be_empty
         expect(SiteItem.displayed.last.topic_list).not_to be_empty
         expect(Event.where(
           base_path: '2021-10-wosss21.md'
