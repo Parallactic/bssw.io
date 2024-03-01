@@ -57,13 +57,13 @@ module ApplicationHelper
   def formatted_standard_dates(event)
     return [''] if event.start_at.blank?
 
-    [((if event.end_at.blank?
+    [(if event.end_at.blank?
                   content_tag('strong', event.start_date.label.gsub('Start', ''))
                 else
                   content_tag('strong', event.start_date.label.gsub('Start', '').pluralize)
                 end), date_range(
                         event.start_at, event.end_at
-                      ))]
+                      )]
   end
 
   def show_dates(event)
