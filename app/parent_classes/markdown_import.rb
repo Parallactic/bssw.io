@@ -64,7 +64,7 @@ class MarkdownImport < GithubImport
   end
 
   def add_slug(val)
-    self.custom_slug = val.downcase
+    self.custom_slug = val.downcase.strip
     save
   end
 
