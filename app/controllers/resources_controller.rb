@@ -10,7 +10,8 @@ class ResourcesController < ApplicationController
   end
 
   def show
-    @resource = scoped_resources.find(params[:id]) || scoped_resources.find_by(custom_slug: params[:id])
+    @resource = scoped_resources.find_by(custom_slug: params[:id]) 
+    @resource = scoped_resources.find(params[:id]) unless @resource
     redirect_to "/events/#{@resource.slug}" if @resource.is_a?(Event)
     redirect_to "/blog_posts/#{@resource.slug}" if @resource.is_a?(BlogPost)
   end
