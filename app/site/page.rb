@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # plain content
-class Page < SearchResult
+class Page < Resource
   scope :displayed, lambda {
     where("#{table_name}.rebuild_id = ?", RebuildStatus.first.display_rebuild_id)
   }
