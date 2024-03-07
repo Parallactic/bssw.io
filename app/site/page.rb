@@ -12,8 +12,8 @@ class Page < Resource
 
   self.table_name = 'search_results'
 
-  extend FriendlyId
-  friendly_id :name, use: %i[finders slugged scoped], scope: :rebuild_id
+  # extend FriendlyId
+  # friendly_id :name, use: %i[finders slugged scoped], scope: :rebuild_id
 
   def regular
     name != 'Contact BSSw' &&
@@ -27,7 +27,7 @@ class Page < Resource
   end
 
   def update_from_content(doc, rebuild)
-    self.slug = nil
+    #    self.slug = nil
     update_featured(doc) if path.match('Homepage')
     update_staff(doc) if path.match('About')
     super(doc, rebuild)

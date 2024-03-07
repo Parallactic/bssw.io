@@ -59,9 +59,9 @@ group :development, :test do
 end
 
 gem 'github_api'
+gem 'loofah'
 gem 'nikkou'
 gem 'nokogiri'
-gem 'loofah'
 
 gem 'redcarpet'
 

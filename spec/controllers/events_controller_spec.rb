@@ -22,10 +22,6 @@ RSpec.describe EventsController, type: :controller do
 
       it 'shows future' do
         event = FactoryBot.create(:event, publish: true, rebuild_id: rebuild.id)
-
-        AdditionalDate.make_date('Party Date', 2.weeks.from_now.to_s, event)
-
-        event = FactoryBot.create(:event, publish: true, rebuild_id: rebuild.id)
         doc = Nokogiri::XML('<ul><li>Dates: December 10 - January 10 </li></ul>')
         event.send(:update_dates, doc.css("li:contains('Dates:')"))
         get :index

@@ -49,19 +49,18 @@ Rails.application.routes.draw do
 
   match '/:custom_slug', to: redirect { |_params, request| "/items/#{request.params[:custom_slug]}" }, via: :get
 
-  
   #  match ':custom_slug', to: 'resources#show', defaults: { id: custom_slug }, via: :get
-  
-# match '/psip', to: 'resources#show',
-#                  defaults: {
-#                    id: 'productivity-and-sustainability-improvement-planning-psip'
-#                  },
-#                  via: :get
 
-#   match '/fellowship', to: 'pages#show',
-#                        defaults: { id: 'bssw-fellowship-program' }, via: :get
-#   match '/FELLOWSHIP', to: 'pages#show',
-#                        defaults: { id: 'bssw-fellowship-program' }, via: :get
+  # match '/psip', to: 'resources#show',
+  #                  defaults: {
+  #                    id: 'productivity-and-sustainability-improvement-planning-psip'
+  #                  },
+  #                  via: :get
+
+  #   match '/fellowship', to: 'pages#show',
+  #                        defaults: { id: 'bssw-fellowship-program' }, via: :get
+  #   match '/FELLOWSHIP', to: 'pages#show',
+  #                        defaults: { id: 'bssw-fellowship-program' }, via: :get
 
   match '/rebuild/search', to: 'rebuilds#search', via: :get
 

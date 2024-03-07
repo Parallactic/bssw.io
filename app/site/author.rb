@@ -83,12 +83,14 @@ class Author < SearchResult
   end
 
   def do_overrides(alpha_name, display_name)
+    puts "overriding #{alpha_name} #{display_name}"
     return unless alpha_name
 
     update(alphabetized_name: alpha_name)
     return unless display_name
 
     names = AuthorUtility.names_from(display_name)
+    puts "names #{names}"
     update(first_name: names.first, last_name: names.last)
   end
 

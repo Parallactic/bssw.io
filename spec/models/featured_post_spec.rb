@@ -8,8 +8,13 @@ RSpec.describe FeaturedPost, type: :model do
     RebuildStatus.create(display_rebuild_id: build.id)
   end
 
+  it 'might not have an image' do
+    fp = FactoryBot.create(:featured_post, path: 'path.md')
+    expect(fp.image?).not_to be true
+  end
+
   it 'might have an image' do
-    fp = FactoryBot.create(:featured_post, path: 'image.jpg')
+    fp = FactoryBot.create(:featured_post, path: 'path.jpg')
     expect(fp.image).to match('jpg')
   end
 

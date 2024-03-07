@@ -111,7 +111,7 @@ class SearchResult < MarkdownImport
   has_many :contributions, join_table: 'contributions', dependent: :destroy, foreign_key: 'site_item_id'
   has_many :authors, through: :contributions
 
-  has_many :features, foreign_key: 'site_item_id'
+#  has_many :features, foreign_key: 'site_item_id'
 
   validates :path, uniqueness: { case_sensitive: false, scope: :rebuild_id, allow_blank: true }
 
