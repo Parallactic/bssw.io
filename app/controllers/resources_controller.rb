@@ -12,6 +12,7 @@ class ResourcesController < ApplicationController
   def show
     @resource = scoped_resources.find_by(slug: params[:id])
     @resource ||= scoped_resources.find(params[:id])
+    redirect_to "/pages/#{@resource.slug}" if @resource.is_a?(Page)
     redirect_to "/events/#{@resource.slug}" if @resource.is_a?(Event)
     redirect_to "/blog_posts/#{@resource.slug}" if @resource.is_a?(BlogPost)
   end
