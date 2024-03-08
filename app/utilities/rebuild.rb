@@ -44,9 +44,7 @@ class Rebuild < ApplicationRecord
   end
 
   def clean(file_path)
-    puts "cleaning!!"
     AuthorUtility.all_custom_info(id, file_path)
-    puts "author utilities!!"
     clear_old
 
     update_links_and_images

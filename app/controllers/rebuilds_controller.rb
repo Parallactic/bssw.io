@@ -15,7 +15,7 @@ class RebuildsController < ApplicationController
 
   def make_displayed
     rs = RebuildStatus.first
-    rs.update_attribute(:display_rebuild_id, params[:id])
+    rs.update(display_rebuild_id: params[:id])
     flash[:notice] = 'Reverted!'
     redirect_to '/rebuilds'
   end

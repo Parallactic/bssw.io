@@ -97,8 +97,6 @@ RSpec.describe RebuildsController, type: :controller do
           base_path: '2021-10-wosss21.md'
         ).first.end_at.to_date).to eq Date.parse('October 8 2021').to_date
 
-
-
         expect(response).to redirect_to('/rebuilds?rebuilt=true')
       end
 

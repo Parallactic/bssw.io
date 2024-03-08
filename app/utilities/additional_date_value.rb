@@ -12,5 +12,4 @@ class AdditionalDateValue < ApplicationRecord
   #     'additional_dates.label not like ?', 'End '
   #   ).where('search_results.id in (?)', events.map(&:id))
   # }
-
 end

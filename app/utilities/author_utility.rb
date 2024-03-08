@@ -3,11 +3,9 @@
 # utility methods for processing authors
 class AuthorUtility
   def self.all_custom_info(rebuild_id, file_path)
-    puts "custom info ..."
     Author.where(rebuild_id:).find_each(&:update_from_github)
     custom_staff_info(file_path, rebuild_id)
     custom_author_info(file_path, rebuild_id)
-    puts "completed custom info"
   end
 
   def self.names_from(name)
@@ -21,36 +19,28 @@ class AuthorUtility
   end
 
   def self.do_overrides(comment, rebuild)
-    puts "doing the overrides"
-    puts comment.text.inspect
     comment.text.split(/\n/).each do |line|
       next if line.match?(/Overrides/i)
-      puts "line #{line}"
+
       text_overrides(line, rebuild)
     end
   end
 
   def self.text_overrides(text, rebuild)
-    puts "our text overrides #{text}"
-    begin
-      vals = text.split(',').map { |val| val.delete('"') }
-      return if vals.map(&:blank?).all?
-      
-      alpha_name = vals[1].try(:strip)
-      display_name = vals.last
-      
-      author = Author.find_from_vals(vals.first, display_name, rebuild)
-      puts "auth #{author}"
-      author&.do_overrides(alpha_name, display_name)
-    rescue Exception => e
-      puts "except #{e.inspect}"
-    end
+    vals = text.split(',').map { |val| val.delete('"') }
+    return if vals.map(&:blank?).all?
+
+    alpha_name = vals[1].try(:strip)
+    display_name = vals.last
+
+    author = Author.find_from_vals(vals.first, display_name, rebuild)
+
+    author&.do_overrides(alpha_name, display_name)
   end
 
   def self.process_overrides(doc, rebuild)
     comments = doc.xpath('//comment()') if doc
     comments&.each do |comment|
-      puts "comment #{comment.text}"
       next unless comment.text.match?(/Overrides/i)
 
       do_overrides(comment, rebuild)
@@ -59,24 +49,22 @@ class AuthorUtility
 
   def self.custom_author_info(file_path, rebuild_id)
     contrib_file = nil
-    puts 'doing authors'
-GithubImporter.tar_extract(file_path).each do |file|
+
+    GithubImporter.tar_extract(file_path).each do |file|
       contrib_file = file.read if file.header.name.match('Contributors.md')
     end
     process_overrides(GithubImporter.parse_html_from(contrib_file), rebuild_id)
-    puts 'finished authors'
   end
 
   def self.custom_staff_info(file_path, rebuild_id)
     contrib_file = nil
-    puts "doing staff info"
-GithubImporter.tar_extract(file_path).each do |file|
+
+    GithubImporter.tar_extract(file_path).each do |file|
       contrib_file = file.read if file.header.name.match('About.md')
     end
     Page.where(rebuild_id:, base_path: 'About.md').first.update_from_content(
       GithubImporter.parse_html_from(contrib_file), rebuild_id
     )
-    puts 'did staff'
   end
 
   def self.make_from_data(node, rebuild)

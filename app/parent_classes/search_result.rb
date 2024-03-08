@@ -44,12 +44,14 @@ class SearchResult < MarkdownImport
   end
 
   def resolve_friendly_id_conflict(candidates)
-    if rebuild && candidates.first
-      rebuild.slug_collisions = rebuild.slug_collisions.to_s + "<li><strong>Slug:</strong> #{candidates.first.inspect}  <strong>Filename of item trying to use slug:</strong> #{base_path} <br /><strong>Filename of conflicting item:</strong> #{SearchResult.where(
-        rebuild_id:, slug: candidates.first.to_s
-      ).first.base_path}</li>"
-
-      rebuild.save
+    cand = candidates.first.try(:to_s)
+    if rebuild && cand
+      rebuild.update(slug_collisions:
+                 rebuild.slug_collisions.to_s +
+               "<li><strong>Slug:</strong> #{cand}
+                                <strong>Filename of item trying to use slug:</strong> #{base_path} <br />
+                                <strong>Filename of conflicting item:</strong>
+                                #{SearchResult.where(rebuild_id:, slug: cand).first.base_path}</li>")
     end
     super
   end
@@ -71,8 +73,8 @@ class SearchResult < MarkdownImport
   }
 
   scope :with_track, lambda { |track|
-                       joins([:tracks]).where('tracks.id = ?', track) if track.present?
-                     }
+    joins([:tracks]).where('tracks.id = ?', track) if track.present?
+  }
 
   scope :with_category, lambda { |category|
     joins([:topics]).joins([:searchresults_topics]).where('topics.category_id = ?', category)
@@ -111,7 +113,7 @@ class SearchResult < MarkdownImport
   has_many :contributions, join_table: 'contributions', dependent: :destroy, foreign_key: 'site_item_id'
   has_many :authors, through: :contributions
 
-#  has_many :features, foreign_key: 'site_item_id'
+  #  has_many :features, foreign_key: 'site_item_id'
 
   validates :path, uniqueness: { case_sensitive: false, scope: :rebuild_id, allow_blank: true }
 
