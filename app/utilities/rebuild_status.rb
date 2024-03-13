@@ -22,9 +22,9 @@ class RebuildStatus < ApplicationRecord
     displayed_rebuild.commit_hash
   end
 
-  def self.code_branch=(name)
-    first.update(code_branch: name)
-  end
+  # def self.code_branch=(name)
+  #   first.update(code_branch: name)
+  # end
 
   def self.start(rebuild, branch)
     begin

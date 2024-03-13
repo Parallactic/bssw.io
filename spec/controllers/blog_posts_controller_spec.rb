@@ -29,14 +29,17 @@ RSpec.describe BlogPostsController, type: :controller do
   describe 'index' do
     before do
       FactoryBot.create(:page, name: 'BSSw Blog', rebuild_id: rebuild.id)
-      bp.authors << author
+      bp.authors = [author]
       bp2.authors = [a]
+      bp3.tracks = [t]
     end
 
     let(:bp) { FactoryBot.create(:blog_post, rebuild_id: rebuild.id) }
     let(:author) { FactoryBot.create(:author, rebuild_id: rebuild.id) }
     let(:a) { FactoryBot.create(:author, rebuild_id: rebuild.id) }
+    let(:t) { FactoryBot.create(:track, rebuild_id: rebuild.id) }
     let(:bp2) { FactoryBot.create(:blog_post, rebuild_id: rebuild.id) }
+    let(:bp3) { FactoryBot.create(:blog_post, rebuild_id: rebuild.id) }
 
     it 'gets index with blog post' do
       get :index
@@ -50,9 +53,18 @@ RSpec.describe BlogPostsController, type: :controller do
     end
 
     it 'gets index with author' do
-      FactoryBot.create(:page, name: 'BSSw Blog')
       get :index, params: { author: a.slug }
       expect(assigns(:posts)).to include bp2
+    end
+
+    it 'gets index with track' do
+      get :index, params: { track: t.slug }
+      expect(assigns(:posts)).to include bp3
+    end
+
+    it 'gets index with all' do
+      get :index, params: { view: 'all' }
+      expect(assigns(:posts)).to include bp
     end
 
     it 'does not include from wrong author' do

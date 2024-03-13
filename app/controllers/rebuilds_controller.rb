@@ -33,9 +33,9 @@ class RebuildsController < ApplicationController
   private
 
   def branch
-    @branch = if Rails.env.preview?
-                'preview'
-              elsif Rails.env.test? || Rails.env.development?
+    @branch = if Rails.env.preview? ||
+                 Rails.env.test? ||
+                 Rails.env.development?
                 'preview'
               else
                 'main'
