@@ -69,7 +69,9 @@ RSpec.describe RebuildsController, type: :controller do
         expect(Author.displayed.where(website: 'https://github.com/nniiicc').first.last_name).not_to eq 'Nic'
         expect(Page.find('homepage')).to be_a Page
         expect(Page.find('homepage').snippet).not_to be_empty
-
+        Author.displayed.each do |a|
+          puts "#{a.display_name} #{a.alphabetized_name}"
+        end
         expect(Author.displayed.where(website: author_slug).size).to eq 1
         expect(Page.displayed.where(name: 'Contributors')).not_to be_empty
 
