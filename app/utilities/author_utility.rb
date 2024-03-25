@@ -34,8 +34,8 @@ class AuthorUtility
     display_name = vals.last
 
     author = Author.find_from_vals(vals.first, display_name, rebuild)
-
-    author&.do_overrides(alpha_name, display_name)
+    return if author.blank?
+    author.do_overrides(alpha_name, display_name)
   end
 
   def self.process_overrides(doc, rebuild)
@@ -49,16 +49,14 @@ class AuthorUtility
 
   def self.custom_author_info(file_path, rebuild_id)
     contrib_file = nil
-
     GithubImporter.tar_extract(file_path).each do |file|
       contrib_file = file.read if file.header.name.match('Contributors.md')
     end
-    process_overrides(GithubImporter.parse_html_from(contrib_file), rebuild_id)
+    AuthorUtility.process_overrides(GithubImporter.parse_html_from(contrib_file), rebuild_id)
   end
 
   def self.custom_staff_info(file_path, rebuild_id)
     contrib_file = nil
-
     GithubImporter.tar_extract(file_path).each do |file|
       contrib_file = file.read if file.header.name.match('About.md')
     end
@@ -85,6 +83,11 @@ class AuthorUtility
                node_data.css('a').first, rebuild
              )
            end
+    # if auth.nil?
+    #   puts "no author from #{node_data.text}"
+    # else
+    #   puts "#{auth.display_name} #{auth.website} #{auth.rebuild_id} #{auth.id}"
+    # end
     [auth, node_data.text]
   end
 
