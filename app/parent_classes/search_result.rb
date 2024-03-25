@@ -4,9 +4,9 @@
 class SearchResult < MarkdownImport
   def author_list_without_links
     if authors.empty?
-      ActionController::Base.helpers.content_tag('strong', 'By').concat ' BSSw Community'
+      ActionController::Base.helpers.content_tag('strong', 'By ').concat 'BSSw Community'
     else
-      ActionController::Base.helpers.content_tag('strong', 'By').concat contributions.map(&:display_name).to_sentence
+      ActionController::Base.helpers.content_tag('strong', 'By ').concat contributions.map(&:display_name).to_sentence
     end
   end
 
