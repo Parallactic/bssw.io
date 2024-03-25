@@ -88,8 +88,17 @@ class Event < SiteItem
 
   def update_dates(doc)
     get_date_nodes(doc).each do |date_node|
-      text = date_node.text.split(':')
+      text_node = Loofah.xml_fragment((date_node.text))
+      text_node.scrub!(:prune)
+      text = text_node.text.split(':')
+      if self.path && self.path.match('Sample')
+        puts text.inspect
+      end
       process_dates(text.last, text.first)
+      if self.path && self.path.match('Sample')
+        puts '...'
+        puts additional_dates.inspect
+      end
       date_node.try(:remove)
     end
     fix_end_year(start_date, end_date)
@@ -103,6 +112,7 @@ class Event < SiteItem
   end
 
   def process_dates(date_text, label_text)
+    return unless date_text
     dates = if date_text.match(/\d{1,2}-\d{1,2}-\d{2,4}/)
               date_text.split('- ')
             else

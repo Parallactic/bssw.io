@@ -49,7 +49,7 @@ module ApplicationHelper
       else
         used_dates << date.additional_date
         content_tag('strong', date.additional_date.label) +
-          date.additional_date.additional_date_values.map { |adv| date_range(adv.date, nil) }.safe_join('; ')
+          date.additional_date.additional_date_values.map { |adv| date_range(adv.date, nil) }.join('; ')
       end
     end
   end
@@ -57,18 +57,18 @@ module ApplicationHelper
   def formatted_standard_dates(event)
     return [''] if event.start_at.blank?
 
-    [safe_join((if event.end_at.blank?
+    [(if event.end_at.blank?
                   content_tag('strong', event.start_date.label.gsub('Start', ''))
                 else
                   content_tag('strong', event.start_date.label.gsub('Start', '').pluralize)
                 end), date_range(
                         event.start_at, event.end_at
-                      ))]
+                      )]
   end
 
   def show_dates(event)
     (formatted_standard_dates(event) + formatted_additionals(event)
-    ).delete_if(&:blank?).safe_join('<br />')
+    ).delete_if(&:blank?).join('<br />').html_safe
   end
 
   def show_date(date_value)
@@ -101,7 +101,7 @@ module ApplicationHelper
                else
                  end_at.strftime('%b %e, %Y')
                end
-    "#{start_date}&ndash;#{end_date}"
+    "#{start_date}&ndash;#{end_date}".html_safe
   end
 
   def show_page(path, next_page)

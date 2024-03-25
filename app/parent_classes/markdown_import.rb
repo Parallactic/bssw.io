@@ -22,12 +22,18 @@ class MarkdownImport < GithubImport
   end
 
   def update_taxonomy(doc, rebuild)
+    
     comments = doc.xpath('//comment()') if doc
     vals = comments.map { |comment| comment.text.split(/:|\n/) }.flatten
     array = vals.each do |val|
       val.strip || val
     end - ['-']
     array.delete_if(&:blank?)
+    if self.name && self.name.match("Balance")
+      puts "balancing..."
+      puts array.inspect
+      puts "balanced"
+    end
     update_associates(array, rebuild)
   end
 
@@ -37,6 +43,10 @@ class MarkdownImport < GithubImport
       names = CSV.parse(names.gsub(/,\s+"/, ',"'), liberal_parsing: true).first
       if method == 'add_topics'
         save if new_record?
+        if name.match("Balance")
+          puts self.inspect
+          puts names.inspect
+        end
         try(:add_topics, names)
       elsif respond_to?(method, true)
         send(method, names.join)

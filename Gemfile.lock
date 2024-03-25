@@ -623,6 +623,7 @@ DEPENDENCIES
   lemmatizer
   lightbox-bootstrap-rails
   listen (~> 3.0.5)
+  loofah
   mail_form
   mechanize
   mysql2
