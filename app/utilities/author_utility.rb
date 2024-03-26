@@ -107,7 +107,7 @@ class AuthorUtility
     names = names_from(link.text)
     uri = URI.parse(link['href'])
     host = uri.host
-    website = host.blank? ? nil : "https://#{host}#{uri.path}".downcase
+    website = host.blank? ? nil : "https://#{host}#{uri.path}".downcase.chomp('/')
 
     auth = Author.find_by(website:, rebuild_id: rebuild)
     unless auth
