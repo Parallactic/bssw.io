@@ -32,7 +32,7 @@ class AuthorUtility
     return if vals.map(&:blank?).all?  
     alpha_name = vals[1].try(:strip)
     display_name = vals.last
-    
+    website = vals.first.downcase.chomp('/')
     author = Author.find_from_vals(vals.first, display_name, rebuild)
     return if author.blank?
     author.do_overrides(alpha_name, display_name)
