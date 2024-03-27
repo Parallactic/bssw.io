@@ -19,20 +19,20 @@ class AuthorUtility
   end
 
   def self.do_overrides(comment, rebuild)
-    comment.text.split(/\n/).each do |line|
-      next if line.match?(/Overrides/i)
+    comment.text.split(/\n/).collect do |text|
+      next if text.match?(/Overrides/i)
 
-      text_overrides(line, rebuild)
+      text_overrides(text, rebuild)
     end
   end
 
   def self.text_overrides(text, rebuild)
-    vals = text.split(',').map { |val| val.delete('"') }
-    return if vals.map(&:blank?).all?
 
+    vals = text.split(',').map { |val| val.delete('"') }
+    return if vals.map(&:blank?).all?  
     alpha_name = vals[1].try(:strip)
     display_name = vals.last
-
+    website = vals.first.downcase.chomp('/')
     author = Author.find_from_vals(vals.first, display_name, rebuild)
     return if author.blank?
     author.do_overrides(alpha_name, display_name)
@@ -48,11 +48,13 @@ class AuthorUtility
   end
 
   def self.custom_author_info(file_path, rebuild_id)
+    puts "custom author info"
     contrib_file = nil
     GithubImporter.tar_extract(file_path).each do |file|
       contrib_file = file.read if file.header.name.match('Contributors.md')
     end
     AuthorUtility.process_overrides(GithubImporter.parse_html_from(contrib_file), rebuild_id)
+    puts "completed custom author"
   end
 
   def self.custom_staff_info(file_path, rebuild_id)
@@ -105,7 +107,7 @@ class AuthorUtility
     names = names_from(link.text)
     uri = URI.parse(link['href'])
     host = uri.host
-    website = host.blank? ? nil : "https://#{host}#{uri.path}".downcase
+    website = host.blank? ? nil : "https://#{host}#{uri.path}".downcase.chomp('/')
 
     auth = Author.find_by(website:, rebuild_id: rebuild)
     unless auth
