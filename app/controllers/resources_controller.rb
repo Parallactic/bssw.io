@@ -9,6 +9,11 @@ class ResourcesController < ApplicationController
                                  password: Rails.application.credentials.import['password'], only: ['import']
   end
 
+  def alias
+    @resource = scoped_resources.find_by(alias: params [:alias])
+    redirect_to "/items/#{@resource.slug}"
+  end
+  
   def show
     @resource = scoped_resources.find_by(slug: params[:id])
     @resource ||= scoped_resources.find(params[:id])

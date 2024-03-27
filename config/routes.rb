@@ -47,7 +47,7 @@ Rails.application.routes.draw do
     end
   end
 
-  match '/:custom_slug', to: redirect { |_params, request| "/items/#{request.params[:custom_slug]}" }, via: :get
+  match '/:alias', to: 'items#alias', via: :get
 
   #  match ':custom_slug', to: 'resources#show', defaults: { id: custom_slug }, via: :get
 
