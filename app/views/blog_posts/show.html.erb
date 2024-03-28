@@ -19,9 +19,6 @@
 		    <%= render :partial => '/layouts/share' %>
 
 
-		    <div class="post-content">
-			<p><%= @post.snippet %></p>
-		    </div>
 		</div>
 	    </div>
 	    <% if @post.hero_image_url %>
@@ -32,6 +29,10 @@
 			    <p class='caption'><%= @post.hero_image_caption %></p>
 			</div>
 		    </div>
+		</div>
+	      <% else %>
+		<div class="post-content">
+		  <p><%= @post.snippet %></p>
 		</div>
 	    <% end %>
 	    <div class="container blog-meta">
@@ -86,8 +87,10 @@
     <div class="container">
 	<div class='row'>
 	    <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-		<div class="content">
-
+	      <div class="content">
+<% unless @post.hero_image_url %>
+  <p><%= @post.snippet %></p>
+  <% end %>
 		    <%= @post.main.try(:html_safe) %>
 
 		</div><!-- /.blog-post-footer -->
