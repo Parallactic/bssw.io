@@ -11,7 +11,8 @@ class ResourcesController < ApplicationController
 
   def alias
     @resource = scoped_resources.find_by(alias: params[:alias])
-    redirect_to "/items/#{@resource.slug}"
+    redirect_to "/pages/#{@resource.slug}" if @resource.is_a?(Page)
+    redirect_to "/items/#{@resource.slug}" if @resource.is_a?(SiteItem)
   end
   
   def show
