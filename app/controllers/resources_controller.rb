@@ -13,7 +13,7 @@ class ResourcesController < ApplicationController
     logger.warn("here we are in the alias action")
     @resource = SearchResult.displayed.find_by(alias: params[:alias])
     logger.warn("we found a resource and its #{@resource.slug}")
-    redirect_to action: show, id: @resource.slug
+    redirect_to "/items/#{@resource.slug}"
   end
   
   def show
