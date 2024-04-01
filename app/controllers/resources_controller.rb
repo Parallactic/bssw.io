@@ -10,7 +10,7 @@ class ResourcesController < ApplicationController
   end
 
   def alias
-    @resource = scoped_resources.find_by(alias: params[:alias])
+    @resource = SearchResult.displayed.find_by(alias: params[:alias])
     redirect_to action: show, id: @resource.slug
   end
   
