@@ -131,6 +131,6 @@ gem 'bcrypt_pbkdf'
 gem 'ed25519'
 
 gem 'algoliasearch-rails'
+gem 'base64', '0.1.1'
 gem 'faraday', '1.10.3'
 gem 'human_time'
-gem 'base64', '0.1.1'

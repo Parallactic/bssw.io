@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_27_161305) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_01_151415) do
   create_table "acronyms", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: nil, null: false
@@ -375,6 +375,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_27_161305) do
     t.string "open_graph_image_tag"
     t.string "website_label"
     t.boolean "is_person", default: false
+    t.string "alias"
     t.index ["name"], name: "index_search_results_on_name"
     t.index ["path"], name: "index_search_results_on_path"
     t.index ["rebuild_id"], name: "index_search_results_on_rebuild_id"

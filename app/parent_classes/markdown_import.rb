@@ -63,10 +63,9 @@ class MarkdownImport < GithubImport
     save
   end
 
-  
-def add_aggregate(val)
-update(aggregate: val) if has_attribute?(:aggregate)
-end
+  def add_aggregate(val)
+    update(aggregate: val) if has_attribute?(:aggregate)
+  end
 
   def add_publish(val)
     val = val.strip.downcase

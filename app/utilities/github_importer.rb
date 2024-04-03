@@ -59,7 +59,7 @@ class GithubImporter < ApplicationRecord
     tar_extract(file_path).each do |file|
       rebuild.process_file(file) if included_file(file)
     rescue StandardError => e
-      Rails.logger.debug "uh-oh: #{e.inspect}"
+      # fail silently?
     end
     RebuildStatus.complete(rebuild, file_path)
   end
