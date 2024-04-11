@@ -58,7 +58,7 @@ class GithubImporter < ApplicationRecord
     file_path = save_content(branch, rebuild)
     tar_extract(file_path).each do |file|
       rebuild.process_file(file) if included_file(file)
-    rescue StandardError => e
+    rescue StandardError
       # fail silently?
     end
     RebuildStatus.complete(rebuild, file_path)

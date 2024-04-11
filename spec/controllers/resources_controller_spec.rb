@@ -58,7 +58,6 @@ RSpec.describe ResourcesController, type: :controller do
     end
   end
 
-  
   describe 'get search' do
     before do
       name = Rails.application.credentials[:preview][:name]
@@ -68,10 +67,13 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     it 'searches' do
-      resource = FactoryBot.create(:resource, publish: true, type: 'Resource', rebuild_id: RebuildStatus.displayed_rebuild.id)
+      resource = FactoryBot.create(:resource, publish: true, type: 'Resource',
+                                              rebuild_id: RebuildStatus.displayed_rebuild.id)
       FactoryBot.create(:resource, publish: true, type: 'Resource', rebuild_id: RebuildStatus.displayed_rebuild.id)
-      author = FactoryBot.create(:author, publish: true, first_name: "#{resource.name} auth", rebuild_id: RebuildStatus.displayed_rebuild.id)
-      FactoryBot.create(:page, publish: true, name: "#{resource.name} page", rebuild_id: RebuildStatus.displayed_rebuild.id)
+      author = FactoryBot.create(:author, publish: true, first_name: "#{resource.name} auth",
+                                          rebuild_id: RebuildStatus.displayed_rebuild.id)
+      FactoryBot.create(:page, publish: true, name: "#{resource.name} page",
+                               rebuild_id: RebuildStatus.displayed_rebuild.id)
       SearchResult.reindex!
       sleep(5)
       get :search, params: { search_string: resource.name }
@@ -83,7 +85,7 @@ RSpec.describe ResourcesController, type: :controller do
 
       let(:fellow) do
         FactoryBot.create(:fellow, name: 'Joe Blow', rebuild_id: RebuildStatus.displayed_rebuild.id,
-                          publish: true)
+                                   publish: true)
       end
 
       before do
@@ -115,7 +117,7 @@ RSpec.describe ResourcesController, type: :controller do
     describe 'finds pages' do
       before do
         FactoryBot.create(:page, name: 'Joe', content: 'Blow',
-                          rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true)
+                                 rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true)
         FactoryBot.create(:resource, publish: true, type: 'Resource', name: 'Blorgon')
         request.env['HTTP_AUTHORIZATION'] = "Basic {Base64.encode64('preview-bssw:SoMyCodeWillSeeTheFuture!!')}"
         SearchResult.reindex
@@ -349,7 +351,7 @@ RSpec.describe ResourcesController, type: :controller do
       before do
         10.times do
           FactoryBot.create(:resource, rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true,
-                            published_at: rand(1..10).weeks.ago)
+                                       published_at: rand(1..10).weeks.ago)
         end
         12.times do
           FactoryBot.create(:resource, published_at: 1.week.ago, rebuild_id: rebuild.id)

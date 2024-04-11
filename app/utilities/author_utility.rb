@@ -49,13 +49,13 @@ class AuthorUtility
   end
 
   def self.custom_author_info(file_path, rebuild_id)
-    puts 'custom author info'
+    Rails.logger.debug 'custom author info'
     contrib_file = nil
     GithubImporter.tar_extract(file_path).each do |file|
       contrib_file = file.read if file.header.name.match('Contributors.md')
     end
     AuthorUtility.process_overrides(GithubImporter.parse_html_from(contrib_file), rebuild_id)
-    puts 'completed custom author'
+    Rails.logger.debug 'completed custom author'
   end
 
   def self.custom_staff_info(file_path, rebuild_id)

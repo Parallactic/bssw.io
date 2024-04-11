@@ -4,6 +4,7 @@
 class BlogPostsController < ApplicationController
   def index
     set_variables
+    @posts = scoped_resources.blog
     if @author
       @posts = @posts.with_author(@author)
     elsif @track
@@ -27,7 +28,7 @@ class BlogPostsController < ApplicationController
     @page = Page.displayed.find_by(name: 'BSSw Blog')
     @author = Author.displayed.find_by(slug: params[:author]) if params[:author]
     @track = Track.displayed.find(params[:track]) if params[:track]
-    @posts = scoped_resources.blog
+
     @all = (params[:view] == 'all')
   end
 end

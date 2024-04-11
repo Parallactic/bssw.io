@@ -72,7 +72,7 @@ RSpec.describe RebuildsController, type: :controller do
         expect(Page.find('homepage').snippet).not_to be_empty
         expect(Author.displayed.where(website: author_slug).size).to eq 1
         expect(Page.displayed.where(name: 'Contributors')).not_to be_empty
-        
+
         expect(Author.displayed.where(website: 'https://github.com/npch').first.alphabetized_name).to eq 'Chue'
 
         expect(Author.displayed.where(website: author_slug).first.resource_listing).not_to eq '0 resources'
