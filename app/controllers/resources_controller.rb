@@ -18,7 +18,7 @@ class ResourcesController < ApplicationController
     @resource = scoped_resources.find_by(slug: params[:id])
     @resource ||= scoped_resources.find(params[:id])
     [Page, Event, BlogPost].each do |kind|
-      redirect_to "/#{kind.table_name}/#{@resource.slug}" if @resource.is_a?(kind)
+      redirect_to "/#{kind.snake_case.pluralize}/#{@resource.slug}" if @resource.is_a?(kind)
     end
   end
 
