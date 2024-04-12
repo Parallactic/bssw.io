@@ -90,7 +90,7 @@
 	<div class='row'>
 	    <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
 	      <div class="content">
-<% unless @post.hero_image_url %>
+<% if @post.hero_image_url %>
   <p><%= @post.snippet %></p>
   <% end %>
 		    <%= @post.main.try(:html_safe) %>
