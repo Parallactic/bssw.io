@@ -57,8 +57,12 @@ class ResourcesController < ApplicationController
     set_filters
 
     set_resources
-    @resources = @resources.standard_scope
-    @resources = SearchResult.where.not(type: 'Page').order('published_at desc') if @latest
+    if @latest
+      @resources = @resources.distinct.order('published_at desc')
+    else
+      @resources = @resources.standard_scope
+    end
+
 
     @total = @resources.size
     @resources = if params[:view] != 'all'
