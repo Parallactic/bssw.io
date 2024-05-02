@@ -58,8 +58,7 @@ class ResourcesController < ApplicationController
 
     set_resources
     @resources = @resources.standard_scope
-
-    @resources = SearchResult.displayed.published.where.not(type: 'Page').order('published_at desc') if @latest
+    @resources = SearchResult.where.not(type: 'Page').order('published_at desc') if @latest
 
     @total = @resources.size
     @resources = if params[:view] != 'all'
@@ -70,7 +69,7 @@ class ResourcesController < ApplicationController
   end
 
   def set_resources
-    @resources = scoped_resources
+    @resources = scoped_resources.where.not(type: 'Page')
     @resources = scoped_resources.joins(:searchresults_topics).with_topic(@topic) if @topic
     @resources = scoped_resources.with_category(@category) if @category
     @resources = scoped_resources.with_author(@author) if @author
