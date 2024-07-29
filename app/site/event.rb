@@ -91,6 +91,7 @@ class Event < SiteItem
       text_node = Loofah.xml_fragment(date_node.text)
       text_node.scrub!(:prune)
       text = text_node.text.split(':')
+      puts "label is #{text.first}"
       process_dates(text.last, text.first) if text.last
       date_node.try(:remove)
     end
@@ -101,7 +102,8 @@ class Event < SiteItem
     doc.css("li:contains('Date')") +
       doc.css("li:contains(' date')") +
       doc.css("li:contains('Deadline')") +
-      doc.css("li:contains('deadline')")
+      doc.css("li:contains('deadline')") +
+      doc.css("li:contains('[date]')")
   end
 
   def process_dates(date_text, label_text)
