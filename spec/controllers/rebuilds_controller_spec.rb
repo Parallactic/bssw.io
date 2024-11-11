@@ -86,7 +86,7 @@ RSpec.describe RebuildsController, type: :controller do
                  a.website.try(
                    :match?, 'maherou'
                  )
-               end.first.affiliation).to eq "Sandia National Labs and St. John's University"
+               end.first.affiliation).to eq "ParaTools, Inc and St. John's University"
 
         expect(Category.displayed.first.slug).to eq 'better-planning'
         expect(BlogPost.displayed.last.topics).not_to be_empty
