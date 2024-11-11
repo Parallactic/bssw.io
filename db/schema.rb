@@ -403,7 +403,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_01_151415) do
     t.string "version_no"
     t.boolean "pinned", default: false
     t.integer "featured", default: 0
-    t.integer "topics_count"
     t.text "search_text"
     t.integer "rebuild_id"
     t.string "slug"
