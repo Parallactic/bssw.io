@@ -91,7 +91,7 @@ class Event < SiteItem
       text_node = Loofah.xml_fragment(date_node.text)
       text_node.scrub!(:prune)
       text = text_node.text.split(':')
-      puts "label is #{text.first}"
+
       process_dates(text.last, text.first) if text.last
       date_node.try(:remove)
     end

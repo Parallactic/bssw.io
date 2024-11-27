@@ -85,7 +85,7 @@ module ApplicationHelper
     date = date_value.additional_date
     label = date.label
     label = label.gsub('Start ', '') if date.label.match('Start')
-    label = label.gsub(/s$/, '') if sing
+    label = label.gsub(/s$/, '') if sing && date.label.match(/Dates$/)
     label
   end
 
