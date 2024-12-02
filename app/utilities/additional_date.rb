@@ -13,9 +13,7 @@ class AdditionalDate < ApplicationRecord
     if label_text.match('Start ') || label_text.match('End ')
       event.additional_dates.where(label: label_text).find_each(&:delete)
     end
-    if label_text.match('[date]')
-       label_text = label_text.gsub('[date]', '').strip
-    end
+    label_text = label_text.gsub('[date]', '').strip if label_text.match('[date]')
     date = create(label: label_text, event:)
     dates.split(';').each do |datetime|
       date.additional_date_values << AdditionalDateValue.new(date: Chronic.parse(datetime).try(:to_date))

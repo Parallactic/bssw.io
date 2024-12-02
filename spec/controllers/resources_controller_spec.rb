@@ -68,12 +68,12 @@ RSpec.describe ResourcesController, type: :controller do
 
     it 'searches' do
       resource = FactoryBot.create(:resource, publish: true, type: 'Resource',
-                                   rebuild_id: RebuildStatus.displayed_rebuild.id)
+                                              rebuild_id: RebuildStatus.displayed_rebuild.id)
       FactoryBot.create(:resource, publish: true, type: 'Resource', rebuild_id: RebuildStatus.displayed_rebuild.id)
       author = FactoryBot.create(:author, publish: true, first_name: "#{resource.name} auth",
-                                 rebuild_id: RebuildStatus.displayed_rebuild.id)
+                                          rebuild_id: RebuildStatus.displayed_rebuild.id)
       FactoryBot.create(:page, publish: true, name: "#{resource.name} page",
-                        rebuild_id: RebuildStatus.displayed_rebuild.id)
+                               rebuild_id: RebuildStatus.displayed_rebuild.id)
       SearchResult.reindex!
       sleep(5)
       get :search, params: { search_string: resource.name }
@@ -85,7 +85,7 @@ RSpec.describe ResourcesController, type: :controller do
 
       let(:fellow) do
         FactoryBot.create(:fellow, name: 'Joe Blow', rebuild_id: RebuildStatus.displayed_rebuild.id,
-                          publish: true)
+                                   publish: true)
       end
 
       before do
@@ -96,7 +96,7 @@ RSpec.describe ResourcesController, type: :controller do
       end
 
       it 'has fellow' do
-        SearchResult.reindex
+        SearchResult.reindex!
         sleep(5)
 
         get :search, params: { search_string: 'Joe' }
@@ -105,7 +105,7 @@ RSpec.describe ResourcesController, type: :controller do
       end
 
       it 'does not have resource' do
-        SearchResult.reindex
+        SearchResult.reindex!
         sleep(5)
 
         get :search, params: { search_string: 'Joe' }
@@ -117,7 +117,7 @@ RSpec.describe ResourcesController, type: :controller do
     describe 'finds pages' do
       before do
         FactoryBot.create(:page, name: 'Joe', content: 'Blow',
-                          rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true)
+                                 rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true)
         FactoryBot.create(:resource, publish: true, type: 'Resource', name: 'Blorgon')
         request.env['HTTP_AUTHORIZATION'] = "Basic {Base64.encode64('preview-bssw:SoMyCodeWillSeeTheFuture!!')}"
         SearchResult.reindex
@@ -164,7 +164,7 @@ RSpec.describe ResourcesController, type: :controller do
         expect(assigns(:resources)).not_to include(other_resource)
       end
     end
-    
+
     # it 'finds fellows' do
     #   fellow = FactoryBot.create(:fellow, name: 'bar bar', rebuild_id: RebuildStatus.displayed_rebuild.id,
     #                                       publish: true)
@@ -175,25 +175,27 @@ RSpec.describe ResourcesController, type: :controller do
     # end
 
     it 'performs a more complex search' do
-      resource = FactoryBot.create(:resource, content: 'Four score and seven')
+      seven_resource = FactoryBot.create(:resource, content: 'Four score and seven')
       SearchResult.reindex!
       sleep(15)
       get :search, params: { search_string: 'four seven' }
-      expect(assigns(:resources)).to include(resource)
+      expect(assigns(:resources)).to include(seven_resource)
     end
 
     it 'respects quote marks in search' do
-      resource = FactoryBot.create(:resource, content: 'Four score and seven')
-      SearchResult.reindex
+      seven_resource = FactoryBot.create(:resource, content: 'Four score and seven')
+      SearchResult.reindex!
       sleep(5)
       get :search, params: { search_string: '"four seven"' }
+      puts assigns(:search_string)
+      puts assigns(:resources)
 
-      expect(assigns(:resources)).not_to include(resource)
+      expect(assigns(:resources)).not_to include(seven_resource)
     end
 
     it 'finds quoted terms in search' do
       resource = FactoryBot.create(:resource, content: 'Four score and seven')
-      SearchResult.reindex
+      SearchResult.reindex!
       sleep(5)
       get :search, params: { search_string: '"four score"' }
       expect(assigns(:resources)).to include(resource)
@@ -220,17 +222,19 @@ RSpec.describe ResourcesController, type: :controller do
         expect(assigns(:resources)).to include(resource)
       end
 
-      it "doesn't show everything " do
+      it "doesn't show everything" do
         get :search, params: { search_string: resource.name }
         expect(assigns(:resources)).not_to include(resource2)
       end
 
       it 'renders marks' do
-        get :search, params: { search_string: resource.name }
+        puts resource.name
+        get :search, params: { search_string: resource.name.to_s }
         expect(response.body).to match "mark>#{resource.name}"
       end
     end
   end
+
   describe 'get authors' do
     before do
       author = FactoryBot.create(:author, rebuild_id: rebuild.id)
@@ -310,94 +314,91 @@ RSpec.describe ResourcesController, type: :controller do
     end
   end
 
+  describe 'using categories' do
+    let(:category) { FactoryBot.create(:category, rebuild_id: rebuild.id) }
+    let(:topic) { FactoryBot.create(:topic, category:, rebuild_id: rebuild.id) }
+    let(:resource_with_category) { FactoryBot.create(:resource, rebuild_id: rebuild.id) }
+    let(:resource_without_category) { FactoryBot.create(:resource, rebuild_id: rebuild.id) }
 
-describe 'using categories' do
-  let(:category) { FactoryBot.create(:category, rebuild_id: rebuild.id) }
-  let(:topic) { FactoryBot.create(:topic, category:, rebuild_id: rebuild.id) }
-  let(:resource_with_category) { FactoryBot.create(:resource, rebuild_id: rebuild.id) }
-  let(:resource_without_category) { FactoryBot.create(:resource, rebuild_id: rebuild.id) }
-
-  before do
-    resource_with_category.topics << topic
-    get :index, params: { category: category.slug }
-  end
-
-  it 'shows the right resource' do
-    expect(assigns(:resources)).to include(resource_with_category)
-  end
-
-  it 'does not show the wrong resource' do
-    expect(assigns(:resources)).not_to include(resource_without_category)
-  end
-end
-
-describe 'using authors' do
-  let(:author) { FactoryBot.create(:author, rebuild_id: rebuild.id) }
-  let(:resource_with_author) { FactoryBot.create(:resource, rebuild_id: rebuild.id) }
-
-  it 'includes the right resource' do
-    resource_with_author.authors << author
-    get :index, params: { author: author.slug }
-    expect(assigns(:resources)).to include resource_with_author
-  end
-
-  it 'does not include the wrong one' do
-    resource_with_author.authors << author
-    resource_without_author = FactoryBot.create(:resource, rebuild_id: rebuild.id)
-    get :index, params: { author: author.slug }
-    expect(assigns(:resources)).not_to include resource_without_author
-  end
-end
-describe 'index' do
-  before do
-    10.times do
-      FactoryBot.create(:resource, rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true,
-                        published_at: rand(1..10).weeks.ago)
+    before do
+      resource_with_category.topics << topic
+      get :index, params: { category: category.slug }
     end
-    12.times do
-      FactoryBot.create(:resource, published_at: 1.week.ago, rebuild_id: rebuild.id)
-      FactoryBot.create(:resource, published_at: 2.weeks.ago, rebuild_id: rebuild.id)
+
+    it 'shows the right resource' do
+      expect(assigns(:resources)).to include(resource_with_category)
+    end
+
+    it 'does not show the wrong resource' do
+      expect(assigns(:resources)).not_to include(resource_without_category)
     end
   end
 
-  it 'is in alpha order' do
-    old_resource = FactoryBot.create(:resource, published_at: 1.week.ago, name: 'AA', rebuild_id: rebuild.id)
-    FactoryBot.create(:resource, published_at: 2.weeks.ago, rebuild_id: rebuild.id, name: 'CC')
-    FactoryBot.create(:resource, published_at: Time.zone.today, name: 'BB', rebuild_id: rebuild.id)
-    get :index
-    expect(assigns(:resources).first).to eq old_resource
+  describe 'using authors' do
+    let(:author) { FactoryBot.create(:author, rebuild_id: rebuild.id) }
+    let(:resource_with_author) { FactoryBot.create(:resource, rebuild_id: rebuild.id) }
+
+    it 'includes the right resource' do
+      resource_with_author.authors << author
+      get :index, params: { author: author.slug }
+      expect(assigns(:resources)).to include resource_with_author
+    end
+
+    it 'does not include the wrong one' do
+      resource_with_author.authors << author
+      resource_without_author = FactoryBot.create(:resource, rebuild_id: rebuild.id)
+      get :index, params: { author: author.slug }
+      expect(assigns(:resources)).not_to include resource_without_author
+    end
   end
 
-  it 'gets by recent' do
+  describe 'index' do
+    before do
+      10.times do
+        FactoryBot.create(:resource, rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true,
+                                     published_at: rand(1..10).weeks.ago)
+      end
+      12.times do
+        FactoryBot.create(:resource, published_at: 1.week.ago, rebuild_id: rebuild.id)
+        FactoryBot.create(:resource, published_at: 2.weeks.ago, rebuild_id: rebuild.id)
+      end
+    end
 
-    6.times { FactoryBot.create(:resource, published_at: (rand(1..6)).days.ago)}
-    new_resource = FactoryBot.create(:resource, published_at: Time.zone.now, name: 'BB', rebuild_id: rebuild.id)
-    get :index, params: { recent: 'true' }
-    expect(assigns(:resources).first).to eq new_resource
+    it 'is in alpha order' do
+      old_resource = FactoryBot.create(:resource, published_at: 1.week.ago, name: 'AA', rebuild_id: rebuild.id)
+      FactoryBot.create(:resource, published_at: 2.weeks.ago, rebuild_id: rebuild.id, name: 'CC')
+      FactoryBot.create(:resource, published_at: Time.zone.today, name: 'BB', rebuild_id: rebuild.id)
+      get :index
+      expect(assigns(:resources).first).to eq old_resource
+    end
+
+    it 'gets by recent' do
+      6.times { FactoryBot.create(:resource, published_at: rand(1..6).days.ago) }
+      new_resource = FactoryBot.create(:resource, published_at: Time.zone.now, name: 'BB', rebuild_id: rebuild.id)
+      get :index, params: { recent: 'true' }
+      expect(assigns(:resources).first).to eq new_resource
+    end
+
+    it 'shows recent' do
+      Resource.where(published_at: nil).find_each(&:destroy)
+      get :index, params: { recent: 'true' }
+      first_date = assigns(:resources).first.published_at
+      second_date = assigns(:resources).last.published_at
+      expect(first_date).to be_later_than second_date
+    end
   end
 
-  it 'shows recent' do
-    Resource.where(published_at: nil).each(&:destroy)
-    get :index, params: { recent: 'true' }
-    first_date = assigns(:resources).first.published_at
-    second_date = assigns(:resources).last.published_at
-    expect(first_date).to be_later_than second_date
+  describe 'rss feed' do
+    it 'shows nothing' do
+      FactoryBot.create_list(:resource, 5)
+      get :index, format: :rss
+      expect(response.media_type).to eq 'application/rss+xml'
+    end
+
+    it 'shows feed' do
+      5.times { FactoryBot.create(:resource, rss_date: 1.week.ago, rebuild_id: rebuild.id) }
+      get :index, format: :rss
+      expect(assigns(:resources)).not_to be_empty
+    end
   end
-end
-
-
-describe 'rss feed' do
-  it 'shows nothing' do
-    FactoryBot.create_list(:resource, 5)
-    get :index, format: :rss
-    expect(response.media_type).to eq 'application/rss+xml'
-  end
-
-  it 'shows feed' do
-    5.times { FactoryBot.create(:resource, rss_date: 1.week.ago, rebuild_id: rebuild.id) }
-    get :index, format: :rss
-    expect(assigns(:resources)).not_to be_empty
-  end
-end
-
 end

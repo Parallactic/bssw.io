@@ -15,11 +15,10 @@ class ResourcesController < ApplicationController
   end
 
   def show
-    @resource = scoped_resources.find_by(slug: params[:id])
-    @resource ||= scoped_resources.find(params[:id])
-    redirect_to "/pages/#{@resource.slug}" if @resource.is_a?(Page)
-    redirect_to "/events/#{@resource.slug}" if @resource.is_a?(Event)
-    redirect_to "/blog_posts/#{@resource.slug}" if @resource.is_a?(BlogPost)
+    @resource = scoped_resources.find_by(slug: params[:id]) || scoped_resources.find(params[:id])
+    [Page, Event, BlogPost].each do |kind|
+      redirect_to("/#{kind.table_name}/#{@resource.slug}") if @resource.is_a?(kind)
+    end
   end
 
   def index
@@ -57,13 +56,15 @@ class ResourcesController < ApplicationController
     set_filters
 
     set_resources
-    if @latest
-      @resources = @resources.distinct.order('published_at desc')
-    else
-      @resources = @resources.standard_scope
-    end
+    @resources = if @latest
+                   @resources.distinct.order('published_at desc')
+                 else
+                   @resources.standard_scope
+                 end
+    paginate_resources
+  end
 
-
+  def paginate_resources
     @total = @resources.size
     @resources = if params[:view] != 'all'
                    @resources.paginate(page: @page_num, per_page: 75)
@@ -87,9 +88,8 @@ class ResourcesController < ApplicationController
   end
 
   def set_associations
-    @category = Category.displayed.find(params[:category]) if params[:category]
-    @topic = Topic.displayed.find(params[:topic]) if params[:topic]
-    @author = Author.displayed.find(params[:author]) if params[:author]
-    @track = Track.displayed.find(params[:track]) if params[:track]
+    %i[category topic author track].each do |kind|
+      instance_variable_set("@#{kind}", kind.to_s.camelize.constantize.displayed.find(params[kind])) if params[kind]
+    end
   end
 end

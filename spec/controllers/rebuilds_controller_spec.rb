@@ -23,7 +23,7 @@ RSpec.describe RebuildsController, type: :controller do
     end
 
     describe 'post import' do
-      it 'tracks '
+      it 'tracks'
       it 'does some imports' do
         name = Rails.application.credentials[:import][:name]
         pw = Rails.application.credentials[:import][:password]

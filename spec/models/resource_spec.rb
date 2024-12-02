@@ -55,5 +55,6 @@ RSS update: 01-01-18
 
   it 'can update links and images' do
     res.update_links_and_images
+    expect(res.content).to match 'caption'
   end
 end

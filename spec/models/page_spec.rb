@@ -38,7 +38,7 @@ Publish: true
   end
 
   it 'picks out homepage' do
-    expect(res.home?).to eq true
+    expect(res.home?).to be true
   end
 
   it 'is in menu list' do

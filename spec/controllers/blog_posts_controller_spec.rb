@@ -30,7 +30,7 @@ RSpec.describe BlogPostsController, type: :controller do
     before do
       FactoryBot.create(:page, name: 'BSSw Blog', rebuild_id: rebuild.id)
       bp.authors = [author]
-      bp2.authors = [a]
+      bp_authored_by_author_a.authors = [a]
       bp3.tracks = [t]
     end
 
@@ -38,7 +38,7 @@ RSpec.describe BlogPostsController, type: :controller do
     let(:author) { FactoryBot.create(:author, rebuild_id: rebuild.id) }
     let(:a) { FactoryBot.create(:author, rebuild_id: rebuild.id) }
     let(:t) { FactoryBot.create(:track, rebuild_id: rebuild.id) }
-    let(:bp2) { FactoryBot.create(:blog_post, rebuild_id: rebuild.id) }
+    let(:bp_authored_by_author_a) { FactoryBot.create(:blog_post, rebuild_id: rebuild.id) }
     let(:bp3) { FactoryBot.create(:blog_post, rebuild_id: rebuild.id) }
 
     it 'gets index with blog post' do
@@ -54,7 +54,7 @@ RSpec.describe BlogPostsController, type: :controller do
 
     it 'gets index with author' do
       get :index, params: { author: a.slug }
-      expect(assigns(:posts)).to include bp2
+      expect(assigns(:posts)).to include bp_authored_by_author_a
     end
 
     it 'gets index with track' do
