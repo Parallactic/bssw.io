@@ -101,8 +101,7 @@ module ApplicationHelper
                else
                  end_at.strftime('%b %e, %Y')
                end
-    safe_join(start_date, '&ndash;'.html_safe, end_date)
-    #    "#{start_date}&ndash;#{end_date}".html_safe
+    safe_join([start_date, '&ndash;'.html_safe, end_date])   #    "#{start_date}&ndash;#{end_date}".html_safe
   end
 
   def show_page(path, next_page)
