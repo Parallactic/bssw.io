@@ -99,11 +99,16 @@ class Event < SiteItem
   end
 
   def get_date_nodes(doc)
-    doc.css("li:contains('Date')") +
-      doc.css("li:contains(' date')") +
-      doc.css("li:contains('Deadline')") +
-      doc.css("li:contains('deadline')") +
-      doc.css("li:contains('[date]')")
+    # doc.at("ul").css("li:contains('Date')") +
+    #   doc.at("ul").css("li:contains(' date')") +
+    #   doc.at("ul").css("li:contains('Deadline')") +
+    #   doc.at("ul").css("li:contains('deadline')") +
+    #   doc.at("ul").css("li:contains('[date]')")
+    (doc.at("ul").try(:css, "li:contains('Date')").to_a) +
+      (doc.at("ul").try(:css, "li:contains(' date')").to_a) +
+      (doc.at("ul").try(:css, "li:contains('Deadline')").to_a) +
+      (doc.at("ul").try(:css, "li:contains('[date]')").to_a) +
+      (doc.at("ul").try(:css, "li:contains('deadline')").to_a)
   end
 
   def process_dates(date_text, label_text)

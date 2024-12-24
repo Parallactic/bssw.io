@@ -137,7 +137,7 @@ RSpec.describe ResourcesController, type: :controller do
 
     it 'performs an empty search' do
       get :search, params: { search_string: 'foob' }
-      SearchResult.reindex!
+      SearchResult.reindex
       sleep(5)
 
       expect(assigns(:resources)).to be_empty
@@ -150,7 +150,7 @@ RSpec.describe ResourcesController, type: :controller do
       before do
         resource
         other_resource
-        SearchResult.reindex!
+        SearchResult.reindex
         sleep(10)
       end
 
@@ -176,7 +176,7 @@ RSpec.describe ResourcesController, type: :controller do
 
     it 'performs a more complex search' do
       seven_resource = FactoryBot.create(:resource, content: 'Four score and seven')
-      SearchResult.reindex!
+      SearchResult.reindex
       sleep(15)
       get :search, params: { search_string: 'four seven' }
       expect(assigns(:resources)).to include(seven_resource)
