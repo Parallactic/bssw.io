@@ -67,13 +67,13 @@ RSpec.describe Event, type: :model do
 
   it 'can use the [date] label' do
     content = "# Foo \n bar
-    \n* [date] Webinar: 01-02-2025
+    \n* [date] Q&A: 01-02-2025
     \n* Location: Place \n* \n* <!--- Publish: Yes --->"
 
     my_event = rebuild.find_or_create_resource('stuff/Events/webinar.md')
     my_event.parse_and_update(content)
 
-    expect(my_event.additional_dates.first.label).to eq 'Webinar'
+    expect(my_event.additional_dates.first.label).to eq 'Q&amp;A'
   end
 
   it 'can parse dates from earlier this year' do

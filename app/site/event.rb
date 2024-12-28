@@ -88,9 +88,8 @@ class Event < SiteItem
 
   def update_dates(doc)
     get_date_nodes(doc).each do |date_node|
-      text_node = Loofah.xml_fragment(date_node.text)
-      text_node.scrub!(:prune)
-      text = text_node.text.split(':')
+
+      text = date_node.text.split(':')
 
       process_dates(text.last, text.first) if text.last
       date_node.try(:remove)
@@ -99,11 +98,7 @@ class Event < SiteItem
   end
 
   def get_date_nodes(doc)
-    # doc.at("ul").css("li:contains('Date')") +
-    #   doc.at("ul").css("li:contains(' date')") +
-    #   doc.at("ul").css("li:contains('Deadline')") +
-    #   doc.at("ul").css("li:contains('deadline')") +
-    #   doc.at("ul").css("li:contains('[date]')")
+
     (doc.at("ul").try(:css, "li:contains('Date')").to_a) +
       (doc.at("ul").try(:css, "li:contains(' date')").to_a) +
       (doc.at("ul").try(:css, "li:contains('Deadline')").to_a) +
@@ -117,6 +112,7 @@ class Event < SiteItem
             else
               date_text.split('-')
             end
+    label_text =   CGI::escapeHTML(CGI::unescapeHTML(label_text))
     if dates.size > 1
       AdditionalDate.do_multiple_dates(dates, label_text, self)
     else
