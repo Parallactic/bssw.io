@@ -86,7 +86,7 @@ module ApplicationHelper
     label = date.label
     label = label.gsub('Start ', '') if date.label.match('Start')
     label = label.gsub(/s$/, '') if sing && date.label.match(/Dates$/)
-    label
+    label.html_safe
   end
 
   def date_range(start_at, end_at)
