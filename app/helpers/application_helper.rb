@@ -48,8 +48,8 @@ module ApplicationHelper
         ''
       else
         used_dates << date.additional_date
-        content_tag('strong', date.additional_date.label) +
-          date.additional_date.additional_date_values.map { |adv| date_range(adv.date, nil) }.join('; ')
+        content_tag('strong', date.additional_date.label.html_safe!) +
+          date.additional_date.additional_date_values.map { |adv| date_range(adv.date, nil) }.safe_join('; ')
       end
     end
   end
@@ -101,7 +101,7 @@ module ApplicationHelper
                else
                  end_at.strftime('%b %e, %Y')
                end
-    safe_join([start_date, '&ndash;'.html_safe, end_date])   #    "#{start_date}&ndash;#{end_date}".html_safe
+    safe_join([start_date, '&ndash;'.html_safe, end_date])       
   end
 
   def show_page(path, next_page)
