@@ -119,9 +119,11 @@ class MarkdownImport < GithubImport
     end
   end
 
-  def add_track(name)
-    tracks << Track.from_name(name.strip.gsub(/^"/, '').gsub(/"$/, ''),
-                              rebuild_id)
+  def add_track(names)
+    names.split(',').each do |name|
+      tracks << Track.from_name(name.strip.gsub(/^"/, '').gsub(/"$/, ''),
+                                rebuild_id)
+    end
   end
 
   def basic?
