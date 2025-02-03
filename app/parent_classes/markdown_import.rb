@@ -34,16 +34,23 @@ class MarkdownImport < GithubImport
   def update_associates(array, _rebuild)
     array.each_cons(2) do |string, names|
       method = "add_#{string.strip}".downcase.tr(' ', '_')
+      
+      if method == 'add_track'
+        tracks = []
+        try(:add_track, names)
+      else
       names = CSV.parse(names.gsub(/,\s+"/, ',"'), liberal_parsing: true).first
+
       if method == 'add_topics'
         save if new_record?
         try(:add_topics, names)
       elsif respond_to?(method, true)
         send(method, names.join)
       end
+      end
     end
   end
-
+  
   def add_opengraph_image(val)
     update(open_graph_image_tag: MarkdownUtility.modified_path(val))
   end
@@ -120,9 +127,11 @@ class MarkdownImport < GithubImport
   end
 
   def add_track(names)
+
     names.split(',').each do |name|
+
       tracks << Track.from_name(name.strip.gsub(/^"/, '').gsub(/"$/, ''),
-                                rebuild_id)
+                               rebuild_id)
     end
   end
 

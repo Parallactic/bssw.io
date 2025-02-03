@@ -15,7 +15,7 @@ RSpec.describe BlogPost, type: :model do
 <!--
 Topics: \"First Qutoe\", Foo, Bar, \"Quoted, Topic\", \"End Quo\"
 Categories: Blah Blah
-Track: Deep dive
+Track: Deep dive, community
 Publish: true
 
 -->"
@@ -57,4 +57,11 @@ Publish: true
   it 'gets caption' do
     expect(res.hero_image_caption).not_to be_nil
   end
+
+  it 'gets tracks' do
+
+    expect(res.tracks.size).to eq 2
+  end
+
+  
 end
