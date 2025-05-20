@@ -55,7 +55,8 @@ class ResourcesController < ApplicationController
   private
 
   def populate_resources
-    set_filters
+    puts "populating resources"
+set_filters
 
     set_resources
     @resources = if @latest
@@ -77,8 +78,14 @@ class ResourcesController < ApplicationController
 
   def set_resources
     @resources = scoped_resources.where.not(type: 'Page')
-    @resources = scoped_resources.joins(:searchresults_topics).with_topic(@topic) if @topic
-    @resources = scoped_resources.with_category(@category) if @category
+    if @topic
+      @resources = scoped_resources.joins(:searchresults_topics).with_topic(@topic)
+      puts "we have a topic"
+session[:topic] = @topic
+    else
+      puts "we don't have a topic"
+    end
+@resources = scoped_resources.with_category(@category) if @category
     @resources = scoped_resources.with_author(@author) if @author
   end
 
@@ -90,8 +97,28 @@ class ResourcesController < ApplicationController
   end
 
   def set_associations
-    %i[category topic author track].each do |kind|
-      instance_variable_set("@#{kind}", kind.to_s.camelize.constantize.displayed.find(params[kind])) if params[kind]
+
+
+    @category = Category.find(params[:category]) if params[:category]
+    @topic = Topic.find(params[:topic]) if params[:topic]
+    @author = Author.find(params[:author]) if params[:author]
+    @track = Track.find(params[:track]) if params[:track] 
+
+    if @topic
+      session[:path] = @topic
+      session[:path_method] = 'topic'
+    elsif @category
+      session[:path] = @category
+      session[:path_method] = 'category'
+    elsif @author
+      session[:path] = @author
+      session[:path_method] = 'author'
+    elsif @track
+      session[:path] = @track
+      session[:path_method] = 'track'
+
     end
+
+    
   end
 end

@@ -27,7 +27,37 @@ RSpec.describe ResourcesController, type: :controller do
     expect(response.body).to match 'changing'
   end
 
-  describe 'preview' do
+  describe 'menus' do
+    before do
+      blog = FactoryBot.create(:blog_post)
+    end
+    it 'shows resource path' do
+      resource = FactoryBot.create(:resource)
+      get :show, params: { id: resource.id }
+      expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to     match 'Resources'
+    end
+    it 'shows blog path' do
+    end
+    it 'shows topic path' do
+      resource = FactoryBot.create(:resource)
+      topic = FactoryBot.create(:topic)
+      resource.topics << topic
+      get :index, params: { topic: topic.slug }
+      get :show, params: { id: resource.id }
+      expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to     match topic.name
+    end
+    it 'shows category path' do
+      resource = FactoryBot.create(:resource)
+      topic = FactoryBot.create(:topic)
+      resource.topics << topic
+      get :index, params: { category: topic.category.slug }
+      get :show, params: { id: resource.id }
+      expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to     match topic.category.name
+
+    end
+  end
+  
+describe 'preview' do
     it 'is invalid without auth' do
       request.host = 'preview.bssw.io'
       request.env['HTTP_AUTHORIZATION'] = bad_credentials

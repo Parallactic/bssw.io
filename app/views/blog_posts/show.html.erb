@@ -8,7 +8,12 @@
 			    <div class="breadcrumbs">
 				<ul>
 				    <li><a href="/">Home</a></li>
+				    		  <% if session[:path].is_a?(topic) %>
+		  <li><%= link_to @topic.name, site_items_path(topic: @topic) %></li>
+
+<% else %>
 				    <li><a href="/blog_posts">Blog</a></li>
+				    <% end %>
 				    <li class="active"><%= @post.name[0..60].gsub(/\s\w+\s*$/, '...') %></li>
 				</ul>
 			    </div>
