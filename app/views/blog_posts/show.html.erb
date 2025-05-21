@@ -5,26 +5,7 @@
 		<div class="page-heading">
 		    <div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-			    <div class="breadcrumbs">
-				<ul>
-				    <li><a href="/">Home</a></li>
-				    		  <% if session[:path].is_a?(topic) %>
-		  <li><%= link_to @topic.name, site_items_path(topic: @topic) %></li>
-
-<% else %>
-				    <li><a href="/blog_posts">Blog</a></li>
-				    <% end %>
-				    <li class="active"><%= @post.name[0..60].gsub(/\s\w+\s*$/, '...') %></li>
-				</ul>
-			    </div>
-			</div>
-		    </div>
-		    <h1><%= @post.name %></h1>
-
-		    <%= render :partial => '/layouts/share' %>
-
-
-		</div>
+			<%= render :partial => 'layouts/breadcrumbs' %>
 	    </div>
 	    <% if @post.hero_image_url %>
 		<div class="container blog-image-container">
