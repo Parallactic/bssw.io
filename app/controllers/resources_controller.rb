@@ -105,16 +105,16 @@ session[:topic] = @topic
     @track = Track.find(params[:track]) if params[:track] 
 
     if @topic
-      session[:path] = @topic
+      session[:path] = { "slug" => @topic.slug, "name" => @topic.name }
       session[:path_method] = 'topic'
     elsif @category
-      session[:path] = @category
+      session[:path] = {"slug" => @category.slug, "name" => @category.name }
       session[:path_method] = 'category'
     elsif @author
-      session[:path] = @author
+      session[:path] = {"slug" => @author.slug, "name" => @author.name}
       session[:path_method] = 'author'
     elsif @track
-      session[:path] = @track
+      session[:path] = {"slug" => @track.slug, "name" => @track.name }
       session[:path_method] = 'track'
 
     end
