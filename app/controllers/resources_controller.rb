@@ -19,7 +19,8 @@ class ResourcesController < ApplicationController
     @resource ||= scoped_resources.find(params[:id])
     redirect_to "/pages/#{@resource.slug}" if @resource.is_a?(Page)
     redirect_to "/events/#{@resource.slug}" if @resource.is_a?(Event)
-    redirect_to "/blog_posts/#{@resource.slug}" if @resource.is_a?(BlogPost)
+    puts "redirect ...."
+redirect_to "/blog_posts/#{@resource.slug}" if @resource.is_a?(BlogPost)
 
   end
 
@@ -55,8 +56,8 @@ class ResourcesController < ApplicationController
   private
 
   def populate_resources
-    puts "populating resources"
-set_filters
+
+    set_filters
 
     set_resources
     @resources = if @latest
@@ -80,12 +81,8 @@ set_filters
     @resources = scoped_resources.where.not(type: 'Page')
     if @topic
       @resources = scoped_resources.joins(:searchresults_topics).with_topic(@topic)
-      puts "we have a topic"
-session[:topic] = @topic
-    else
-      puts "we don't have a topic"
     end
-@resources = scoped_resources.with_category(@category) if @category
+    @resources = scoped_resources.with_category(@category) if @category
     @resources = scoped_resources.with_author(@author) if @author
   end
 
@@ -105,17 +102,14 @@ session[:topic] = @topic
     @track = Track.find(params[:track]) if params[:track] 
 
     if @topic
-      session[:path] = { "slug" => @topic.slug, "name" => @topic.name }
-      session[:path_method] = 'topic'
+      session[:path] = { "slug" => @topic.slug, "name" => @topic.name, "method" => 'topic' }
     elsif @category
-      session[:path] = {"slug" => @category.slug, "name" => @category.name }
-      session[:path_method] = 'category'
+      session[:path] = {"slug" => @category.slug, "name" => @category.name, "method" => 'topic' }
     elsif @author
-      session[:path] = {"slug" => @author.slug, "name" => @author.name}
-      session[:path_method] = 'author'
+      session[:path] = {"slug" => @author.slug, "name" => @author.name,
+                       "method" => @author}
     elsif @track
-      session[:path] = {"slug" => @track.slug, "name" => @track.name }
-      session[:path_method] = 'track'
+      session[:path] = {"slug" => @track.slug, "name" => @track.name, 'method' => 'track' }
 
     end
 

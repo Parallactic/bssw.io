@@ -28,15 +28,13 @@ RSpec.describe ResourcesController, type: :controller do
   end
 
   describe 'menus' do
-    before do
-      blog = FactoryBot.create(:blog_post)
-    end
+
     it 'shows resource path' do
-      resource = FactoryBot.create(:resource)
+      resource = FactoryBot.create(:resource, type: 'Resource')
+      get :index
       get :show, params: { id: resource.id }
-      expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to     match 'Resources'
-    end
-    it 'shows blog path' do
+
+expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to     match 'Resources'
     end
     it 'shows topic path' do
       resource = FactoryBot.create(:resource)

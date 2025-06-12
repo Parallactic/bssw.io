@@ -5,96 +5,86 @@
         <div class="page-heading">
           <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-              <div class="breadcrumbs">
-                <ul>
-                  <li><a href="/">Home</a></li>
-<% if Event.displayed.upcoming.include?(@event) %>
-                  <li><a href="/events">Events</a></li>                  
-<% else %>
-<li><a href="/events?past=true">Past Events</a></li>
-<% end %>
-                  <li class="active"><%= @event.name[0..50].gsub(/\s\w+\s*$/, '...') %></li>
-                </ul>
-              </div>
+	      <%= render :partial => '/layouts/breadcrumbs' %>
             </div>
-          </div>
-          <h1><%= @event.name %></h1>
-
-          <%= render :partial => '/layouts/share' %>
+	  </div>
 
 
-          <div class="post-content">
+
+
+	  <h1><%= @event.name %></h1>
+
+	  <%= render :partial => '/layouts/share' %>
+
+
+	  <div class="post-content">
             <p><%= @event.snippet %></p>
-          </div>
+	  </div>
 
-          <% if @event.website %>
-          <h4 class="offsite"><a href='<%= @event.website %>' target='_blank'><% if @event.website_label %><%= @event.website_label %><% else %>Event Website<% end %></a></h4>
-          <% end %>
-        </div>
-      </div></div>
-       <div class="row details-row">
-        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-          <h3 class='small-caps'>
-            <%= show_dates(@event) %></h3>
-          </div>
-          <% if @event.location %>
-          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-            <h3 class='small-caps'>
-              <strong>Location</strong><%= @event.location.strip %></h3>
-            </div>
-            <% end %>
-            <% if @event.organizers %>
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-             <h3 class='small-caps'><strong>Organizers</strong> <%= @event.organizers %></h3>
-           </div>
-           <% end %>
-       </div>
-       <div class='row details-row'>
-	   <% if @event.authors %>
-	       <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-		   <div class="topics-wrapper">
-		       
-			       <span class="small-caps">                     
-                      <strong><%= "Author".pluralize(@event.authors.count) %></strong><%= author_list(@event) %>
+	  <% if @event.website %>
+	  <h4 class="offsite"><a href='<%= @event.website %>' target='_blank'><% if @event.website_label %><%= @event.website_label %><% else %>Event Website<% end %></a></h4>
+	  <% end %>
+	</div>
 
-</span>
+	<div class="row details-row">
+	  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+	    <h3 class='small-caps'>
+	      <%= show_dates(@event) %></h3>
+	  </div>
+	  <% if @event.location %>
+	  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+	    <h3 class='small-caps'>
+	      <strong>Location</strong><%= @event.location.strip %></h3>
+	  </div>
+	  <% end %>
+	  <% if @event.organizers %>
+	  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+	    <h3 class='small-caps'><strong>Organizers</strong> <%= @event.organizers %></h3>
+	  </div>
+	  <% end %>
+	</div>
+	<div class='row details-row'>
+	  <% if @event.authors %>
+	  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+	    <div class="topics-wrapper">
+	      
+	      <span class="small-caps">                     
+		<strong><%= "Author".pluralize(@event.authors.count) %></strong><%= author_list(@event) %>
 
-
-	       </div>
-	   </div>
-	   <% end  %>
-           <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
-	       <span class="small-caps">
-		   <%= render :partial => '/resources/topics', :locals => {:resource => @event } %>
-	       </span>
-	   </div>
+	      </span>
 
 
-        </div>
+	    </div>
+	  </div>
+	  <% end  %>
+	  <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+	    <span class="small-caps">
+	      <%= render :partial => '/resources/topics', :locals => {:resource => @event } %>
+	    </span>
+	  </div>
+	</div>
       </div>
+    </div>
+</div></div>
 
 
+<div class="page-content event-content">
+  <div class="container">
+    <div class='row'>
+      <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+        <div class="content">
 
-       </div>
-     </div>
-   </div>
+	  <%= @event.main.try(:html_safe) %>
 
+	  <% if @event.website %>
+	  <p class="offsite">
+	    <!--<i class="fas fa-link"></i>--><a href="<%= @event.website %>" target="_blank"><% if @event.website_label.blank? %>Event Website<% else %><%= @event.website_label %><% end %></a></p>
+	  <% end %>
 
-   <div class="page-content event-content">
-      <div class="container">
-        <div class='row'>
-    <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-          <div class="content">
-
-            <%= @event.main.try(:html_safe) %>
-
-            <% if @event.website %>
-            <p class="offsite">
-              <!--<i class="fas fa-link"></i>--><a href="<%= @event.website %>" target="_blank"><% if @event.website_label.blank? %>Event Website<% else %><%= @event.website_label %><% end %></a></p>
-            <% end %>
-
-          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+
+

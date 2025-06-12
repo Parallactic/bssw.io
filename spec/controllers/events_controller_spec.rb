@@ -10,8 +10,8 @@ RSpec.describe EventsController, type: :controller do
   let(:rebuild) { RebuildStatus.displayed_rebuild }
 
   before do
-    RebuildStatus.all.find_each(&:destroy)
-    RebuildStatus.create(display_rebuild_id: Rebuild.create.id)
+#    RebuildStatus.all.find_each(&:destroy)
+    RebuildStatus.find_or_create_by(display_rebuild_id: Rebuild.first.id)
   end
 
   describe 'get index' do
@@ -89,7 +89,7 @@ RSpec.describe EventsController, type: :controller do
       AdditionalDate.make_date('Submission Date', 1.week.from_now.to_s, event)
       AdditionalDate.make_date('Party Date', 2.weeks.from_now.to_s, event)
       get :show, params: { id: event }
-      expect(assigns(:event)).to eq event
+      expect(assigns(:resource)).to eq event
     end
 
     it 'shows an event with a different date range' do

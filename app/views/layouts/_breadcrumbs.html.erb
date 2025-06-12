@@ -1,21 +1,30 @@
-              <div class="breadcrumbs">
-                <ul>
-                  <li><a href="/">Home</a></li>
+<div class="breadcrumbs">
+  <ul>
+    <li><a href="/">Home</a></li>
 
 
-		  <% if session[:path_method] == 'topic' %>
-		  <li><%= link_to session[:path]["name"], site_items_path(topic: session[:path]["slug"]) %></li>
-		  		  <% elsif session[:path_method] == 'category' %>
-		  <li><%= link_to session[:path]["name"], site_items_path(category: session[:path]["slug"]) %></li>
+    <% if session.dig(:path, "method")  == 'topic' %>
+    <li><%= link_to session[:path]["name"], site_items_path(topic: session[:path]["slug"]) %></li>
+    <% elsif session.dig(:path, "method") == 'category' %>
+    <li><%= link_to session[:path]["name"], site_items_path(category: session[:path]["slug"]) %></li>
 
-<% else %>
-                  <li><%= link_to 'Resources', site_items_path %></li>
+    <% elsif @resource.is_a?(BlogPost) %>
+    <li><%= link_to 'Blog', blog_posts_path %></li>
+    <% elsif @resource.is_a?(Event) %>
+    <% if Event.displayed.upcoming.include?(@resource) %>
+    <li><a href="/events">Events</a></li>                  
+    <% else %>
+    <li><a href="/events?past=true">Past Events</a></li>
+    <% end %>
 
-		  <% end %>
-                  <li class="active">       <li>crum</li> <%= @resource.name[0..34].gsub(/\s\w+\s*$/, '...') %></li>
-                </ul>
+    <% else %>
+    <li><%= link_to 'Resources', site_items_path %></li>
+
+    <% end %>
+    <li class="active">        <%= @resource.name[0..34].gsub(/\s\w+\s*$/, '...') %></li>
+  </ul>
 
 
 
-              </div>
+</div>
 

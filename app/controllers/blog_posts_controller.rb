@@ -4,7 +4,8 @@
 class BlogPostsController < ApplicationController
   def index
     set_variables
-    @posts = scoped_resources.blog
+    session[:path] = nil
+@posts = scoped_resources.blog
     if @author
       @posts = @posts.with_author(@author)
     elsif @track
@@ -16,9 +17,15 @@ class BlogPostsController < ApplicationController
   end
 
   def show
-    blog = scoped_resources.blog
-    @post = blog.find(params[:id])
-    @resource = @post
+    puts "bloggity"
+    #    blog = scoped_resources.blog
+    #    @post = blog.find(params[:id])
+@resource = scoped_resources.find_by(slug: params[:id])
+    @resource ||= scoped_resources.find(params[:id])
+    puts "were in the blog"
+puts @resource.inspect
+    @post = @resource
+
     @related_posts = @post.related_posts
   end
 
