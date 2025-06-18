@@ -70,7 +70,7 @@ redirect_to "/blog_posts/#{@resource.slug}" if @resource.is_a?(BlogPost)
 
   def paginate_resources
     @total = @resources.size
-    @resources = if params[:view] != 'all'
+    @resources = if params[:vieppw] != 'all'
                    @resources.paginate(page: @page_num, per_page: 75)
                  else
                    @resources.paginate(page: @page_num, per_page: @resources.size)
@@ -79,9 +79,8 @@ redirect_to "/blog_posts/#{@resource.slug}" if @resource.is_a?(BlogPost)
 
   def set_resources
     @resources = scoped_resources.where.not(type: 'Page')
-    if @topic
-      @resources = scoped_resources.joins(:searchresults_topics).with_topic(@topic)
-    end
+
+    @resources = scoped_resources.with_topic(@topic) if @topic
     @resources = scoped_resources.with_category(@category) if @category
     @resources = scoped_resources.with_author(@author) if @author
   end
@@ -97,7 +96,7 @@ redirect_to "/blog_posts/#{@resource.slug}" if @resource.is_a?(BlogPost)
 
 
     @category = Category.find(params[:category]) if params[:category]
-    @topic = Topic.find(params[:topic]) if params[:topic]
+    @topic = Topic.displayed.find(params[:topic]) if params[:topic]
     @author = Author.find(params[:author]) if params[:author]
     @track = Track.find(params[:track]) if params[:track] 
 

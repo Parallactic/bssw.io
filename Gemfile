@@ -43,7 +43,7 @@ gem 'bootstrap-sass'
 
 group :development, :test do
   gem 'brakeman'
-  gem 'bullet'
+#  gem 'bullet'
   gem 'factory_bot_rails'
   gem 'faker'
   #  gem 'metric_fu', github: 'eamonn-webster/metric_fu'
