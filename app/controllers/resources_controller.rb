@@ -95,10 +95,10 @@ redirect_to "/blog_posts/#{@resource.slug}" if @resource.is_a?(BlogPost)
   def set_associations
 
 
-    @category = Category.find(params[:category]) if params[:category]
+    @category = Category.displayed.find(params[:category]) if params[:category]
     @topic = Topic.displayed.find(params[:topic]) if params[:topic]
-    @author = Author.find(params[:author]) if params[:author]
-    @track = Track.find(params[:track]) if params[:track] 
+    @author = Author.displayed.find(params[:author]) if params[:author]
+    @track = Track.displayed.find(params[:track]) if params[:track] 
 
     if @topic
       session[:path] = { "slug" => @topic.slug, "name" => @topic.name, "method" => 'topic' }
