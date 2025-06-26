@@ -20,7 +20,7 @@ class ResourcesController < ApplicationController
     redirect_to "/pages/#{@resource.slug}" if @resource.is_a?(Page)
     redirect_to "/events/#{@resource.slug}" if @resource.is_a?(Event)
     puts "redirect ...."
-redirect_to "/blog_posts/#{@resource.slug}" if @resource.is_a?(BlogPost)
+    redirect_to "/blog_posts/#{@resource.slug}" if @resource.is_a?(BlogPost)
 
   end
 
@@ -70,7 +70,7 @@ redirect_to "/blog_posts/#{@resource.slug}" if @resource.is_a?(BlogPost)
 
   def paginate_resources
     @total = @resources.size
-    @resources = if params[:vieppw] != 'all'
+    @resources = if params[:view] != 'all'
                    @resources.paginate(page: @page_num, per_page: 75)
                  else
                    @resources.paginate(page: @page_num, per_page: @resources.size)
@@ -103,10 +103,11 @@ redirect_to "/blog_posts/#{@resource.slug}" if @resource.is_a?(BlogPost)
     if @topic
       session[:path] = { "slug" => @topic.slug, "name" => @topic.name, "method" => 'topic' }
     elsif @category
-      session[:path] = {"slug" => @category.slug, "name" => @category.name, "method" => 'topic' }
+      session[:path] = {"slug" => @category.slug, "name" => @category.name, "method" => 'category' }
     elsif @author
       session[:path] = {"slug" => @author.slug, "name" => @author.name,
-                       "method" => @author}
+                       "method" => 'author'
+                       }
     elsif @track
       session[:path] = {"slug" => @track.slug, "name" => @track.name, 'method' => 'track' }
 

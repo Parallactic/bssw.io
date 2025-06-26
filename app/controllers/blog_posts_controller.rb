@@ -17,13 +17,9 @@ class BlogPostsController < ApplicationController
   end
 
   def show
-    puts "bloggity"
-    #    blog = scoped_resources.blog
-    #    @post = blog.find(params[:id])
-@resource = scoped_resources.find_by(slug: params[:id])
+    @resource = scoped_resources.find_by(slug: params[:id])
     @resource ||= scoped_resources.find(params[:id])
-    puts "were in the blog"
-puts @resource.inspect
+
     @post = @resource
 
     @related_posts = @post.related_posts

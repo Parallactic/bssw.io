@@ -39,7 +39,12 @@
 		  
 		</p>
 		<% if @author.website %>
+		<% if @author.website.match('github.com') %>
+%>
 		  <p class="offsite mt-0"><%= link_to 'GitHub', @author.website  %></p>
+<% else %>
+		  <p class="offsite mt-0"><%= link_to 'Website', @author.website  %></p>
+
 		<% end %>
 	      </div>
 	    </div>

@@ -38,15 +38,21 @@ expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to     match 'Res
     end
     it 'shows topic path' do
       resource = FactoryBot.create(:resource)
-      topic = FactoryBot.create(:topic)
+      topic = FactoryBot.create(:topic, rebuild_id: RebuildStatus.displayed_rebuild.id)
       resource.topics << topic
-      get :index, params: { topic: topic.slug }
-      get :show, params: { id: resource.id }
-      expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to     match topic.name
+      puts topic.inspect
+
+get :index, params: { topic: topic.slug }
+
+expect(Nokogiri::HTML(response.body).css('h1').text).to     match topic.name
+
+get :show, params: { id: resource.id }
+       expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to     match topic.name
     end
-    it 'shows category path' do
+   it 'shows category path' do
       resource = FactoryBot.create(:resource)
-      topic = FactoryBot.create(:topic)
+      topic = FactoryBot.create(:topic,                                               rebuild_id: RebuildStatus.displayed_rebuild.id)
+      topic.category.update(rebuild_id: RebuildStatus.displayed_rebuild.id)
       resource.topics << topic
       get :index, params: { category: topic.category.slug }
       get :show, params: { id: resource.id }
