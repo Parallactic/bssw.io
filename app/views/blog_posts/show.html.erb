@@ -5,136 +5,137 @@
 		<div class="page-heading">
 		    <div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-			<%= render :partial => 'layouts/breadcrumbs' %>
-   <h1><%= @post.name %></h1>
+			    <%= render :partial => 'layouts/breadcrumbs' %>
+			    <h1><%= @post.name %></h1>
 
-                   <%= render :partial => '/layouts/share' %>
-
-
+			    <%= render :partial => '/layouts/share' %>
 
 
-	    </div>
-	    <% if @post.hero_image_url %>
-		<div class="container blog-image-container">
-		    <div class='image-wrapper' style='background-image:url(<%= @post.hero_image_url %>); '></div>
-		    <div class="row">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-			    <p class='caption'><%= @post.hero_image_caption %></p>
+
+
 			</div>
-		    </div>
-		</div>
-	      <% else %>
-		<div class="container">
-		<div class="post-content">
-		  <p><%= @post.snippet %></p>
-		</div>
-		</div>
-	    <% end %>
-	    <div class="container blog-meta">
-		<div class="row">
-		    <div class="col-xl-3">
-			<div class="row">
-			    <div class="col-xl-12">
-				<div class="small-caps"><strong>Published</strong><%= @post.published_at.try(:strftime, "%b %d, %Y") %></div>
-			    </div>
-			</div>
-		    </div>
-		    <div class="col-xl-3">
-			<div class="row">
-			    <div class="col-xl-12">
-				<div class="small-caps">
-				    <strong>
-					<%= "Author".pluralize(@post.authors.count) %></strong>
-				    <%= author_list(@post) %>
-				    
+			<% if @post.hero_image_url %>
+			    <div class="container blog-image-container">
+				<div class='image-wrapper' style='background-image:url(<%= @post.hero_image_url %>); '></div>
+				<div class="row">
+				    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<p class='caption'><%= @post.hero_image_caption %></p>
+				    </div>
 				</div>
-			    </div>			    
+			    </div>
+			<% else %>
+			    <div class="container">
+				<div class="post-content">
+				    <p><%= @post.snippet %></p>
+				</div>
+			    </div>
+			<% end %>
+			<div class="container blog-meta">
+			    <div class="row">
+				<div class="col-xl-3">
+				    <div class="row">
+					<div class="col-xl-12">
+					    <div class="small-caps"><strong>Published</strong><%= @post.published_at.try(:strftime, "%b %d, %Y") %></div>
+					</div>
+				    </div>
+				</div>
+				<div class="col-xl-3">
+				    <div class="row">
+					<div class="col-xl-12">
+					    <div class="small-caps">
+						<strong>
+						    <%= "Author".pluralize(@post.authors.count) %></strong>
+						<%= author_list(@post) %>
+						
+					    </div>
+					</div>			    
+				    </div>
+				</div>
+				<div class="col-xl-6">
+				    <%= render :partial => '/resources/topics', :locals => {:resource => @post } %>
+				</div>
+			    </div>
+			    <% unless @post.listed_tracks.empty? %>
+				<div class="row">
+				    <div class="col-xl-6">
+					<div class="small-caps">
+					    <strong>Track</strong>
+
+					    <%= @post.listed_tracks.map{|t| link_to(t.name, blog_posts_path(track: t))}.to_sentence.html_safe %>
+
+					</div>
+				    </div>
+
+				</div>
+			    <% end %>
 			</div>
+			
+			
 		    </div>
-		    <div class="col-xl-6">
-			<%= render :partial => '/resources/topics', :locals => {:resource => @post } %>
+
+		</div>
+	    </div>
+
+
+
+	    <div class="page-content post-event-content">
+		<div class="container">
+		    <div class='row'>
+			<div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+			    <div class="content">
+				<% if @post.hero_image_url %>
+				    <p><%= @post.snippet %></p>
+				<% end %>
+				<%= @post.main.try(:html_safe) %>
+
+			    </div><!-- /.blog-post-footer -->
+			</div>
 		    </div>
 		</div>
-		<% unless @post.listed_tracks.empty? %>
-		    <div class="row">
-			<div class="col-xl-6">
-			    <div class="small-caps">
-			      <strong>Track</strong>
-
-<%= @post.listed_tracks.map{|t| link_to(t.name, blog_posts_path(track: t))}.to_sentence.html_safe %>
-
-			    </div>
-</div>
-
-</div>
-<% end %>
-</div>
-	    
-	    
-	</div>
-
-    </div>
-</div>
-
-
-
-<div class="page-content post-event-content">
-    <div class="container">
-	<div class='row'>
-	    <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-	      <div class="content">
-<% if @post.hero_image_url %>
-  <p><%= @post.snippet %></p>
-  <% end %>
-		    <%= @post.main.try(:html_safe) %>
-
-		</div><!-- /.blog-post-footer -->
 	    </div>
-	</div>
-    </div>
-</div>
 
-<div class="blog-post-footer">
-    <div class="container">
-	<div class="row">
-	    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-		<h1>Comment</h1>
-		<div id="disqus_thread"></div>
-
-		<script>
-		 /**
-		  *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-		  *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-		 /*
-		    var disqus_config = function () {
-		    this.page.url = <%= request.url %>;  // Replace PAGE_URL with your page's canonical URL variable
-		    this.page.identifier = <%= @post.slug %>; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-		    };
-		  */
-		 (function() { // DON'T EDIT BELOW THIS LINE
-		     var d = document, s = d.createElement('script');
-		     s.src = 'https://better-scientific-software.disqus.com/embed.js';
-		     s.setAttribute('data-timestamp', +new Date());
-		     (d.head || d.body).appendChild(s);
-		 })();
-		</script>
-		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-		<% unless @related_posts.empty? %>
-
+	    <div class="blog-post-footer">
+		<div class="container">
 		    <div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-			    <h1>More on <%= @post.topics.map(&:name).to_sentence %></h1>
+			    <h1>Comment</h1>
+			    <div id="disqus_thread"></div>
+
+			    <script>
+			     /**
+			      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+			      *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+			     /*
+				var disqus_config = function () {
+				this.page.url = <%= request.url %>;  // Replace PAGE_URL with your page's canonical URL variable
+				this.page.identifier = <%= @post.slug %>; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+				};
+			      */
+			     (function() { // DON'T EDIT BELOW THIS LINE
+				 var d = document, s = d.createElement('script');
+				 s.src = 'https://better-scientific-software.disqus.com/embed.js';
+				 s.setAttribute('data-timestamp', +new Date());
+				 (d.head || d.body).appendChild(s);
+			     })();
+			    </script>
+			    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+			    <% unless @related_posts.empty? %>
+
+				<div class="row">
+				    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<h1>More on <%= @post.topics.map(&:name).to_sentence %></h1>
+				    </div>
+				</div>
 			</div>
 		    </div>
+		</div>
+		<% @related_posts.each do |post| %>
+		    <%= render 'post', :post => post %>
+		<% end %>
+
+
+			    <% end %>
 	    </div>
 	</div>
     </div>
-    <% @related_posts.each do |post| %>
-	<%= render 'post', :post => post %>
-    <% end %>
-
-
-		<% end %>
-</div>
-
