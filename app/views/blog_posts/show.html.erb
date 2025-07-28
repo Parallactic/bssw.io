@@ -9,9 +9,7 @@
 			    <h1><%= @post.name %></h1>
 
 			    <%= render :partial => '/layouts/share' %>
-
 			</div>
-
 
 		    </div>
 		</div>
@@ -25,11 +23,10 @@
 			</div>
 		    </div>
 		<% else %>
-		    <div class="container">
 			<div class="post-content">
 			    <p><%= @post.snippet %></p>
 			</div>
-		    </div>
+
 		<% end %>
 		<div class="container blog-meta">
 		    <div class="row">
