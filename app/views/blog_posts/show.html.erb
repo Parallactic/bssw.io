@@ -6,6 +6,13 @@
 		    <div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 			<%= render :partial => 'layouts/breadcrumbs' %>
+   <h1><%= @post.name %></h1>
+
+                   <%= render :partial => '/layouts/share' %>
+
+
+               </div>
+
 	    </div>
 	    <% if @post.hero_image_url %>
 		<div class="container blog-image-container">
