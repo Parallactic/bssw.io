@@ -1,0 +1,21 @@
+<div class="container blog-meta">
+    <div class="row">
+	<div class="col-xl-3">
+	    <div class="row">
+		<div class="col-xl-12">
+		    <div class="small-caps"><strong>Published</strong><%= @post.published_at.try(:strftime, "%b %d, %Y") %></div>
+		</div>
+	    </div>
+	</div>
+	<div class="col-xl-3">
+	    <div class="row">
+		<div class="col-xl-12">
+		    <div class="small-caps">
+			<strong>
+			    <%= "Author".pluralize(@post.authors.count) %></strong>
+			<%= author_list(@post) %>
+			
+		    </div>
+		</div>			    
+	    </div>
+	</div>
