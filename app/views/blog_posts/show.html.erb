@@ -24,7 +24,7 @@
 	</div>
 	
 	<% unless @post.listed_tracks.empty? %>
-	    <%= render :partial => '/blog_posts/tracks', {locals: :resource => @post }%>
+	    <%= render :partial => '/blog_posts/tracks', locals: {:source => @post }%>
 	<% end %>
     </div>
     
