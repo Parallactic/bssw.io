@@ -11,12 +11,12 @@
 		    <h1><%= @post.name %></h1>
 
 		    <%= render :partial => '/layouts/share' %>
-
+		    <%= render :partial => '/blog_posts/hero', locals: { post: @post } %>
 
 		</div>
 	    </div>
 	    <%= render :partial => '/blog_posts/meta', locals: { post: @post } %>
-	    <%= render :partial => '/blog_posts/hero', locals: { post: @post } %>
+
 	    
 	</div>
 
@@ -35,7 +35,7 @@
 		    <% end %>
 		    <%= @post.main.try(:html_safe) %>
 
-		</div><!-- /.blog-post-footer -->
+		</div>
 	    </div>
 	</div>
     </div>
@@ -45,7 +45,7 @@
     <div class="container">
 	<div class="row">
 	    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<%= render :partial => '/blog_posts/comment', locals: { post: @post } %>
+		<%= render :partial => '/blog_posts/comment', locals: { post: @post } %>
 	    </div>
 	</div>
     </div>
@@ -55,9 +55,9 @@
 	<div class="container">
 
 	    <div class="row">
-	    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-		<h1>More on <%= @post.topics.map(&:name).to_sentence %></h1>
-	    </div>
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+		    <h1>More on <%= @post.topics.map(&:name).to_sentence %></h1>
+		</div>
 	    </div>
 	</div>
 	<% @related_posts.each do |post| %>
