@@ -45,16 +45,19 @@
     <div class="container">
 	<div class="row">
 	    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-p		<%= render :partial => '/blog_posts/comment', locals: { post: @post } %>
+				<%= render :partial => '/blog_posts/comment', locals: { post: @post } %>
 	    </div>
 	</div>
     </div>
 
     <% unless @related_posts.empty? %>
 
-	<div class="row">
+	<div class="container">
+
+	    <div class="row">
 	    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 		<h1>More on <%= @post.topics.map(&:name).to_sentence %></h1>
+	    </div>
 	    </div>
 	</div>
 	<% @related_posts.each do |post| %>
