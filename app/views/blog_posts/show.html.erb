@@ -11,9 +11,10 @@
 		    <h1><%= @post.name %></h1>
 
 		    <%= render :partial => '/layouts/share' %>
-		    <%= render :partial => '/blog_posts/hero', locals: { post: @post } %>
-
 		</div>
+
+		
+		<%= render :partial => '/blog_posts/hero', locals: { post: @post } %>
 	    </div>
 	    <%= render :partial => '/blog_posts/meta', locals: { post: @post } %>
 
