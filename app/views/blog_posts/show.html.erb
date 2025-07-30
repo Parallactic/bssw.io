@@ -19,14 +19,15 @@
 	    <%= render :partial => '/blog_posts/hero' %>
 	    <div class="row">
 		<%= render :partial => '/blog_posts/meta', locals: { :resource => @post } %>
-		<%= render :partial => '/blog_posts/topics', locals: { :resource => @post } %>
+		<%= render :partial => '/resources/topics', locals: { :resource => @post } %>
 	    </div>
 	    
 	    <% unless @post.listed_tracks.empty? %>
 		<%= render :partial => '/blog_posts/tracks', locals: {:source => @post }%>
 	    <% end %>
 	</div>
-	
+    </div>
+</div>
 
 
 
