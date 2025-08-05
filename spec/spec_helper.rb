@@ -104,6 +104,9 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 
+  config.fail_fast = 1
+ 
+ 
   config.before(:all) do
     r = Rebuild.create
     RebuildStatus.create(display_rebuild_id: r.id)

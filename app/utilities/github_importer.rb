@@ -10,12 +10,12 @@ class GithubImporter < ApplicationRecord
 
   def self.parse_html_from(updated_content)
     markdown = Redcarpet::Markdown.new(RougeRenderer.new(with_toc_data: true),
-                                       autolink: true,
-                                       tables: true,
-                                       lax_spacing: true,
-                                       strikethrough: true,
-                                       fenced_code_blocks: true,
-                                       no_intra_emphasis: true)
+                                      autolink: true,
+                                      tables: true,
+                                      lax_spacing: true,
+                                      strikethrough: true,
+                                      fenced_code_blocks: true,
+                                      no_intra_emphasis: true)
     Nokogiri::HTML(markdown.render(updated_content), nil, 'UTF-8')
   end
 
