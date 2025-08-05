@@ -8,12 +8,12 @@
 		<div class="card panel">
 		    <div class="card-header" id="heading-<%= index %>" >
 			<h2 class="mb-0">
-			    <button class="btn btn-link <% unless category.name == session[:path]['name'] %>collapsed<% end %>" type="button" data-toggle="collapse" data-target="#collapse-<%= index %>" aria-expanded="false" aria-controls="collapse-<%= index %>">
+			    <button class="btn btn-link <% unless category.slug == session.dig(:path, 'slug') || category.slug == Topic.find(session.dig(:path, 'slug')).category.slug%> collapsed<% end %>" type="button" data-toggle="collapse" data-target="#collapse-<%= index %>" aria-expanded="false" aria-controls="collapse-<%= index %>">
 				<%= category.name %>
 			    </button>
 			</h2>
 		    </div>
-		    <div id="collapse-<%= index %>" class="collapse <% if category.name == session[:path]['name'] %>show<% end %>" aria-labelledby="heading-<%= index %>" data-parent="#accordionSidebar">
+		    <div id="collapse-<%= index %>" class="collapse <% if category.slug == session.dig(:path, 'slug') || category.slug == Topic.find(session.dig(:path, 'slug')).category.slug %>show<% end %>" aria-labelledby="heading-<%= index %>" data-parent="#accordionSidebar">
 			<div class="card-body">
 			    <ul class="caret-list">
 				<li><a href="/items?category=<%= category.slug %>">All <%= cat.second %> Resources</a></li>
