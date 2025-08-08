@@ -13,7 +13,7 @@
 			    </button>
 			</h2>
 		    </div>
-		    <div id="collapse-<%= index %>" class="collapse <% if category.slug == session.dig(:path, 'slug') || category.slug == Topic.find(session.dig(:path, 'slug')).category.slug %>show<% end %>" aria-labelledby="heading-<%= index %>" data-parent="#accordionSidebar">
+		    <div id="collapse-<%= index %>" class="collapse <% if category.slug == session.dig(:path, 'slug') ||  session.dig(:path, 'method') == 'topic' && category.slug == Topic.find(session.dig(:path, 'slug')).category.slug %>show<% end %>" aria-labelledby="heading-<%= index %>" data-parent="#accordionSidebar">
 			<div class="card-body">
 			    <ul class="caret-list">
 				<li><a href="/items?category=<%= category.slug %>">All <%= cat.second %> Resources</a></li>
