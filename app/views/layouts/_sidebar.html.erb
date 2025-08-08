@@ -8,7 +8,7 @@
 		<div class="card panel">
 		    <div class="card-header" id="heading-<%= index %>" >
 			<h2 class="mb-0">
-			    <button class="btn btn-link <% unless category.slug == session.dig(:path, 'slug') || category.slug == Topic.find(session.dig(:path, 'slug')).category.slug%> collapsed<% end %>" type="button" data-toggle="collapse" data-target="#collapse-<%= index %>" aria-expanded="false" aria-controls="collapse-<%= index %>">
+			    <button class="btn btn-link <% unless category.slug == session.dig(:path, 'slug') || session.dig(:path, 'method') == 'topic' && category.slug == Topic.find(session.dig(:path, 'slug')).category.slug %> collapsed<% end %>" type="button" data-toggle="collapse" data-target="#collapse-<%= index %>" aria-expanded="false" aria-controls="collapse-<%= index %>">
 				<%= category.name %>
 			    </button>
 			</h2>

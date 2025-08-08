@@ -2,19 +2,19 @@
 {:page => @page }  if @page %>
 
 <div class="container">
-		<% if @author %>
-    <div class="page-heading">
-	<div class="row">
-	    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+    <% if @author %>
+	<div class="page-heading">
+	    <div class="row">
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 
 		    <h1>Events by Contributor: <%= @author.first_name %> <%= @author.last_name %></h1>
 
+		</div>
 	    </div>
 	</div>
-    </div>
-		<% end %>
-<% if @page %>
-    <div class="sub-nav-container events-sub-nav">
+    <% end %>
+    <% if @page %>
+	<div class="sub-nav-container events-sub-nav">
 
 	    <ul class="nav justify-content-end">
 		<% if @past_events %>
@@ -28,8 +28,8 @@
 		<% end %>   
 	    </ul>
 
-    </div>
-<% end %>
+	</div>
+    <% end %>
 </div>
 
 <div id='events'>
@@ -44,9 +44,9 @@
 	    <div class="col-xl-12">
 
 		
-		    <span id="more">
-			<%= render 'show_more',  :events => @events  %>
-		    </span>
+		<span id="more">
+		    <%= render 'show_more',  :events => @events  %>
+		</span>
 		
 		<a class="to-top" href="#top">To Top</a>
 	    </div>

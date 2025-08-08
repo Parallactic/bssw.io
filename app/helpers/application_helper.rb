@@ -25,14 +25,6 @@ module ApplicationHelper
     page_item.open_graph_image_tag if page_item.respond_to?(:open_graph_image_tag)
   end
 
-  # def social_description
-  #   return strip_tags(@post.snippet) if @post
-  #   return strip_tags(@page.snippet) if @page
-  #   return strip_tags(@event.snippet) if @event
-
-  #   strip_tags(@resource.snippet) if @resource
-  # end
-
   def author_list(resource)
     resource.author_list
   end
@@ -48,8 +40,8 @@ module ApplicationHelper
         ''
       else
         used_dates << date.additional_date
-        content_tag('strong', date.additional_date.label.html_safe) +
-          date.additional_date.additional_date_values.map { |adv| date_range(adv.date, nil) }.join('; ').html_safe
+        content_tag('strong', date.additional_date.label) +
+          date.additional_date.additional_date_values.map { |adv| date_range(adv.date, nil) }.safe_join('; ')
       end
     end
   end
@@ -68,12 +60,12 @@ module ApplicationHelper
 
   def show_dates(event)
     (formatted_standard_dates(event) + formatted_additionals(event)
-    ).delete_if(&:blank?).join('<br />').html_safe
+    ).delete_if(&:blank?).safe_join('<br />')
   end
 
   def show_date(date_value)
     date = date_value.additional_date
-    if date.label =~ /Start/
+    if date.label =~ /Start/ || date.label =~ /End/
       date_range(date.event.start_at,
                  date.event.end_at)
     else
@@ -86,8 +78,8 @@ module ApplicationHelper
     label = date.label
     label = label.gsub('Start ', '') if date.label.match('Start')
     label = label.gsub('End ', '') if date.label.match('End')
-#    label = label.gsub(/s$/, '') if date.label.match(/Dates$/)
-    label.html_safe
+    #    label = label.gsub(/s$/, '') if date.label.match(/Dates$/)
+    label
   end
 
   def date_range(start_at, end_at)
@@ -102,14 +94,14 @@ module ApplicationHelper
                else
                  end_at.strftime('%b %e, %Y')
                end
-    safe_join([start_date, '&ndash;'.html_safe, end_date])       
+    safe_join([start_date, '&ndash;'.html_safe, end_date])
   end
 
   def show_page(path, next_page)
     if path.match(/page/)
-      path.gsub(/page.?\d+/, "page=#{next_page}").html_safe
+      path.gsub(/page.?\d+/, "page=#{next_page}")
     else
-      (path + "?&page=#{next_page}").html_safe
+      safe_join(path, "?&page=#{next_page}")
     end
   end
 end

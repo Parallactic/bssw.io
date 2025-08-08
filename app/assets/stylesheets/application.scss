@@ -20,11 +20,11 @@
 
 
 @mixin transition($args) { 
-  -webkit-transition: $args; 
-  -moz-transition: $args; 
-  -ms-transition: $args; 
-  -o-transition: $args; 
-  transition: $args; 
+    -webkit-transition: $args; 
+    -moz-transition: $args; 
+    -ms-transition: $args; 
+    -o-transition: $args; 
+    transition: $args; 
 }
 
 
@@ -1410,17 +1410,17 @@ FEATURED
 	    color: #349dff;
 	    &:hover { background: #eee;
 		      color: #19197d;
-				  }
+		    }
 
 	  }
 .latest { margin-top: 18px;
 	}
 
 .owl-carousel  {
-		border-bottom: 2px solid #ebebeb;
+    border-bottom: 2px solid #ebebeb;
 
 
-		}
+}
 
 .owl-item {
     background: #fff;
@@ -2591,11 +2591,11 @@ ACCORDION
 
 .collapse {
     @include transition(all .3s);
-	   &:before {
-		     --font-family: 'Font Awesome 5 Free';
-		     --content: '\f067' !important;
-		     --font-weight: 400;
-		     }
+    &:before {
+	--font-family: 'Font Awesome 5 Free';
+	--content: '\f067' !important;
+	--font-weight: 400;
+    }
 }
 
 .collapsing {
@@ -3140,30 +3140,30 @@ label {
 }
 
 #mc_embed_signup > form > #mc_embed_signup_scroll select, .simple_form select {
-    							  height: 2.4em;
-							  background-color: #349dff;
-							  background-image: url(./chevron-down.svg);
-							  background-position: calc(100% - 1em) 50%;
-							  background-size: 1.2em;
-							  background-repeat: no-repeat;
-							  border: none;
-							  color: white;
-							  font-weight: 800;
-							  padding: 0 .5em;
-							  border-radius: 0;
-							  text-overflow: '';
-							  width: 100%;
-							  display: block;
-							  -webkit-appearance: none;
-							  -moz-appearance: none;
-							  @include transition(ease-in-out .2s border);
-							  font-size: 18px;
-							  margin-bottom: 10px;
+    height: 2.4em;
+    background-color: #349dff;
+    background-image: url(./chevron-down.svg);
+    background-position: calc(100% - 1em) 50%;
+    background-size: 1.2em;
+    background-repeat: no-repeat;
+    border: none;
+    color: white;
+    font-weight: 800;
+    padding: 0 .5em;
+    border-radius: 0;
+    text-overflow: '';
+    width: 100%;
+    display: block;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    @include transition(ease-in-out .2s border);
+    font-size: 18px;
+    margin-bottom: 10px;
 
 }
 
 #mc_embed_signup > form > #mc_embed_signup_scroll select {
-							  }
+}
 
 .simple_form input[type='submit'] {
     width: auto;
@@ -3341,11 +3341,11 @@ LIGHTBOX
 	@include transition(ease-in-out .2s background);
 
 	&:hover {
-		 background: #19197D;
-		 color: #fff !important;
-		 outline: none;
-		 opacity: 1 !important;
-		 }
+	    background: #19197D;
+	    color: #fff !important;
+	    outline: none;
+	    opacity: 1 !important;
+	}
     }
 }
 

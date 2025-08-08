@@ -105,8 +105,8 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 
   config.fail_fast = 1
- 
- 
+  config.color = true
+  config.profile_examples = true
   config.before(:all) do
     r = Rebuild.create
     RebuildStatus.create(display_rebuild_id: r.id)
