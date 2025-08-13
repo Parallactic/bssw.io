@@ -17,9 +17,10 @@
 			<div class="card-body">
 			    <ul class="caret-list">
 				<li
-				    <% if category.slug == session.dig(:path, 'slug') ||  session.dig(:path, 'method') == 'topic' && category.slug == Topic.find(session.dig(:path, 'slug')).category.slug %>
-					active
+				    <% if category.slug == session.dig(:path, 'slug') %>
+					class='active'
 				    <% end %>
+
 				    ><a href="/items?category=<%= category.slug %>">All <%= cat.second %> Resources</a></li>
 				<% category.topics.each_with_index do |topic| %>
 				    <li
