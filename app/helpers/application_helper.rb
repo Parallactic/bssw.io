@@ -61,7 +61,7 @@ module ApplicationHelper
 
   def show_dates(event)
     safe_join((formatted_standard_dates(event) + formatted_additionals(event)
-    ).delete_if(&:blank?), '<br />')
+    ).delete_if(&:blank?), '<br />'.html_safe)
   end
 
   def show_date(date_value)
@@ -102,7 +102,7 @@ module ApplicationHelper
     if path.match(/page/)
       path.gsub(/page.?\d+/, "page=#{next_page}")
     else
-      safe_join([path], "?&page=#{next_page}")
+      safe_join([path], "?&page=#{next_page}".html_safe)
     end
   end
 end
