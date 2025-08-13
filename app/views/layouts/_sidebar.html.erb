@@ -19,7 +19,7 @@
 				<li><a href="/items?category=<%= category.slug %>">All <%= cat.second %> Resources</a></li>
 				<% category.topics.each_with_index do |topic| %>
 				    <li
-					<% if session.dig(:path, 'method') == 'topic' && Topic.find(session.dig(:path, 'slug')) == topic.slug %>
+					<% if session.dig(:path, 'method') == 'topic' && session.dig(:path, 'slug') == topic.slug %>
 					    class="active"
 					<% end %>>
 					<%= link_to topic.name, '/items?topic='+topic.slug.to_s %>
