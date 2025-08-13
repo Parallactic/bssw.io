@@ -3,9 +3,9 @@
 # view helpers
 module ApplicationHelper
   def listings(author)
-    [(author.resource_listing if author.resource_listing != '0 resources'),
+    safe_join([(author.resource_listing if author.resource_listing != '0 resources'),
      (author.blog_listing if author.blog_listing != '0 blog posts'),
-     (author.event_listing if author.event_listing != '0 events')].delete_if(&:nil?).join(', ')
+     (author.event_listing if author.event_listing != '0 events')].delete_if(&:nil?), ', ')
   end
 
   def search_result_url(result)
@@ -36,12 +36,13 @@ module ApplicationHelper
   def formatted_additionals(event)
     used_dates = []
     event.special_additional_dates.map do |date|
-      if used_dates.include?(date.additional_date)
+      additional = date.additional_date
+      if used_dates.include?(additional)
         ''
       else
-        used_dates << date.additional_date
-        content_tag('strong', date.additional_date.label) +
-          date.additional_date.additional_date_values.map { |adv| date_range(adv.date, nil) }.safe_join('; ')
+        used_dates << additional
+        content_tag('strong', additional.label) +
+          additional.additional_date_values.map { |adv| date_range(adv.date, nil) }.join('; ')
       end
     end
   end
@@ -59,8 +60,8 @@ module ApplicationHelper
   end
 
   def show_dates(event)
-    (formatted_standard_dates(event) + formatted_additionals(event)
-    ).delete_if(&:blank?).safe_join('<br />')
+    safe_join((formatted_standard_dates(event) + formatted_additionals(event)
+    ).delete_if(&:blank?), '<br />')
   end
 
   def show_date(date_value)
@@ -101,7 +102,7 @@ module ApplicationHelper
     if path.match(/page/)
       path.gsub(/page.?\d+/, "page=#{next_page}")
     else
-      safe_join(path, "?&page=#{next_page}")
+      safe_join([path], "?&page=#{next_page}")
     end
   end
 end
