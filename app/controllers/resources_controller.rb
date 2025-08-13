@@ -110,7 +110,8 @@ class ResourcesController < ApplicationController
                        }
     elsif @track
       session[:path] = {"slug" => @track.slug, "name" => @track.name, 'method' => 'track' }
-
+    else
+      session[:path] = nil
     end
 
     
