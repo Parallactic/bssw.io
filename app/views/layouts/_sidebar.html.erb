@@ -13,13 +13,17 @@
 			    </button>
 			</h2>
 		    </div>
-		    <div id="collapse-<%= index %>" class="collapse <% if category.slug == session.dig(:path, 'slug') ||  session.dig(:path, 'method') == 'topic' && category.slug == Topic.find(session.dig(:path, 'slug')).category.slug %>show active<% end %>" aria-labelledby="heading-<%= index %>" data-parent="#accordionSidebar">
+		    <div id="collapse-<%= index %>" class="collapse <% if category.slug == session.dig(:path, 'slug') ||  session.dig(:path, 'method') == 'topic' && category.slug == Topic.find(session.dig(:path, 'slug')).category.slug %>show <% end %>" aria-labelledby="heading-<%= index %>" data-parent="#accordionSidebar">
 			<div class="card-body">
 			    <ul class="caret-list">
-				<li><a href="/items?category=<%= category.slug %>">All <%= cat.second %> Resources</a></li>
+				<li
+				    <% if category.slug == session.dig(:path, 'slug') ||  session.dig(:path, 'method') == 'topic' && category.slug == Topic.find(session.dig(:path, 'slug')).category.slug %>
+					active
+				    <% end %>
+				    ><a href="/items?category=<%= category.slug %>">All <%= cat.second %> Resources</a></li>
 				<% category.topics.each_with_index do |topic| %>
 				    <li
-					<% if session.dig(:path, 'method') == 'topic' && session.dig(:path, 'slug') == topic.slug %>
+					<% if session.dig(:path, 'method') == 'topic' && session.dig(:path, 'slug') == topic.slug  %>
 					    class="active"
 					<% end %>>
 					<%= link_to topic.name, '/items?topic='+topic.slug.to_s %>
