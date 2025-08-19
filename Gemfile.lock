@@ -527,6 +527,7 @@ GEM
       faraday (>= 0.17.3, < 3)
     scout_apm (5.5.0)
       parser
+    scss_lint_reporter_checkstyle (0.2.0)
     sexp_processor (4.17.3)
     simple_form (5.3.1)
       actionpack (>= 5.2)
@@ -662,6 +663,7 @@ DEPENDENCIES
   rubyzip
   sass-rails
   scout_apm
+  scss_lint_reporter_checkstyle
   simple_form
   simplecov
   spring
