@@ -603,7 +603,6 @@ DEPENDENCIES
   algoliasearch-rails
   attempt
   awesome_print
-  base64 (= 0.1.1)
   bcrypt_pbkdf
   bootstrap-sass
   brakeman
