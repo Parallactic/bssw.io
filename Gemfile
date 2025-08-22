@@ -137,4 +137,4 @@ gem 'algoliasearch-rails'
 
 gem 'faraday' # , '1.10.3'
 gem 'human_time'
-
+gem 'base64', '0.3.0'
