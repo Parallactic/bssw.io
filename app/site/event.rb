@@ -88,7 +88,6 @@ class Event < SiteItem
 
   def update_dates(doc)
     get_date_nodes(doc).each do |date_node|
-
       text = date_node.text.split(':')
 
       process_dates(text.last, text.first) if text.last
@@ -98,12 +97,11 @@ class Event < SiteItem
   end
 
   def get_date_nodes(doc)
-
-    (doc.at("ul").try(:css, "li:contains('Date')").to_a) +
-      (doc.at("ul").try(:css, "li:contains(' date')").to_a) +
-      (doc.at("ul").try(:css, "li:contains('Deadline')").to_a) +
-      (doc.at("ul").try(:css, "li:contains('[date]')").to_a) +
-      (doc.at("ul").try(:css, "li:contains('deadline')").to_a)
+    doc.at('ul').try(:css, "li:contains('Date')").to_a +
+      doc.at('ul').try(:css, "li:contains(' date')").to_a +
+      doc.at('ul').try(:css, "li:contains('Deadline')").to_a +
+      doc.at('ul').try(:css, "li:contains('[date]')").to_a +
+      doc.at('ul').try(:css, "li:contains('deadline')").to_a
   end
 
   def process_dates(date_text, label_text)
@@ -112,7 +110,7 @@ class Event < SiteItem
             else
               date_text.split('-')
             end
-    label_text =   CGI::escapeHTML(CGI::unescapeHTML(label_text))
+    label_text = CGI.escapeHTML(CGI.unescapeHTML(label_text))
     if dates.size > 1
       AdditionalDate.do_multiple_dates(dates, label_text, self)
     else

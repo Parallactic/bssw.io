@@ -5,7 +5,7 @@ class BlogPostsController < ApplicationController
   def index
     set_variables
     session[:path] = nil
-@posts = scoped_resources.blog
+    @posts = scoped_resources.blog
     if @author
       @posts = @posts.with_author(@author)
     elsif @track

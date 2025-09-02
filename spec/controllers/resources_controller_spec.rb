@@ -12,7 +12,7 @@ RSpec.describe ResourcesController, type: :controller do
   end
   let(:good_credentials) do
     ActionController::HttpAuthentication::Basic.encode_credentials Rails.application.credentials[:preview][:name],
-                                                                 Rails.application.credentials[:preview][:password]
+                                                                   Rails.application.credentials[:preview][:password]
   end
 
   before do
@@ -28,14 +28,14 @@ RSpec.describe ResourcesController, type: :controller do
   end
 
   describe 'menus' do
-
     it 'shows resource path' do
       resource = FactoryBot.create(:resource, type: 'Resource')
       get :index
       get :show, params: { id: resource.id }
 
-      expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to     match 'Resources'
+      expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to match 'Resources'
     end
+
     it 'shows topic path' do
       resource = FactoryBot.create(:resource)
       topic = FactoryBot.create(:topic, rebuild_id: RebuildStatus.displayed_rebuild.id)
@@ -44,23 +44,24 @@ RSpec.describe ResourcesController, type: :controller do
 
       get :index, params: { topic: topic.slug }
 
-      expect(Nokogiri::HTML(response.body).css('h1').text).to     match topic.name
+      expect(Nokogiri::HTML(response.body).css('h1').text).to match topic.name
 
       get :show, params: { id: resource.id }
-      expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to     match topic.name
+      expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to match topic.name
     end
+
     it 'shows category path' do
       resource = FactoryBot.create(:resource)
-      topic = FactoryBot.create(:topic,                                               rebuild_id: RebuildStatus.displayed_rebuild.id)
+      topic = FactoryBot.create(:topic,
+                                rebuild_id: RebuildStatus.displayed_rebuild.id)
       topic.category.update(rebuild_id: RebuildStatus.displayed_rebuild.id)
       resource.topics << topic
       get :index, params: { category: topic.category.slug }
       get :show, params: { id: resource.id }
-      expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to     match topic.category.name
-
+      expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to match topic.category.name
     end
   end
-  
+
   describe 'preview' do
     it 'is invalid without auth' do
       request.host = 'preview.bssw.io'
@@ -102,12 +103,12 @@ RSpec.describe ResourcesController, type: :controller do
 
     it 'searches' do
       resource = FactoryBot.create(:resource, publish: true, type: 'Resource',
-                                   rebuild_id: RebuildStatus.displayed_rebuild.id)
+                                              rebuild_id: RebuildStatus.displayed_rebuild.id)
       FactoryBot.create(:resource, publish: true, type: 'Resource', rebuild_id: RebuildStatus.displayed_rebuild.id)
       author = FactoryBot.create(:author, publish: true, first_name: "#{resource.name} auth",
-                                 rebuild_id: RebuildStatus.displayed_rebuild.id)
+                                          rebuild_id: RebuildStatus.displayed_rebuild.id)
       FactoryBot.create(:page, publish: true, name: "#{resource.name} page",
-                        rebuild_id: RebuildStatus.displayed_rebuild.id)
+                               rebuild_id: RebuildStatus.displayed_rebuild.id)
       SearchResult.reindex!
       sleep(5)
       get :search, params: { search_string: resource.name }
@@ -119,7 +120,7 @@ RSpec.describe ResourcesController, type: :controller do
 
       let(:fellow) do
         FactoryBot.create(:fellow, name: 'Joe Blow', rebuild_id: RebuildStatus.displayed_rebuild.id,
-                          publish: true)
+                                   publish: true)
       end
 
       before do
@@ -151,7 +152,7 @@ RSpec.describe ResourcesController, type: :controller do
     describe 'finds pages' do
       before do
         FactoryBot.create(:page, name: 'Joe', content: 'Blow',
-                          rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true)
+                                 rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true)
         FactoryBot.create(:resource, publish: true, type: 'Resource', name: 'Blorgon')
         request.env['HTTP_AUTHORIZATION'] = "Basic {Base64.encode64('preview-bssw:SoMyCodeWillSeeTheFuture!!')}"
         SearchResult.reindex
@@ -390,7 +391,7 @@ RSpec.describe ResourcesController, type: :controller do
     before do
       10.times do
         FactoryBot.create(:resource, rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true,
-                          published_at: rand(1..10).weeks.ago)
+                                     published_at: rand(1..10).weeks.ago)
       end
       12.times do
         FactoryBot.create(:resource, published_at: 1.week.ago, rebuild_id: rebuild.id)

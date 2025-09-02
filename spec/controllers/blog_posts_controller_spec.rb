@@ -90,17 +90,16 @@ RSpec.describe BlogPostsController, type: :controller do
     end
 
     it 'shows blog path' do
-            resource = FactoryBot.create(:blog_post)
-            resource = FactoryBot.create(:resource, type: 'BlogPost')
+      FactoryBot.create(:blog_post)
+      resource = FactoryBot.create(:resource, type: 'BlogPost')
 
       get :show, params: { id: resource.id }
       puts resource.inspect
       puts response.body
-      expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to     match 'Blog'
+      expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to match 'Blog'
     end
 
-    
-it 'shows related post' do
+    it 'shows related post' do
       get :show, params: { id: BlogPost.last }
       expect(assigns(:related_posts)).not_to be_empty
     end

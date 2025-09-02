@@ -19,9 +19,8 @@ class ResourcesController < ApplicationController
     @resource ||= scoped_resources.find(params[:id])
     redirect_to "/pages/#{@resource.slug}" if @resource.is_a?(Page)
     redirect_to "/events/#{@resource.slug}" if @resource.is_a?(Event)
-    puts "redirect ...."
+    Rails.logger.debug 'redirect ....'
     redirect_to "/blog_posts/#{@resource.slug}" if @resource.is_a?(BlogPost)
-
   end
 
   def index
@@ -56,7 +55,6 @@ class ResourcesController < ApplicationController
   private
 
   def populate_resources
-
     set_filters
 
     set_resources
@@ -93,27 +91,20 @@ class ResourcesController < ApplicationController
   end
 
   def set_associations
-
-
     @category = Category.displayed.find(params[:category]) if params[:category]
     @topic = Topic.displayed.find(params[:topic]) if params[:topic]
     @author = Author.displayed.find(params[:author]) if params[:author]
-    @track = Track.displayed.find(params[:track]) if params[:track] 
+    @track = Track.displayed.find(params[:track]) if params[:track]
 
-    if @topic
-      session[:path] = { "slug" => @topic.slug, "name" => @topic.name, "method" => 'topic' }
-    elsif @category
-      session[:path] = {"slug" => @category.slug, "name" => @category.name, "method" => 'category' }
-    elsif @author
-      session[:path] = {"slug" => @author.slug, "name" => @author.name,
-                       "method" => 'author'
-                       }
-    elsif @track
-      session[:path] = {"slug" => @track.slug, "name" => @track.name, 'method' => 'track' }
-    else
-      session[:path] = nil
-    end
-
-    
+    session[:path] = if @topic
+                       { 'slug' => @topic.slug, 'name' => @topic.name, 'method' => 'topic' }
+                     elsif @category
+                       { 'slug' => @category.slug, 'name' => @category.name, 'method' => 'category' }
+                     elsif @author
+                       { 'slug' => @author.slug, 'name' => @author.name,
+                         'method' => 'author' }
+                     elsif @track
+                       { 'slug' => @track.slug, 'name' => @track.name, 'method' => 'track' }
+                     end
   end
 end

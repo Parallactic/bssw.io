@@ -4,8 +4,8 @@
 module ApplicationHelper
   def listings(author)
     safe_join([(author.resource_listing if author.resource_listing != '0 resources'),
-     (author.blog_listing if author.blog_listing != '0 blog posts'),
-     (author.event_listing if author.event_listing != '0 events')].delete_if(&:nil?), ', ')
+               (author.blog_listing if author.blog_listing != '0 blog posts'),
+               (author.event_listing if author.event_listing != '0 events')].delete_if(&:nil?), ', ')
   end
 
   def search_result_url(result)
@@ -61,7 +61,7 @@ module ApplicationHelper
 
   def show_dates(event)
     safe_join((formatted_standard_dates(event) + formatted_additionals(event)
-    ).delete_if(&:blank?), '<br />'.html_safe)
+              ).delete_if(&:blank?), '<br />'.html_safe)
   end
 
   def show_date(date_value)

@@ -59,9 +59,6 @@ Publish: true
   end
 
   it 'gets tracks' do
-
     expect(res.tracks.size).to eq 2
   end
-
-  
 end
