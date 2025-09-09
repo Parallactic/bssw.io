@@ -1,0 +1,66 @@
+/**
+#######################################################################
+HERO
+#######################################################################
+**/
+
+.hero {
+  background: #18187d;
+  color: white;
+  padding-top: 130px;
+  padding-bottom: 60px;
+  border-top: 1px solid #b9ffff;
+
+  h1 {
+    font-weight: 400;
+    font-size: 45px;
+    color: #fff;
+  }
+
+  p {
+    font-size: 26px;
+    line-height: 36px;
+    font-weight: 400;
+    color: #fff;
+  }
+
+  .list-inline {
+    margin-top: 50px;
+  }
+
+  #orientation {
+    &::before {
+      display: inline-block;
+      content: 'GET ORIENTED ';
+      font-size: 15px;
+      font-weight: 500;
+      padding-right: 1.4em;
+      padding-bottom: .5em;
+    }
+  }
+
+  .list-inline-item {
+    &:not(:last-child) {
+      margin-right: 1.15em;
+    }
+
+    a {
+      background: #349dff;
+      border: 0.15em solid #349dff;
+      color: white;
+      display: inline-block;
+      margin-bottom: .5em;
+      padding: .5em 1.5em;
+      border-radius: 1.5em;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 30px;
+    }
+  }
+}
+
+.home-hero {
+  background-image: url('./home-tile.png');
+  background-size: cover;
+  background-position: 50% 50%;
+}

@@ -1,0 +1,50 @@
+
+/**
+#######################################################################
+ANNOUNCEMENT
+#######################################################################
+**/
+
+.announcement {
+  background: #ffff9b;
+  color: #19197D;
+  font-weight: 700;
+  position: relative;
+  z-index: 2;
+  padding: 9px 0 11px;
+  font-size: 15px;
+  display: none;
+
+  p {
+    padding-bottom: 0;
+  }
+
+  a {
+    color: #19197D;
+
+    &::before {
+      font-family: 'Font Awesome 5 Pro';
+      content: '\f105';
+      display: inline-block;
+      padding-right: 14px;
+      font-weight: 700;
+      transition: all 0.2s ease-in-out;
+      font-size: 20px;
+      color: #19197D;
+      top: 3px;
+      position: relative;
+    }
+  }
+}
+
+.announcements-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #19197D;
+  font-size: 20px;
+  top: 3px;
+  position: relative;
+  left: 8px;
+  text-align: center
+}

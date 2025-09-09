@@ -1,0 +1,150 @@
+/**
+#######################################################################
+PAGINATION
+#######################################################################
+**/
+
+.pagination {
+  text-transform: uppercase;
+  font-family: 'Roboto Mono', Roboto, Helvetica, Arial, sans-serif;
+  color: #89898e;
+  font-size: 14px;
+  line-height: 14px;
+  letter-spacing: .07em;
+
+  span, a, em {
+    padding-left: 12px;
+    font-family: 'Roboto Mono', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+}
+
+.pagination-top {
+  padding-top: 50px;
+  padding-bottom: 18px;
+}
+
+.pagination-bottom {
+  padding-top: 25px;
+  padding-bottom: 60px;
+}
+
+.load-more {
+  font-weight: bold;
+  transition: none;
+  font-size: 18px;
+  line-height: 30px;
+  letter-spacing: initial !important;
+
+  &::after {
+    content: ' \f107';
+    color: #349dff;
+    padding-top: 5px;
+    font-family: 'Font Awesome 5 Pro';
+    font-size: 22px;
+    position: relative;
+    margin-left: 8px;
+    top: 3px;
+  }
+
+  &:hover {
+    color: #19197d;
+  }
+
+  &:hover::after {
+    color: #19197d;
+  }
+
+  padding-top: 20px;
+  padding-bottom: 40px;
+  position: relative;
+  display: inline-block;
+}
+
+.pagination-bottom {
+  padding-bottom: 200px;
+
+  .load-more {
+    padding-top: 40px;
+    padding-bottom: 40px;
+    font-size: 44px;
+    line-height: 55px;
+    display: block;
+    clear: both;
+    left: 0;
+    position: absolute;
+    font-family: Roboto, sans-serif;
+    text-transform: initial;
+    margin-top: 20px;
+    font-weight: 400;
+    transition: all 0.2s ease-in-out;
+
+    &::before {
+      display: inline-block;
+      align-items: center;
+      justify-content: center;
+      width: 1.5em;
+      height: 1.5em;
+      color: #349dff;
+      font-family: 'Font Awesome 5 Pro';
+      z-index: 2000;
+      content: '\f107';
+      margin-right: .5em;
+      padding-left: .34em;
+      padding-top: .08em;
+      border-radius: .75em;
+      top: .75em;
+      position: relative;
+      border: 4px solid #359dff;
+      transform: translateY(-50%) !important;
+      font-size: 42px !important;
+      font-weight: 400;
+      transition: all 0.2s ease-in-out;
+    }
+
+    &::after {
+      content: none;
+    }
+
+    &:hover {
+      &::before {
+	color: #19197d;
+	border: 4px solid #19197d;
+      }
+    }
+  }
+}
+
+.to-top {
+  &:hover {
+    color:#19197d;
+  }
+
+  &::after {
+    content: ' \f106';
+    color: #349dff;
+    font-family: 'Font Awesome 5 Pro';
+    font-size: 22px;
+    position: relative;
+    margin-left: 8px;
+    top: 3px;
+  }
+
+  float: right;
+  text-align: right;
+  display: inline-block;
+  font-weight: bold;
+  transition: none;
+  font-size: 18px;
+  line-height: 30px;
+  padding-bottom: 40px;
+  padding-top: 20px;
+
+  &:hover::after {
+    color: #19197d;
+  }
+}
+
+.to-top-after-load {
+  display: none;
+}

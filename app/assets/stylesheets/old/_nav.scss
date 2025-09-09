@@ -1,0 +1,351 @@
+/* ------------------------
+Nav + Breadcrumbs
+------------------------ */
+
+
+
+// Breadcrumbs
+
+.breadcrumbs-row { background: $gray5; }
+
+.breadcrumb {
+  margin-bottom: 0;
+  padding-left: 0;
+
+  li {
+    font-size: 1.2rem;
+    float: left;
+  }
+
+  &> li + li:before {
+    color: $gray4;
+    font-size: 1rem;
+    padding: 0 .4em;
+    @extend .-chevronright;
+  }
+
+  &> li:nth-of-type(4) { display: none; }
+
+  a {
+    color: $blue2;
+    @include transition-one(color);
+
+    @include hover {
+      color: $blue6;
+      @include transition-one(color);
+    }
+  }
+}
+
+
+
+// Logos - Navbar Brand
+
+.navbar-brand {
+  width: 85%;
+  max-width: calc(100% - 3em);
+  height: auto;
+  display: block;
+  padding: 0 0 0 .6em;
+
+  @include hover {
+    .md-logo-div {
+      background-image: url('/assets/bss-logo-hover.svg');
+      @include transition-one(background-image);
+    }
+  }
+}
+
+
+.md-logo-div, .sm-logo-div {
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: contain;
+}
+
+
+// desktop
+.md-logo-div {
+  width: 7.1em;
+  height: 2.8em;
+  background-image: url('/assets/bss-logo.svg');
+  @include transition-one(background-image);
+
+  &::after {
+    display: none;
+    content: url('/assets/bss-logo-hover.svg');
+  }
+}
+
+
+
+// scroll up and mobile
+.sm-logo-div {
+  width: 100%;
+  height: 2.77em;
+  background-image: url('/assets/bss-logo-sm-2.svg');
+  display: block;
+}
+
+
+
+// Toggle button
+
+.navbar-toggle {
+  height: 3.5em;
+  border: none;
+  margin: 0;
+  padding: 0 1em;
+  @include border-radius(0);
+  .fa-bars { font-size: 2.7rem; }
+}
+
+
+
+// removing Boostrap defaults
+.nav-container-fluid > .row > .container,
+.nav-container-fluid > .row > .container > .navbar > #navbar {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.nav-container-fluid > .row > .container > .navbar > .navbar-collapse > .nav > li > a {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu > li > a { color: white; }
+
+.nav-container-fluid > .row > .container > .navbar {
+  min-height: 0;
+  margin-bottom: 0;
+}
+
+.navbar-top .dropdown,
+.navbar-right .dropdown.resources {
+  &> ul {
+    margin-top: -1px;
+
+    &> li {
+      @extend %-bodytxt;
+    }
+  }
+}
+
+
+.dropdown-menu {
+  background: inherit;
+  border: none;
+  padding-top: 0;
+  padding-bottom: 0;
+  @include box-shadow-none;
+
+  &> li > a { @include hover { background: inherit; } }
+}
+
+.navbar-nav .open .dropdown-menu > li > a {  padding: .634em 0 .634em 15px; }
+
+
+.navbar-nav {
+  margin: 0;
+  &.navbar-top { background: $gray1; }
+}
+
+.navbar-default,
+.breadcrumb {
+  background: none;
+  border: none;
+  @include border-radius(0);
+}
+
+
+
+.nav-container-fluid {
+  @extend .-blue1bg;
+}
+
+
+
+.nav-container-fluid {
+  border-bottom: 1px solid $blue3;
+}
+
+
+
+.navbar-default .navbar-nav > li > a {
+  color: $blue3;
+
+  @include hover {
+    color: $blue3;
+  }
+}
+
+
+
+.navbar-nav > .dropdown.open > .dropdown-menu {
+  border: none;
+  @include border-radius(0);
+}
+
+
+
+
+// Top (top nav)
+
+.navbar-default .navbar-nav.navbar-top > li {
+
+  &> a {
+    background: transparent;
+    color: $gray2;
+    @include transition-all;
+
+    @include hover {
+      background: $gray3;
+      color: white;
+      @include transition-all;
+    }
+  }
+
+  &.open {
+    background: $gray3;
+
+    &> a {
+      color: white;
+    }
+  }
+
+  &> .dropdown-menu {
+    background: $gray3;
+
+    a {
+      background: transparent;
+      color: white;
+
+      @include hover {
+        background: transparent;
+        color: $gray1;
+      }
+    }
+  }
+}
+
+
+
+// Right (main nav)
+
+.navbar-default .navbar-right > li {
+
+  &.active {
+    &> a {
+      background: $blue2;
+      color: $blue4;
+
+      @include hover {
+        background: $blue2;
+        color: $blue4;
+        cursor: default;
+      }
+    }
+  }
+
+  &> a {
+    &:hover, &:active {
+      background: $blue2;
+      color: $blue4;
+    }
+  }
+
+
+  &.open > a,
+  &.open > a:hover,
+  &.open > a:active,
+  &.open > a:focus {
+    background: $blue2;
+    color: $blue4;
+  }
+
+  .dropdown-menu {
+    background: $blue2;
+
+    &> li > a {
+      background: transparent;
+      color: white;
+
+      @include hover {
+        background: transparent;
+        color: $blue6;
+      }
+    }
+  }
+}
+
+
+
+
+// Chevron - right
+
+// .dropdown-menu > li > a:before {
+//   @extend .-chevronright;
+//   margin-right: .5em;
+// }
+
+
+
+// // Chevron - down
+
+// .dropdown:not(.search) {
+//   &> a:after {
+//     @extend .-chevrondown;
+//   }
+
+//   &.open > a:after {
+//     @extend .-chevronup;
+//   }
+// }
+
+
+
+// Nav Search
+
+.search .dropdown-menu {
+  @include box-shadow-none;
+}
+
+
+.input-group .form-control { padding-top: .1em; padding-bottom: 0; }
+
+.search.open {
+
+  .navbar-form {
+    width: calc(100% - 3em);
+    height: 100%;
+    border: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+     bottom: 0;
+     left: 3em;
+
+    .input-group {
+      width: calc(100% - 1em);
+      height: 100%;
+    }
+  }
+
+  .input-group-btn > .btn {
+    display: none;
+  }
+
+  &> .dropdown-menu input[type="text"] {
+    height: 100%;
+    padding-left: 0;
+  }
+}
+
+
+
+.search input[type="text"] {
+  height: 100%;
+  border: none;
+  @include placeholder { color: $blue4; }
+}

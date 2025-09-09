@@ -1,0 +1,171 @@
+/**
+#######################################################################
+SIDEBAR
+#######################################################################
+**/
+
+.sidebar {
+  border-left: 2px solid #ebebeb;
+  padding-left: 25px;
+  background: #fff;
+  height: 100%;
+  position:absolute;
+  z-index: 1;
+  transition: all 0.2s ease-in-out;
+  top: 0;
+  webkit-box-shadow: 9999px 10px 0 9999px rgb(255 255 255 / 100%);
+  box-shadow: 9999px 10px 0 9999px rgb(255 255 255 / 100%);
+
+  h3 {
+    border-bottom: 2px solid #ebebeb;
+    padding-bottom: 10px;
+    margin-bottom: 0;
+  }
+
+  .caret-list {
+    padding-left: 26px;
+
+    li {
+      text-indent: -12px;
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-top: 5px;
+      padding-bottom: 5px;
+
+      &::before {
+	padding-left: 0;
+	padding-right: 12px;
+      }
+
+      &.active a {
+	color:#19197D;
+      }
+
+      &.active::before {
+	color:#19197D;
+      }
+    }
+  }
+}
+
+.faux-sidebar {
+  border-left: 2px solid #ebebeb;
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+}
+
+.sidebar-inner {
+  padding-top: 126px;
+  width: 230px;
+  overflow: auto;
+  padding-bottom: 40px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/**
+#######################################################################
+ACCORDION
+#######################################################################
+**/
+
+.card-header {
+  .btn {
+    &::before {
+      padding-left: 0 !important;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Font Awesome 5 Pro';
+      content: '\f068';
+      display: inline-block;
+      padding-right: 10px;
+      color: #8dcbfe;
+      transition: all 0.2s ease-in-out;
+    }
+
+    font-size: 18px;
+    font-family: Roboto, sans-serif;
+    color: #329fff;
+    font-weight: 600;
+    text-align: left;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    text-decoration: none;
+    margin-top: -12px;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      color: #19197D !important;
+
+      &::before {
+	color: #19197D;
+	transition: all 0.2s ease-in-out;
+      }
+    }
+  }
+
+  padding: 0;
+  background: none;
+  border: 0;
+  margin-bottom: 0;
+
+  .collapsed {
+    &::before {
+      content: '\f067';
+    }
+  }
+}
+
+.card {
+  border: 0;
+  border-radius: 0;
+  border-bottom: 2px solid #ebebeb !important;
+}
+
+.card-body {
+  padding: 0;
+
+  @include transition(all .3s);
+}
+
+.collapse {
+  @include transition(all .3s);
+
+  &::before {
+    --font-family: 'Font Awesome 5 Free';
+    --content: '\f067' !important;
+    --font-weight: 400;
+  }
+}
+
+.collapsing {
+  transition: none;
+  display: none;
+}
+
+@media (width <= 920px) {
+  .card {
+    padding-right: 40px;
+  }
+}
+
+@media (width <= 869px) {
+  .card {
+    padding-right: 60px;
+  }
+
+  .card-header .btn {
+    font-size: 16px;
+
+    &::before {
+      font-size: 13px;
+      top: -1px;
+      position: relative;
+    }
+  }
+}

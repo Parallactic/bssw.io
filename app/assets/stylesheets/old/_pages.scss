@@ -1,0 +1,11 @@
+/* ------------------------
+Pages (like About)
+------------------------ */
+
+
+.main-row {
+  @extend %bodycontentrow;
+  .content {
+    @extend %bodycontentstyles;
+  }
+}

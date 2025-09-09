@@ -1,0 +1,136 @@
+/**
+#######################################################################
+BLOG
+#######################################################################
+**/
+
+.link-row {
+  z-index: 2;
+  border-top: 1px solid #dcdcdd;
+  border-bottom: 1px solid #dcdcdd;
+  padding: 9px 0;
+  display: block;
+  height: 100%;
+  position: relative;
+  margin-top: -1px;
+
+  &::before {
+    opacity: 0;
+    visibility: hidden;
+    content: '';
+    background: #faf7f7;
+    position: absolute;
+    top: -1px;
+    left: 0;
+    height: 104%;
+    z-index: -1;
+    padding-left: 1em;
+    margin-left: -1em;
+    width: calc(100% + 2em);
+    border-top: 1px solid #dcdcdd;
+    border-bottom: 1px solid #dcdcdd;
+
+    @include transition(ease-in-out .2s all);
+
+  }
+
+  &:hover::before {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.blog-content {
+  padding-top: 40px;
+  padding-bottom: 20px;
+}
+
+.blog-sub-nav {
+  border-bottom: 1px solid #cececf;
+  margin-bottom: 30px;
+}
+
+.sub-nav-container .nav .nav-item .nav-link {
+  padding: 22px 14px;
+  color: #349dff;
+  font-weight: 700;
+  font-size: 18px;
+
+  &:hover {
+    background: #eee;
+    color: #19197d;
+  }
+}
+
+.email-digest::before {
+  content: '\f0e0';
+  font-weight: 900;
+  display: inline-block;
+  font-family: 'Font Awesome 5 Pro';
+  font-size: 1.1em;
+  padding-right: .6em;
+}
+
+.rss-feed::before {
+  content: '\f09e';
+  font-weight: 900;
+  display: inline-block;
+  font-family: 'Font Awesome 5 Pro';
+  font-size: 1.1em;
+  padding-right: .6em;
+}
+
+.references-wrapper {
+  counter-reset: item;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  font-size: 13.5px;
+  width: 1170px;
+  margin-top: 10px;
+
+  .references {
+    width: 45%;
+    float: left;
+    display: block;
+    margin-left: 32px;
+
+    &:first-of-type {
+      margin-right: 40px;
+    }
+
+    a, div, p {
+      display: block;
+      display: list-item;
+      list-style-type: none;
+      margin-bottom: 15px;
+      font-size: 13.5px;
+      line-height: 1.6;
+
+      &::before {
+	padding-right: 13px;
+	margin-left: -32px;
+	vertical-align: top;
+	counter-increment: item;
+	content: counter(item) "";
+	font-weight: bold;
+	position: absolute;
+	font-size: 16px;
+	margin-top: -4px;
+	color: #5c5a5b;
+      }
+    }
+  }
+}
+
+@media (width <= 1199px) {
+  .references-wrapper {
+    width: 100%;
+
+    .references {
+      float: none;
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,169 @@
+/**
+#######################################################################
+FORMS
+#######################################################################
+**/
+
+label {
+  margin-bottom: 5px;
+  font-weight: 700;
+  display: block;
+  font-size: 18px;
+}
+
+.simple_form {
+  input {
+    background: #d6ebff;
+    border: 1px solid transparent;
+    padding: .35em;
+    text-indent: 0;
+    width: 100%;
+    display: block;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  textarea {
+    background: #d6ebff;
+    border: 1px solid transparent;
+    padding: .35em;
+    text-indent: 0;
+    width: 100%;
+    display: block;
+    height: 10.8em;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  select {
+    height: 2.4em;
+    background-color: #349dff;
+    background-image: url("./chevron-down.svg");
+    background-position: calc(100% - 1em) 50%;
+    background-size: 1.2em;
+    background-repeat: no-repeat;
+    border: none;
+    color: white;
+    font-weight: 800;
+    padding: 0 .5em;
+    border-radius: 0;
+    text-overflow: '';
+    width: 100%;
+    display: block;
+
+
+    @include transition(ease-in-out .2s border);
+
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+}
+
+#mc_embed_signup > form > #mc_embed_signup_scroll select, .simple_form select {
+  height: 2.4em;
+  background-color: #349dff;
+  background-image: url("./chevron-down.svg");
+  background-position: calc(100% - 1em) 50%;
+  background-size: 1.2em;
+  background-repeat: no-repeat;
+  border: none;
+  color: white;
+  font-weight: 800;
+  padding: 0 .5em;
+  border-radius: 0;
+  text-overflow: '';
+  width: 100%;
+  display: block;
+  appearance: none;
+
+  @include transition(ease-in-out .2s border);
+
+  font-size: 18px;
+  margin-bottom: 10px;
+
+}
+
+#mc_embed_signup > form > #mc_embed_signup_scroll select {
+}
+
+.simple_form input[type='submit'] {
+  width: auto;
+  height: auto;
+  background-color: transparent;
+  border: 0.12em solid #349dff;
+  clear: both;
+  color: #349dff;
+  float: left;
+  font-weight: 700;
+  margin-top: 2em;
+  padding: .35em 4em;
+  border-radius: 1.5em;
+
+  @include transition(ease-in-out .2s background-color);
+  @include transition(ease-in-out .2s color);
+
+  font-size: 18px;
+  margin-bottom: 40px;
+
+  &:hover {
+    color: #fff;
+    background: #349dff;
+  }
+}
+
+#mc_embed_signup {
+  h2 {
+    font-size: 45px;
+    line-height: 54px;
+    font-weight: 400;
+  }
+
+  .mc-field-group {
+    label {
+      margin-bottom: 10px;
+    }
+
+    input {
+      background: #d6ebff;
+      border: 1px solid transparent;
+      padding: .35em;
+      width: 100%;
+      display: block;
+      font-size: 18px;
+      margin-bottom: 10px;
+      text-indent: 0;
+    }
+  }
+
+  #mc-embedded-subscribe-form div.mce_inline_error {
+    padding: 0;
+    margin: 0;
+  }
+
+  .button {
+    width: auto;
+    height: auto;
+    background-color: transparent;
+    border: 0.12em solid #349dff;
+    clear: both;
+    color: #349dff;
+    float: left;
+    font-weight: 700;
+    margin-top: 2em;
+    padding: .35em 4em;
+    border-radius: 1.5em;
+    transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+
+    @include transition(ease-in-out .2s background-color);
+    @include transition(ease-in-out .2s color);
+
+    font-size: 18px;
+    margin-bottom: 40px;
+    cursor: pointer;
+
+    &:hover {
+      color: #fff;
+      background: #349dff;
+    }
+  }
+}

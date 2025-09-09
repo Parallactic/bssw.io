@@ -1,0 +1,266 @@
+/**
+#######################################################################
+LIGHTBOX
+#######################################################################
+**/
+
+.modal-backdrop {
+  background-color: #19197D;
+
+  &.in {
+    opacity: 0.5;
+    filter: alpha(opacity = 50);
+  }
+}
+
+@media (width >= 34em) {
+  .modal-content .modal-header {
+    top: 1.112em;
+    right: 1.112em;
+  }
+}
+
+.modal-content .modal-header {
+  display: block !important;
+  position: relative;
+  background: none;
+  border: none;
+  padding: 0;
+
+  button {
+    width: 1.715em;
+    height: 1.715em;
+    background: #349dff;
+    color: #fff;
+    position: relative;
+    top: -2px;
+    right: -2px;
+    z-index: 400;
+    opacity: 1;
+    filter: alpha(opacity = 100);
+
+    @include transition(ease-in-out .2s background);
+
+    &:hover {
+      background: #19197D;
+      color: #fff !important;
+      outline: none;
+      opacity: 1 !important;
+    }
+  }
+}
+
+.modal-content .modal-header h4 {
+  display: none;
+}
+
+.modal-header {
+  &::before, &::after {
+    content: " ";
+    display: table;
+  }
+
+  &::after {
+    clear: both;
+  }
+
+  .close {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.modal-content {
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  position: relative;
+  top: -20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 0 0 rgb(255 255 255 / 0%);
+}
+
+a[data-toggle="lightbox"] {
+  background: #faf7f7;
+  display: flex;
+  font-weight: 400;
+  margin-right: 0;
+  margin-left: 0;
+  position: relative;
+  cursor:zoom-in;
+
+  &::before {
+    width: 2.5em;
+    height: 2.5em;
+    background: #349dff;
+
+    --background: #161d77;
+
+    color: white;
+    content: '\f065';
+    font-family: 'Font Awesome 5 Pro';
+    display: -webkit-box;
+    display: flex;
+    display: flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    right: -2.5em;
+
+    @include transition(ease-in-out .2s background);
+  }
+
+  &:hover {
+    background: rgb(25 25 125 / 70%) !important;
+  }
+
+  &:hover::before {
+    background: #19197D !important;
+    color: #fff !important;
+  }
+
+  > img {
+    align-self: center;
+    max-width: calc(100% - 2.224em);
+    max-height: calc(100% - 2.224em);
+    display: block;
+    margin: 1.112em auto;
+    width: initial;
+  }
+
+  &::after {
+    width: 100%;
+    height: 100%;
+    display: -webkit-box;
+    display: flex;
+    display: flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(25 25 125 / 70%);
+    color: white;
+    font-size: 40px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    filter: alpha(opacity = 0);
+
+    @include transition(ease-in-out .2s all);
+  }
+
+  &:hover::after {
+    opacity: 1;
+
+    @include transition(ease-in-out .2s all);
+  }
+}
+
+@media (width >= 34em) {
+  a[data-toggle="lightbox"]::after {
+    padding-right: 2em;
+  }
+}
+
+@media (width >= 48em) {
+  a[data-toggle="lightbox"]::before {
+    width: 2em;
+    height: 2em;
+    right: -2em;
+  }
+}
+
+@media (width >= 62em) {
+  a[data-toggle="lightbox"] {
+    width: calc(100% - 2.8em);
+    height: 24.5em;
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+
+@media (width >= 75em) {
+  a[data-toggle="lightbox"] {
+    height: 25em;
+
+    &::after {
+      background-position: 66% 50%;
+    }
+  }
+}
+
+.post-event-content {
+  .img-wrapper {
+    height: 25em;
+    width: calc(100% - 2.8em);
+    margin-right: 0;
+    margin-left: 0;
+    background: #faf7f7;
+    display: flex;
+    font-weight: 400;
+    position: relative;
+
+    img {
+      &:not(.lightbox) {
+	align-self: center;
+	max-width: calc(100% - 2.224em);
+	max-height: calc(100% - 2.224em);
+	display: block;
+	margin: 1.112em auto;
+	width: initial;
+      }
+    }
+  }
+}
+
+.communities-overview {
+  ul li {
+    margin-bottom:7px;
+    font-size: 20px;
+
+    a {
+      font-size: 20px;
+    }
+
+    &:hover a {
+      color: #19197D;
+    }
+
+    &:hover::before {
+      background: #19197D;
+    }
+  }
+
+  ul li::before {
+    width: 1.2em;
+    height: 1.2em;
+    background: #349dff;
+    color: white;
+    display: flex;
+    float: left;
+    font-family: 'Font Awesome 5 Pro';
+    font-weight: 700;
+    font-size: 18px;
+    content: '\f105';
+    margin-top: .15em;
+    margin-right: .5em;
+    padding-top: .03em;
+    padding-bottom: .03em;
+
+    --padding-left: .37em;
+
+    justify-content: center;
+    align-items: center;
+
+    --text-indent: .15em;
+
+    text-indent: .79em;
+    border-radius: 0.85em;
+
+    @include transition(ease-in-out .2s background);
+  }
+}

@@ -1,0 +1,96 @@
+
+.fellows-content {
+  padding-top: 0;
+}
+
+.fellow {
+  clear: both;
+  display: block;
+  height: initial;
+  min-height: 200px;
+
+  .img_div {
+    width: 200px;
+    float: left;
+    margin-right: 70px;
+  }
+
+  .short_bio {
+    float: left;
+    width: 500px;
+    margin-bottom: 50px;
+
+    p:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+}
+
+@media (width <= 1199px) {
+  .fellow {
+    .img_div {
+      width: initial;
+      float: none;
+    }
+
+    .short_bio {
+      width: initial;
+      margin-top: 40px;
+      float: none;
+    }
+  }
+}
+
+/**
+#######################################################################
+FELLOWS
+#######################################################################
+**/
+
+.fellows-hero {
+  padding-bottom: 55px;
+}
+
+.fellows-photo {
+  display: block;
+  width: 100%;
+}
+
+.fellows-info {
+  display: table;
+  height: 100%;
+
+  .fellows-info-inner {
+    display: table-cell;
+    vertical-align: middle;
+    padding-top: 20px;
+  }
+}
+
+.class-year:nth-of-type(2n) {
+  background: #f9f8f6;
+
+}
+
+.sponsorship, .class-year {   padding: 60px 0 44px;}
+
+.class-year:nth-of-type(1) { padding-top: 0;
+			   }
+
+.author-col .author-photo {
+  display: block;
+  width: 100%;
+  min-height: 255px;
+  background-size: cover !important;
+}
+
+
+.class-year > .container > .row:nth-of-type(5) .author-col > .author-photo {
+  min-height: 160px;
+}
+
+@media (width <=768px) {
+  .author-photo {
+    min-height: 487px;
+  }
+}
