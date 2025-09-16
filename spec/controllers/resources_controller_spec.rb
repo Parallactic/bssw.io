@@ -112,7 +112,7 @@ RSpec.describe ResourcesController, type: :controller do
       SearchResult.reindex!
       sleep(5)
       get :search, params: { search_string: resource.name }
-      expect(assigns(:resources)).to include(author)
+      expect(assigns(:resources)).to include(resource)
     end
 
     describe 'finds fellows' do

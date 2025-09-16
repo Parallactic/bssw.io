@@ -10,14 +10,14 @@
 			    <div class="container">
 				<div class="row">
 				    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-					<h2><%= year %> Class</h2>
+					<h2 id="<%= year.strip %>-class"><%= year %> Class</h2>
 				    </div>
 				</div>
 				<% fellows.group_by(&:honorable_mention).each do |hm, fellows_group| %>
 
 				    <div class="row">
 					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-					    <h3 class="mb-2"><%= hm ? 'Honorable Mentions' : 'Fellows' %></h3>
+					    <h3 id='<%= hm ? "#{year.strip}-honorable-mentions" : "#{year.strip}-fellows" %>' class="mb-2"><%= hm ? 'Honorable Mentions' : 'Fellows' %></h3>
 					</div>
 				    </div>
 				    <div class="row">
