@@ -6,14 +6,14 @@
     <div class="row">
       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 
-	<a href="<%= search_result_url(result) %>"> 
+	<a href="<%= search_result_url(result) %>">
 
 	  <div class="row">
 	    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-	      
+
 		<h3>
-		    <% name = result.highlight_result['name']['value'].try(:html_safe)  %>
-		    
+		    <% name = result.highlight_result.dig(:name).dig(:value).try(:html_safe)  %>
+
 <%= name.blank? ? result.name : name %>
 		</h3>
 		<% if result.respond_to?(:listed_tracks) %>
@@ -53,7 +53,7 @@ Event
 <% elsif result.is_a?(BlogPost) %>
 Blog Post
 <% elsif result.is_a?(Fellow) %>
-Fellow 
+Fellow
 <% elsif result.is_a?(Author) %>
 Author
 <% elsif result.is_a?(SiteItem) %>
@@ -79,5 +79,3 @@ Page
 
   </div>
 </div>
-
-
