@@ -13,7 +13,7 @@ LIGHTBOX
   }
 }
 
-@media (width >= 34em) {
+@media (max-width: 34em) {
   .modal-content .modal-header {
     top: 1.112em;
     right: 1.112em;
@@ -79,7 +79,7 @@ LIGHTBOX
   display: flex;
   flex-direction: column;
   justify-content: center;
-  box-shadow: 0 0 0 rgb(255 255 255 / 0%);
+  box-shadow: 0 0 0 RGB(255 255 255 / 0%);
 }
 
 a[data-toggle="lightbox"] {
@@ -115,7 +115,7 @@ a[data-toggle="lightbox"] {
   }
 
   &:hover {
-    background: rgb(25 25 125 / 70%) !important;
+    background: RGB(25 25 125 / 70%) !important;
   }
 
   &:hover::before {
@@ -141,7 +141,7 @@ a[data-toggle="lightbox"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgb(25 25 125 / 70%);
+    background: RGB(25 25 125 / 70%);
     color: white;
     font-size: 40px;
     position: absolute;
@@ -160,13 +160,13 @@ a[data-toggle="lightbox"] {
   }
 }
 
-@media (width >= 34em) {
+@media (max-width: 34em) {
   a[data-toggle="lightbox"]::after {
     padding-right: 2em;
   }
 }
 
-@media (width >= 48em) {
+@media (max-width: 48em) {
   a[data-toggle="lightbox"]::before {
     width: 2em;
     height: 2em;
@@ -174,7 +174,7 @@ a[data-toggle="lightbox"] {
   }
 }
 
-@media (width >= 62em) {
+@media (max-width: 62em) {
   a[data-toggle="lightbox"] {
     width: calc(100% - 2.8em);
     height: 24.5em;
@@ -183,7 +183,7 @@ a[data-toggle="lightbox"] {
   }
 }
 
-@media (width >= 75em) {
+@media (max-width: 75em) {
   a[data-toggle="lightbox"] {
     height: 25em;
 

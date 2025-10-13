@@ -196,7 +196,7 @@ INLINE LIST
   background: #18187d;
 }
 
-@media (width <= 767px) {
+@media (max-width: 767px) {
   .hero .list-inline::before {
     display: block;
   }
@@ -395,13 +395,13 @@ PAGE CONTENT
   }
 }
 
-@media (width <= 1999px) {
+@media (max-width: 1999px) {
   .social-share {
     padding-right: 0;
   }
 }
 
-@media (width <= 991px) {
+@media (max-width: 991px) {
   .single-item-hero .social-share {
     text-align: left;
     margin-left: -20px;
@@ -550,7 +550,7 @@ CARET LIST
   }
 }
 
-@media (width <= 869px) {
+@media (max-width: 869px) {
   .caret {
     font-size: 16px;
 
@@ -562,7 +562,7 @@ CARET LIST
   }
 }
 
-@media (width <= 991px) {
+@media (max-width: 991px) {
   .tool-row .caret-list {
     padding-left: 110px;
   }
@@ -801,13 +801,13 @@ PAGE HEADING
   padding-right: 15px;
 }
 
-@media (width <= 1199px) {
+@media (max-width: 1199px) {
   .single-post-hero .topics-wrapper {
     padding-top: 20px;
   }
 }
 
-@media (width <= 991px) {
+@media (max-width: 991px) {
   .page-heading .topic {
     padding-left: 0;
 
@@ -817,7 +817,7 @@ PAGE HEADING
   }
 }
 
-@media (width <= 767px) {
+@media (max-width: 767px) {
   .blog-image-container {
     padding-left: 15px;
     padding-right: 15px;
@@ -950,7 +950,7 @@ RESOURCES
   display: none;
 }
 
-@media (width <= 991px) {
+@media (max-width: 991px) {
   .resources {
     .resource {
       .recommended {
@@ -966,7 +966,7 @@ RESOURCES
   }
 }
 
-@media (width <= 767px) {
+@media (max-width: 767px) {
   .resources {
     .resource {
       margin-right: 0;
@@ -997,7 +997,7 @@ JS STICKY CLASS - Added to the navbar with JS when it reaches its scroll positio
   width: 0 !important
 }
 
-@media (width <= 869px) {
+@media (max-width: 869px) {
   .sidebar .caret-list li {
     &::before {
       position: relative;
@@ -1022,7 +1022,7 @@ JS STICKY CLASS - Added to the navbar with JS when it reaches its scroll positio
   }
 }
 
-@media (width <= 767px) {
+@media (max-width: 767px) {
   .sidebar {
     opacity: 0;
     z-index: -1;
@@ -1087,7 +1087,7 @@ RESOURCES FOOTER
   }
 }
 
-@media (width <= 991px) {
+@media (max-width: 991px) {
   .resources-footer {
     .resource {
       .topics {
@@ -1207,7 +1207,7 @@ POSTS
 }
 
 
-@media (width <= 500px) {
+@media (max-width: 500px) {
   .post-author {
     margin-left: 0;
     display: block;
@@ -1327,7 +1327,7 @@ FOOTER
   }
 }
 
-@media (width <= 991px) {
+@media (max-width: 991px) {
   .sub-footer img {
     padding: 0 20px 0 0;
   }
@@ -1424,7 +1424,7 @@ TOPICS
   }
 }
 
-@media (width >= 768px) {
+@media (max-width: 768px) {
   .topics .row {
     .topic, .sub-topic {
       margin-bottom: 15px;
@@ -1748,7 +1748,7 @@ TABLES
   }
 }
 
-@media (width <= 991px) {
+@media (max-width: 991px) {
   .content {
     table {
       width: 970px;
@@ -1756,7 +1756,7 @@ TABLES
   }
 }
 
-@media (width <= 767px) {
+@media (max-width: 767px) {
   .content {
     table {
       width: 750px;
@@ -1764,7 +1764,7 @@ TABLES
   }
 }
 
-@media (width <= 600px) {
+@media (max-width: 600px) {
   .content {
     table {
       width: calc(100% + 2em);
@@ -1945,7 +1945,7 @@ BLOG POST FOOTER
   }
 }
 
-@media (width <=767px) {
+@media (max-width: 767px) {
   .error-container {
     .error {
       .error-logo {

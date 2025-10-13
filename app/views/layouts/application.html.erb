@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
     <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	
+
 	<meta name="twitter:title" content="<%= page_item.try(:name) %>" />
 	<meta name="twitter:description" content="<%= strip_tags(page_item.try(:snippet)) %>" />
 	<meta property="og:title" content="<%= page_item.try(:name) %>" />
-	<meta property="og:description" content="<%= strip_tags(page_item.try(:snippet)) %>" /> 
+	<meta property="og:description" content="<%= strip_tags(page_item.try(:snippet)) %>" />
 
 	<meta property="og:url" content="<%= request.url %>" />
 	<meta name="twitter:card" content="summary_large_image" />
@@ -46,7 +46,7 @@
 
 	<img src="/assets/bss-logo.svg" style="display:none;">
 	<img src="/assets/bss-logo-hover.svg" style="display:none;">
-	
+
 	<!-- preloading a few select images so hovers won't glitch -->
 	<link rel="preload" as="image" href="/assets/bss-logo.svg">
 	<link rel="preload" as="image" href="/assets/bss-logo-hover.svg">
@@ -119,7 +119,7 @@
 			</div>
 		    </div>
 		</div>
-	    </div> 
+	    </div>
 	<% end %>
 
 
@@ -174,7 +174,7 @@ autoplayHoverPause:true
 	 if (navbar) {
 	     //Get the offset position of the navbar
 	     var sticky = navbar.offsetTop;
-	 // When the user scrolls the page, execute myFunction 
+	 // When the user scrolls the page, execute myFunction
 
 	 window.onscroll = function() {myFunction()};
 

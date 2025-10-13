@@ -13,8 +13,8 @@ SIDEBAR
   z-index: 1;
   transition: all 0.2s ease-in-out;
   top: 0;
-  webkit-box-shadow: 9999px 10px 0 9999px rgb(255 255 255 / 100%);
-  box-shadow: 9999px 10px 0 9999px rgb(255 255 255 / 100%);
+  webkit-box-shadow: 9999px 10px 0 9999px RGB(255 255 255 / 100%);
+  box-shadow: 9999px 10px 0 9999px RGB(255 255 255 / 100%);
 
   h3 {
     border-bottom: 2px solid #ebebeb;
@@ -148,13 +148,13 @@ ACCORDION
   display: none;
 }
 
-@media (width <= 920px) {
+@media (max-width: 920px) {
   .card {
     padding-right: 40px;
   }
 }
 
-@media (width <= 869px) {
+@media (max-width: 869px) {
   .card {
     padding-right: 60px;
   }

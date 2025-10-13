@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-source 'https://rubygems.org'
+source 'https://gem.coop'
 ruby '3.2.0'
 
 git_source(:github) do |repo_name|
@@ -10,7 +10,9 @@ end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'mysql2'
-gem 'rails', '7.0.4'
+gem 'rails', '7.1.0'
+gem 'sprockets-rails', '2.3.3'
+
 gem 'sqlite3'
 
 # Use Puma as the app server

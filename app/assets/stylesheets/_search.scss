@@ -58,7 +58,7 @@ SEARCH MENU
   color: #b9ffff !important;
 }
 
-@media (width <=767px) {
+@media (max-width: 767px) {
   .search-menu {
     border-bottom: 0;
     margin-bottom: -2px;

@@ -26,7 +26,7 @@
   }
 }
 
-@media (width <= 1199px) {
+@media (max-width: 1199px) {
   .fellow {
     .img_div {
       width: initial;
@@ -89,7 +89,7 @@ FELLOWS
   min-height: 160px;
 }
 
-@media (width <=768px) {
+@media (max-width: 768px) {
   .author-photo {
     min-height: 487px;
   }
