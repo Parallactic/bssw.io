@@ -40,16 +40,17 @@
 
 <% [:location, :organizers].each do |facet| %>
 <% if result.respond_to?(facet) && !(result.highlight_result.try(:[], facet).blank?) %>
-<p class='small-caps'><strong><%= facet %></strong>
-<%=  result.highlight_result[facet]['value'].try(:html_safe) %>
-</p>
+    <p class='small-caps'><strong><%= facet %></strong>
+	<%=  result.highlight_result[facet]['value'].try(:html_safe) %>
+    </p>
 <% end %>
 
 <% end %>
 
 
 <p class='search-results-content'>
-<%= result.snippet_result['content'].try(:[], 'value').try(:html_safe) %>
+    <%= result.snippet_result[:content][:value].html_safe) %>
+
 </p>
 
 <p class="topics small-caps">
