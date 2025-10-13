@@ -12,10 +12,10 @@
 	    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 
 		<h3>
-		    <%= result.highlight_result.inspect %>
-		    <% if
-			name = result.highlight_result[:name][:value].try(:html_safe)
-			end
+
+		    <%
+			name = result.highlight_result[:name][:value].html_safe
+
 		    %>
 
 <%= name.blank? ? result.name : name %>
@@ -34,8 +34,7 @@
 <p class="search-results-content">
 
     <p class='small-caps'>
-	<%= result.highlight_result[:author_list_without_links][:value] %>
-	<%= result.highlight_result.keys.include?('author_list_without_links') ? result.highlight_result[:author_list_without_links][:value].try(:html_safe) : 'bluh' %> #result.author_list_without_links %>
+	<%= result.highlight_result[:author_list_without_links][:value].html_safe %>
     </p>
 
 
