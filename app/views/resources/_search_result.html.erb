@@ -34,6 +34,7 @@
 <p class="search-results-content">
 
     <p class='small-caps'>
+	<%= result.highlight_result[:author_list_without_links][:value] %>
 	<%= result.highlight_result.keys.include?('author_list_without_links') ? result.highlight_result[:author_list_without_links][:value].try(:html_safe) : 'bluh' %> #result.author_list_without_links %>
     </p>
 
