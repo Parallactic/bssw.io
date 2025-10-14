@@ -27,7 +27,10 @@
 				    <li
 					<% if session.dig(:path, 'method') == 'topic' && session.dig(:path, 'slug') == topic.slug  %>
 					    class="active"
-					<% end %>><%= link_to topic.name, '/items?topic='+topic.slug.to_s %></li>
+					<% end %>
+
+					>
+					<a href="/items?topic="<%= topic.slug %>"><%= topic.name %></a></li>
 				<% end %>
 			    </ul>
 			</div>
