@@ -26,7 +26,8 @@ SIDEBAR
     padding-left: 26px;
 
     li {
-      text-indent: -12px;
+      text-indent: -20px;
+      margin-left: 15px;
       border-bottom: none;
       margin-bottom: 0;
       padding-top: 5px;
@@ -34,7 +35,8 @@ SIDEBAR
 
       &::before {
 	padding-left: 0;
-	padding-right: 12px;
+	padding-right: 4px;
+	margin-left: -10px;
       }
 
       &.active a {

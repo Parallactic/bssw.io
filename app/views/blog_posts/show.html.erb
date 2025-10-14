@@ -12,14 +12,15 @@
 
 		    <%= render :partial => '/layouts/share' %>
 
+		    <%= render :partial => '/blog_posts/hero', locals: { post: @post } %>
+
+
+
 		</div>
 	    </div>
-	    
-	    <%= render :partial => '/blog_posts/hero', locals: { post: @post } %>
-
 	    <%= render :partial => '/blog_posts/meta', locals: { post: @post } %>
 	</div>
-    </div>	    
+    </div>
 </div>
 
 
@@ -59,4 +60,3 @@
 	<% end %>
     <% end %>
 </div>
-

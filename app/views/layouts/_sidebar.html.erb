@@ -3,7 +3,7 @@
 	<div class="sidebar-inner">
 	    <h3>Resources by Topic</h3>
 	    <div class="accordion panel-group" id="accordionSidebar" role='tablist'>
-		<% Category.displayed.includes([:topics]).each_with_index do |category, index| 
+		<% Category.displayed.includes([:topics]).each_with_index do |category, index|
 		    cat = category.name.split(' ') %>
 		<div class="card panel">
 		    <div class="card-header" id="heading-<%= index %>" >
@@ -21,7 +21,8 @@
 					class='active'
 				    <% end %>
 
-				    ><a href="/items?category=<%= category.slug %>">All <%= cat.second %> Resources</a></li>
+				    >
+				    <a href="/items?category=<%= category.slug %>">All <%= cat.second %> Resources</a></li>
 				<% category.topics.each_with_index do |topic| %>
 				    <li
 					<% if session.dig(:path, 'method') == 'topic' && session.dig(:path, 'slug') == topic.slug  %>

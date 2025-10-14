@@ -4,6 +4,7 @@
 class EventsController < ApplicationController
   def index
     filter_events
+    session[:path] = nil
     @last_page = (@events.size.to_f / 25).ceil
     @current_page = (params[:page] || 1).to_i
     if params[:view] == 'all'

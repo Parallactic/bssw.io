@@ -302,9 +302,9 @@ GEM
     lemmatizer (0.2.2)
     lightbox-bootstrap-rails (5.1.0.1)
     lint_roller (1.1.0)
-    listen (3.0.8)
-      rb-fsevent (~> 0.9, >= 0.9.4)
-      rb-inotify (~> 0.9, >= 0.9.7)
+    listen (3.9.0)
+      rb-fsevent (~> 0.10, >= 0.10.3)
+      rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.7.0)
     loofah (2.24.1)
       crass (~> 1.0.2)
@@ -681,7 +681,7 @@ DEPENDENCIES
   jquery-rails
   lemmatizer
   lightbox-bootstrap-rails
-  listen (~> 3.0.5)
+  listen (= 3.9.0)
   loofah
   mail_form
   mechanize
