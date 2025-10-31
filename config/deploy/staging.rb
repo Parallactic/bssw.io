@@ -56,4 +56,4 @@ server 'bss.parallactic.com', user: 'web', roles: %w[app db web]
 #     auth_methods: %w(publickey password)
 #     # password: "please use keys"
 #   }
-set :ssh_options, { forward_agent: true }
+#set :ssh_options, { forward_agent: true }

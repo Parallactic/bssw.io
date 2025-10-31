@@ -6,7 +6,7 @@ set :rvm_ruby_version, '3.2.0'
 # set :bundle_flags, '--system --quiet'
 
 set :application, 'bss'
-set :repo_url, 'git@github.com:Parallactic/bssw.io.git'
+set :repo_url, 'https://github.com/Parallactic/bssw.io.git'
 
 set :branch, ENV['BRANCH'] || 'main'
 
