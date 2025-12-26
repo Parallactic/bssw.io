@@ -66,8 +66,7 @@ RSpec.describe Event, type: :model do
   end
 
   it 'can use the [date] label' do
-    content = "# Foo \n bar
-    \n* [date] Q&A: 01-02-2025
+    content = "# Foo \n bar    \n* [date] Q&A: 01-02-2025
     \n* Location: Place \n* \n* <!--- Publish: Yes --->"
 
     my_event = rebuild.find_or_create_resource('stuff/Events/webinar.md')

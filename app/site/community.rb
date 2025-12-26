@@ -7,7 +7,7 @@ class Community < MarkdownImport
   scope :published, -> { where(publish: true) }
   default_scope { published }
 
-  serialize :resource_paths, Array
+  serialize :resource_paths, type: Array
 
   extend FriendlyId
   friendly_id :name, use: %i[finders slugged scoped], scope: :rebuild_id

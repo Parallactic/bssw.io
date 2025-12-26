@@ -6,7 +6,7 @@ RSpec.describe ResourcesController, type: :controller do
   render_views
 
   let(:rebuild) { Rebuild.first }
-  let(:request) { @request }
+  #  let(:request) { @request }
   let(:bad_credentials) do
     ActionController::HttpAuthentication::Basic.encode_credentials 'name', 'pw'
   end
@@ -40,12 +40,17 @@ RSpec.describe ResourcesController, type: :controller do
       resource = FactoryBot.create(:resource)
       topic = FactoryBot.create(:topic, rebuild_id: RebuildStatus.displayed_rebuild.id)
       resource.topics << topic
-      puts topic.inspect
 
       get :index, params: { topic: topic.slug }
 
       expect(Nokogiri::HTML(response.body).css('h1').text).to match topic.name
+    end
 
+    it 'shows topic in breadcrumbs' do
+      resource = FactoryBot.create(:resource)
+      topic = FactoryBot.create(:topic, rebuild_id: RebuildStatus.displayed_rebuild.id)
+      resource.topics << topic
+      get :index, params: { topic: topic.slug }
       get :show, params: { id: resource.id }
       expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to match topic.name
     end
@@ -105,8 +110,8 @@ RSpec.describe ResourcesController, type: :controller do
       resource = FactoryBot.create(:resource, publish: true, type: 'Resource',
                                               rebuild_id: RebuildStatus.displayed_rebuild.id)
       FactoryBot.create(:resource, publish: true, type: 'Resource', rebuild_id: RebuildStatus.displayed_rebuild.id)
-      author = FactoryBot.create(:author, publish: true, first_name: "#{resource.name} auth",
-                                          rebuild_id: RebuildStatus.displayed_rebuild.id)
+      FactoryBot.create(:author, publish: true, first_name: "#{resource.name} auth",
+                                 rebuild_id: RebuildStatus.displayed_rebuild.id)
       FactoryBot.create(:page, publish: true, name: "#{resource.name} page",
                                rebuild_id: RebuildStatus.displayed_rebuild.id)
       SearchResult.reindex!
@@ -200,14 +205,14 @@ RSpec.describe ResourcesController, type: :controller do
       end
     end
 
-    # it 'finds fellows' do
-    #   fellow = FactoryBot.create(:fellow, name: 'bar bar', rebuild_id: RebuildStatus.displayed_rebuild.id,
-    #                                       publish: true)
-    #   SearchResult.reindex!
-    #   sleep(15)
-    #   get :search, params: { search_string: 'bar' }
-    #   expect(assigns(:resources)).to include(fellow)
-    # end
+    it 'finds fellows' do
+      fellow = FactoryBot.create(:fellow, name: 'bar bar', rebuild_id: RebuildStatus.displayed_rebuild.id,
+                                          publish: true)
+      SearchResult.reindex!
+      sleep(15)
+      get :search, params: { search_string: 'bar' }
+      expect(assigns(:resources)).to include(fellow)
+    end
 
     it 'performs a more complex search' do
       seven_resource = FactoryBot.create(:resource, content: 'Four score and seven')
@@ -222,8 +227,6 @@ RSpec.describe ResourcesController, type: :controller do
       SearchResult.reindex!
       sleep(5)
       get :search, params: { search_string: '"four seven"' }
-      puts assigns(:search_string)
-      puts assigns(:resources)
 
       expect(assigns(:resources)).not_to include(seven_resource)
     end
@@ -275,8 +278,6 @@ RSpec.describe ResourcesController, type: :controller do
       author = FactoryBot.create(:author, rebuild_id: rebuild.id)
       resource = FactoryBot.create(:resource, rebuild_id: rebuild.id)
       resource.contributions << Contribution.create(author:, display_name: author.display_name)
-      # RebuildStatus.all.each(&:destroy)
-      # RebuildStatus.create(display_rebuild_id: rebuild.id)
     end
 
     it 'renders template' do

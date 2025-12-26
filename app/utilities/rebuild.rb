@@ -15,7 +15,7 @@ class Rebuild < ApplicationRecord
   end
 
   def self.in_progress
-    !(Rebuild.where('started_at > ?', 10.minutes.ago).to_a.select { |rebuild| rebuild.ended_at.blank? }).empty?
+    !Rebuild.where('started_at > ?', 10.minutes.ago).to_a.select { |rebuild| rebuild.ended_at.blank? }.empty?
   end
 
   def process_file(file)
