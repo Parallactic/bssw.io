@@ -14,7 +14,7 @@ class MarkdownUtility < ApplicationRecord
       "#{image_path}?raw=true"
     elsif image_path
       branch = Rails.env.preview? ? 'preview' : 'main'
-      path = URI(image_path).path.split('/').select do |dir|
+      path = URI(image_path).path.to_s.split('/').select do |dir|
         !dir.empty? && !dir.in?(['images', '.', '..'])
       end.join('/')
       "https://raw.githubusercontent.com/betterscientificsoftware/bssw.io/#{branch}/images/#{path}?raw=true"

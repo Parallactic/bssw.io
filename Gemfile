@@ -138,5 +138,6 @@ gem 'ed25519'
 gem 'algoliasearch-rails'
 
 gem 'base64', '0.3.0'
-gem 'faraday' # , '1.10.3'
+gem 'faraday', '1.10.3'
+gem 'faraday-retry'
 gem 'human_time'
