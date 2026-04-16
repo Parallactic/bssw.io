@@ -49,7 +49,7 @@
 
 
 				<p class='search-results-content'>
-				    <%= result.snippet_result.dig(:content, :value).html_safe %>
+				    <%= result.snippet_result.dig(:content, :value).html_safe if result.snippet_result %>
 				</p>
 
 				<p class="topics small-caps">
