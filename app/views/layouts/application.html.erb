@@ -76,7 +76,8 @@
 	<meta name="msapplication-square310x310logo" content="../assets/mstile-310x310.png" />
 
 
-    </head>
+      <%= Sentry.get_trace_propagation_meta.html_safe %>
+  </head>
     <body>
 	<div id="top"></div>
 

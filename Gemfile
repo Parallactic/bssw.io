@@ -141,3 +141,7 @@ gem 'base64', '0.3.0'
 gem 'faraday', '1.10.3'
 gem 'faraday-retry'
 gem 'human_time'
+
+
+gem "sentry-ruby"
+gem "sentry-rails"
