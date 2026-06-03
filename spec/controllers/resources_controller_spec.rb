@@ -266,7 +266,8 @@ RSpec.describe ResourcesController, type: :controller do
       end
 
       it 'renders marks' do
-        FactoryBot.create(:resource, content: 'bloo bloo')
+        FactoryBot.create(:resource, content: 'And then bloo bloo and')
+        sleep(1)
         SearchResult.reindex!
         get :search, params: { search_string: 'bloo' }
         expect(response.body).to match "mark>bloo"

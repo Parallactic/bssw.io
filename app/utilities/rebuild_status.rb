@@ -40,7 +40,7 @@ class RebuildStatus < ApplicationRecord
 
   def self.complete(rebuild, file_path)
     Rails.logger.debug 'completing'
-    first.update(display_rebuild_id: rebuild.id, in_progress_rebuild_id: nil)
+
 
     SiteItem.clean
 
@@ -48,5 +48,6 @@ class RebuildStatus < ApplicationRecord
 
     rebuild.update(files_processed: "<ul>#{rebuild.files_processed}</ul>",
                    ended_at: Time.zone.now)
+    first.update(display_rebuild_id: rebuild.id, in_progress_rebuild_id: nil)
   end
 end
