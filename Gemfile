@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source 'https://gem.coop'
-ruby '3.2.0'
+ruby '4.0.6'
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
@@ -10,7 +10,7 @@ end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'mysql2'
-gem 'rails', '7.1.0'
+gem 'rails', '8.1.3.1'
 gem 'sprockets-rails', '2.3.3'
 
 gem 'sqlite3'
@@ -31,6 +31,7 @@ gem 'jquery-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', github: 'rails/jbuilder', branch: 'master'
+gem "json", "< 3"
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
@@ -78,7 +79,7 @@ gem 'capistrano-rvm'
 
 gem 'acts-as-taggable-on', '~> 4.0'
 gem 'chronic'
-gem 'friendly_id' # , '5.3.0'
+gem 'friendly_id'
 
 gem 'headhunter'
 gem 'pry'
@@ -145,3 +146,4 @@ gem 'human_time'
 
 gem "sentry-ruby"
 gem "sentry-rails"
+gem 'mutex_m'
