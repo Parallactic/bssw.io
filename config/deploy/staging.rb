@@ -5,7 +5,7 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-set :rvm_ruby_version, '4.0.6'
+set :rvm_ruby_version, 'ruby-4.0.6'
 
 server 'bss.parallactic.com', user: 'web', roles: %w[app db web]
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
