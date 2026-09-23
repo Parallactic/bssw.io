@@ -41,7 +41,6 @@ class RebuildStatus < ApplicationRecord
   def self.complete(rebuild, file_path)
     Rails.logger.debug 'completing'
 
-
     SiteItem.clean
 
     rebuild.clean(file_path)

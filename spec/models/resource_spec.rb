@@ -9,11 +9,11 @@ RSpec.describe Resource, type: :model do
     FactoryBot.create(:page, name: 'Resources')
     FactoryBot.create(:page, path: 'foo.md')
     content = "# Foo \n#### Contributed by [Jane Does](https://github.com)\n \n bar
+\n more txt
 \n#### Publication Date: June 1, 2020
 ![bloo](blah.jpg)[okay]
 
 <img src='blaj.jpg' class='lightbox'>
-
 [fooble](foo.md)
 
 <!---
@@ -26,6 +26,7 @@ RSS update: 01-01-18
 
     FactoryBot.create(:category, name: 'Better Blah Blah')
     res.parse_and_update(content)
+    RebuildStatus.first.update(display_rebuild_id: res.rebuild.id)
     res.reload
   end
 
@@ -38,7 +39,7 @@ RSS update: 01-01-18
   end
 
   it 'gets content' do
-    expect(res.content).to match 'bar'
+    expect(res.content).to match 'more'
   end
 
   it 'parses topics' do
@@ -57,4 +58,26 @@ RSS update: 01-01-18
     res.update_links_and_images
     expect(res.content).to match 'caption'
   end
+
+
+
+  describe 'searches' do
+
+    it 'respects quote marks in search (neg)' do
+      SearchResult.algolia_reindex!(1000, true)
+      expect(SearchResult.algolia_search("\"more bar\"")).not_to include(res)
+    end
+
+    it 'respects quote marks in search (pos)' do
+      SearchResult.algolia_reindex!(1000, true)
+      expect(SearchResult.algolia_search("\"more txt\"")).to include(res)
+    end
+
+    it 'searches' do
+      SearchResult.algolia_reindex!(1000, true)
+      expect(SearchResult.algolia_search("more")).to include(res)
+    end
+  end
 end
+
+

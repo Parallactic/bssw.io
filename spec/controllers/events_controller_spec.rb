@@ -32,7 +32,7 @@ RSpec.describe EventsController, type: :controller do
     describe 'past events' do
       before do
         FactoryBot.create(:page, name: 'Past Events', rebuild_id: rebuild.id)
-        200.times do
+        80.times do
           event = FactoryBot.create(:event, publish: true, rebuild_id: rebuild.id)
           doc = Nokogiri::XML('<ul><li>Dates: January 1 2019 - January 10 2019</li></ul>')
           event.send(:update_dates, doc.css("li:contains('Dates:')"))

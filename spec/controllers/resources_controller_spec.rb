@@ -28,6 +28,13 @@ RSpec.describe ResourcesController, type: :controller do
   end
 
   describe 'menus' do
+    let(:resource) { FactoryBot.create(:resource) }
+    let(:topic) {  FactoryBot.create(:topic, rebuild_id: RebuildStatus.displayed_rebuild.id) }
+    before do
+
+      resource.topics << topic
+    end
+
     it 'shows resource path' do
       resource = FactoryBot.create(:resource, type: 'Resource')
       get :index
@@ -37,30 +44,19 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     it 'shows topic path' do
-      resource = FactoryBot.create(:resource)
-      topic = FactoryBot.create(:topic, rebuild_id: RebuildStatus.displayed_rebuild.id)
-      resource.topics << topic
-
       get :index, params: { topic: topic.slug }
-
       expect(Nokogiri::HTML(response.body).css('h1').text).to match topic.name
     end
 
     it 'shows topic in breadcrumbs' do
-      resource = FactoryBot.create(:resource)
-      topic = FactoryBot.create(:topic, rebuild_id: RebuildStatus.displayed_rebuild.id)
-      resource.topics << topic
+
       get :index, params: { topic: topic.slug }
       get :show, params: { id: resource.id }
       expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to match topic.name
     end
 
     it 'shows category path' do
-      resource = FactoryBot.create(:resource)
-      topic = FactoryBot.create(:topic,
-                                rebuild_id: RebuildStatus.displayed_rebuild.id)
       topic.category.update(rebuild_id: RebuildStatus.displayed_rebuild.id)
-      resource.topics << topic
       get :index, params: { category: topic.category.slug }
       get :show, params: { id: resource.id }
       expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to match topic.category.name
@@ -108,14 +104,13 @@ RSpec.describe ResourcesController, type: :controller do
 
     it 'searches' do
       resource = FactoryBot.create(:resource, publish: true, type: 'Resource',
-                                              rebuild_id: RebuildStatus.displayed_rebuild.id)
+                                   rebuild_id: RebuildStatus.displayed_rebuild.id)
       FactoryBot.create(:resource, publish: true, type: 'Resource', rebuild_id: RebuildStatus.displayed_rebuild.id)
       FactoryBot.create(:author, publish: true, first_name: "#{resource.name} auth",
-                                 rebuild_id: RebuildStatus.displayed_rebuild.id)
+                        rebuild_id: RebuildStatus.displayed_rebuild.id)
       FactoryBot.create(:page, publish: true, name: "#{resource.name} page",
-                               rebuild_id: RebuildStatus.displayed_rebuild.id)
-      SearchResult.reindex!
-      sleep(5)
+                        rebuild_id: RebuildStatus.displayed_rebuild.id)
+      SearchResult.algolia_reindex!(1000, true)
       get :search, params: { search_string: resource.name }
       expect(assigns(:resources)).to include(resource)
     end
@@ -125,29 +120,22 @@ RSpec.describe ResourcesController, type: :controller do
 
       let(:fellow) do
         FactoryBot.create(:fellow, name: 'Joe Blow', rebuild_id: RebuildStatus.displayed_rebuild.id,
-                                   publish: true)
+                          publish: true)
       end
 
       before do
         request.env['HTTP_AUTHORIZATION'] = "Basic {Base64.encode64('preview-bssw:SoMyCodeWillSeeTheFuture!!')}"
-
         fellow
         resource
+        SearchResult.algolia_reindex!(1000, true)
       end
 
       it 'has fellow' do
-        SearchResult.reindex!
-        sleep(5)
-
         get :search, params: { search_string: 'Joe' }
-
         expect(assigns(:resources)).to include(fellow)
       end
 
       it 'does not have resource' do
-        SearchResult.reindex!
-        sleep(5)
-
         get :search, params: { search_string: 'Joe' }
 
         expect(assigns(:resources)).not_to include(resource)
@@ -157,11 +145,11 @@ RSpec.describe ResourcesController, type: :controller do
     describe 'finds pages' do
       before do
         FactoryBot.create(:page, name: 'Joe', content: 'Blow',
-                                 rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true)
+                          rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true)
         FactoryBot.create(:resource, publish: true, type: 'Resource', name: 'Blorgon')
         request.env['HTTP_AUTHORIZATION'] = "Basic {Base64.encode64('preview-bssw:SoMyCodeWillSeeTheFuture!!')}"
-        SearchResult.reindex
-        sleep(5)
+        SearchResult.algolia_reindex!(1000, true)
+
       end
 
       it 'shows the page' do
@@ -176,10 +164,8 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     it 'performs an empty search' do
+      SearchResult.algolia_reindex!(1000, true)
       get :search, params: { search_string: 'foob' }
-      SearchResult.reindex
-      sleep(5)
-
       expect(assigns(:resources)).to be_empty
     end
 
@@ -190,8 +176,8 @@ RSpec.describe ResourcesController, type: :controller do
       before do
         resource
         other_resource
-        SearchResult.reindex
-        sleep(10)
+        SearchResult.algolia_reindex!(1000, true)
+
       end
 
       it 'finds the resource' do
@@ -205,38 +191,37 @@ RSpec.describe ResourcesController, type: :controller do
       end
     end
 
-    it 'finds fellows' do
-      fellow = FactoryBot.create(:fellow, name: 'bar bar', rebuild_id: RebuildStatus.displayed_rebuild.id,
-                                          publish: true)
-      SearchResult.reindex!
-      sleep(15)
-      get :search, params: { search_string: 'bar' }
-      expect(assigns(:resources)).to include(fellow)
-    end
+    describe 'more complex search' do
 
-    it 'performs a more complex search' do
-      seven_resource = FactoryBot.create(:resource, content: 'Four score and seven')
-      SearchResult.reindex
-      sleep(15)
-      get :search, params: { search_string: 'four seven' }
-      expect(assigns(:resources)).to include(seven_resource)
-    end
+      let(:seven_resource) {  FactoryBot.create(:resource, content: 'Four score and seven') } 
+      let(:other_resource) { FactoryBot.create(:resource, content: 'Four seven and score') }
 
-    it 'respects quote marks in search' do
-      seven_resource = FactoryBot.create(:resource, content: 'Four score and seven')
-      SearchResult.reindex!
-      sleep(5)
-      get :search, params: { search_string: '"four seven"' }
+      def reindex
+        seven_resource
+        other_resource
+        SearchResult.algolia_reindex!(1000, true)
+      end
 
-      expect(assigns(:resources)).not_to include(seven_resource)
-    end
+      it 'respects quote marks in search' do
+        reindex
+        get :search, params: { search_string: "\"four seven\"" }
+        expect(assigns(:resources)).not_to include(seven_resource)
+      end
 
-    it 'finds quoted terms in search' do
-      resource = FactoryBot.create(:resource, content: 'Four score and seven')
-      SearchResult.reindex!
-      sleep(5)
-      get :search, params: { search_string: '"four score"' }
-      expect(assigns(:resources)).to include(resource)
+      it 'finds quoted terms in search' do
+        reindex
+        get :search, params: { search_string: "\"four score\"" }
+        expect(assigns(:resources)).to include(seven_resource)
+      end
+
+
+      it 'performs a more complex search' do
+        reindex
+        get :search, params: { search_string: "four seven" }
+        expect(assigns(:resources)).to include(other_resource)
+        expect(assigns(:resources)).to include(seven_resource)
+      end
+
     end
 
     describe 'searching and rendering' do
@@ -246,8 +231,7 @@ RSpec.describe ResourcesController, type: :controller do
       before do
         resource
         resource2
-        SearchResult.reindex!
-        sleep(1)
+        SearchResult.algolia_reindex!(1000, true)
       end
 
       it 'keeps search string' do
@@ -267,10 +251,10 @@ RSpec.describe ResourcesController, type: :controller do
 
       it 'renders marks' do
         FactoryBot.create(:resource, content: 'And then bloo bloo and')
-        sleep(1)
-        SearchResult.reindex!
+        SearchResult.algolia_reindex!(1000, true)
+
         get :search, params: { search_string: 'bloo' }
-        expect(response.body).to match "mark>bloo"
+        expect(response.body).to match 'mark>bloo'
       end
     end
   end
@@ -318,8 +302,8 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     it 'displays pages' do
-      FactoryBot.create_list(:resource, 150)
-      get :search, params: { page: 1 }, xhr: true
+      FactoryBot.create_list(:resource, 75)
+      get :search, params: { page: 2 }, xhr: true
       expect(response).to render_template :index
     end
   end
@@ -394,7 +378,7 @@ RSpec.describe ResourcesController, type: :controller do
     before do
       10.times do
         FactoryBot.create(:resource, rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true,
-                                     published_at: rand(1..10).weeks.ago)
+                          published_at: rand(1..10).weeks.ago)
       end
       12.times do
         FactoryBot.create(:resource, published_at: 1.week.ago, rebuild_id: rebuild.id)

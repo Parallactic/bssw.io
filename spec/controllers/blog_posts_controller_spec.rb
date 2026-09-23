@@ -94,8 +94,7 @@ RSpec.describe BlogPostsController, type: :controller do
       resource = FactoryBot.create(:resource, type: 'BlogPost')
 
       get :show, params: { id: resource.id }
-      puts resource.inspect
-      puts response.body
+
       expect(Nokogiri::HTML(response.body).css('.breadcrumbs').text).to match 'Blog'
     end
 

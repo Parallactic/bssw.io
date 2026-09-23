@@ -13,7 +13,10 @@ class SearchResult < MarkdownImport
   include AlgoliaSearch
 
   algoliasearch per_environment: true, sanitize: true, auto_index: false, if: :searchable? do
+    advancedSyntax true
     attributes :name, :content, :author_list_without_links, :published_at
+    disablePrefixOnAttributes %w[name author_list_without_links content]
+    disableTypoToleranceOnAttributes %w[name author_list_without_links content]
     searchableAttributes %w[name author_list_without_links content]
     attributesToSnippet %w[content]
     attributesToHighlight %w[name author_list_without_links]
@@ -21,9 +24,10 @@ class SearchResult < MarkdownImport
     highlightPostTag '</mark>'
     hitsPerPage 1000
     ranking ['typo', 'desc(is_fellow)', 'desc(published_at)']
-    advancedSyntax true
+
   end
 
+  
   # def searchable_content
   #   ActionView::Base.full_sanitizer.sanitize(content).gsub("\n", ' ').gsub(',', '')
   # end

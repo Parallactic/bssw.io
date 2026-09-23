@@ -23,8 +23,9 @@ RSpec.describe RebuildsController, type: :controller do
     end
 
     describe 'post import' do
-      it 'tracks'
-      it 'does some imports' do
+
+      it 'does some imports' do 
+        puts "importing ..."
         name = Rails.application.credentials[:import][:name]
         pw = Rails.application.credentials[:import][:password]
         @request.env['HTTP_AUTHORIZATION'] =
@@ -86,7 +87,7 @@ RSpec.describe RebuildsController, type: :controller do
                  a.website.try(
                    :match?, 'maherou'
                  )
-               end.first.affiliation).to match "ParaTools, Inc and St. John's University"
+               end.first.affiliation).to match "ParaTools, Inc; St. John's University, MN; HPE; Hyperion"
 
         expect(Category.displayed.first.slug).to eq 'better-planning'
         expect(BlogPost.displayed.last.topics).not_to be_empty

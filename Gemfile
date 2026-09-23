@@ -31,7 +31,7 @@ gem 'jquery-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', github: 'rails/jbuilder', branch: 'master'
-gem "json", "< 3"
+gem 'json', '< 3'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
@@ -143,7 +143,6 @@ gem 'faraday', '1.10.3'
 gem 'faraday-retry'
 gem 'human_time'
 
-
-gem "sentry-ruby"
-gem "sentry-rails"
 gem 'mutex_m'
+gem 'sentry-rails'
+gem 'sentry-ruby'

@@ -5,8 +5,7 @@ class EventsController < ApplicationController
   def index
     filter_events
     session[:path] = nil
-    @last_page = (@events.size.to_f / 25).ceil
-    @current_page = (params[:page] || 1).to_i
+    set_pages
     if params[:view] == 'all'
       @events = @events.paginate(page: 1, per_page: @events.size)
       @last_page = @current_page = 1
@@ -23,6 +22,10 @@ class EventsController < ApplicationController
 
   private
 
+  def set_pages
+    @last_page = (@events.size.to_f / 25).ceil
+    @current_page = (params[:page] || 1).to_i
+  end
   # def set_cache_key
   #   last_modified_str = Event.order(:updated_at).last.updated_at.utc.to_fs(:number)
   #   @cache_key = "#{params[:past]}/all_events/#{last_modified_str}"

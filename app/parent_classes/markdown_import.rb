@@ -34,18 +34,15 @@ class MarkdownImport < GithubImport
   def update_associates(array, _rebuild)
     array.each_cons(2) do |string, names|
       method = "add_#{string.strip}".downcase.tr(' ', '_')
-
-      if method == 'add_track'
+      new_names = CSV.parse(names.gsub(/,\s+"/, ',"'), liberal_parsing: true).first
+      case method
+      when 'add_track'
         try(:add_track, names)
+      when 'add_topics'
+        save if new_record?
+        try(:add_topics, new_names)
       else
-        names = CSV.parse(names.gsub(/,\s+"/, ',"'), liberal_parsing: true).first
-
-        if method == 'add_topics'
-          save if new_record?
-          try(:add_topics, names)
-        elsif respond_to?(method, true)
-          send(method, names.join)
-        end
+        send(method, new_names.join) if respond_to?(method, true)
       end
     end
   end

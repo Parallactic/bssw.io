@@ -35,13 +35,13 @@ class ResourcesController < ApplicationController
     end
   end
 
-  def search
-    search_string = params[:search_string]
-    page = params[:page] ? params[:page].to_i : 1
 
+  def search
+    search_string = params[:search_string].to_s
+    page = params[:page] ? params[:page].to_i : 1
     @search = search_string
-    @resources = []
-    @resources += SearchResult.algolia_search(search_string, hitsPerPage: 1000, page: 1)
+    SearchResult.algolia_reindex!(1000, true)
+    @resources = SearchResult.search(@search)
     @total = @resources.size
     @resources = @resources.paginate(page:, per_page: (params[:view] == 'all' ? @total : 25))
     render 'index'
@@ -91,10 +91,17 @@ class ResourcesController < ApplicationController
   end
 
   def set_associations
-    @category = Category.displayed.find(params[:category]) if params[:category]
-    @topic = Topic.displayed.find(params[:topic]) if params[:topic]
-    @author = Author.displayed.find(params[:author]) if params[:author]
-    @track = Track.displayed.find(params[:track]) if params[:track]
+    %w[category topic author track].each do |kind|
+      if params[kind.to_sym]
+        instance_variable_set("@#{kind}",
+                              kind.classify.constantize.displayed.find(params[kind.to_sym]))
+      end
+    end
+
+    # @category = Category.displayed.find(params[:category]) if params[:category]
+    # @topic = Topic.displayed.find(params[:topic]) if params[:topic]
+    # @author = Author.displayed.find(params[:author]) if params[:author]
+    # @track = Track.displayed.find(params[:track]) if params[:track]
 
     session[:path] = if @topic
                        { 'slug' => @topic.slug, 'name' => @topic.name, 'method' => 'topic' }
