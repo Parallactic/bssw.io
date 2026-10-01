@@ -6,11 +6,8 @@ class BlogPostsController < ApplicationController
     set_variables
     session[:path] = nil
     @posts = scoped_resources.blog
-    if @author
-      @posts = @posts.with_author(@author)
-    elsif @track
-      @posts = @posts.with_track(@track.id)
-    end
+    @posts = @posts.with_author(@author) if @author
+    @posts = @posts.with_track(@track.id) if @track
     @total = @posts.size
     @posts = @posts.paginate(page: (@all ? 1 : params[:page]), per_page: (@all ? @total : 25))
     render(@track.nil? ? :index : :track)

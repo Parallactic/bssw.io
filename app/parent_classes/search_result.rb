@@ -24,10 +24,8 @@ class SearchResult < MarkdownImport
     highlightPostTag '</mark>'
     hitsPerPage 1000
     ranking ['typo', 'desc(is_fellow)', 'desc(published_at)']
-
   end
 
-  
   # def searchable_content
   #   ActionView::Base.full_sanitizer.sanitize(content).gsub("\n", ' ').gsub(',', '')
   # end

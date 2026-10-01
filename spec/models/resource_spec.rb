@@ -59,25 +59,20 @@ RSS update: 01-01-18
     expect(res.content).to match 'caption'
   end
 
-
-
   describe 'searches' do
-
     it 'respects quote marks in search (neg)' do
       SearchResult.algolia_reindex!(1000, true)
-      expect(SearchResult.algolia_search("\"more bar\"")).not_to include(res)
+      expect(SearchResult.algolia_search('"more bar"')).not_to include(res)
     end
 
     it 'respects quote marks in search (pos)' do
       SearchResult.algolia_reindex!(1000, true)
-      expect(SearchResult.algolia_search("\"more txt\"")).to include(res)
+      expect(SearchResult.algolia_search('"more txt"')).to include(res)
     end
 
     it 'searches' do
       SearchResult.algolia_reindex!(1000, true)
-      expect(SearchResult.algolia_search("more")).to include(res)
+      expect(SearchResult.algolia_search('more')).to include(res)
     end
   end
 end
-
-

@@ -10,14 +10,14 @@ module ApplicationHelper
 
   def search_result_url(result)
     case result
-    when SiteItem
-      site_item_url(result)
     when Author
       site_items_url(author: result.slug)
     when Fellow
       fellow_url(result)
     when Page
       page_url(result)
+    when SiteItem
+      site_item_url(result)
     end
   end
 
@@ -34,16 +34,11 @@ module ApplicationHelper
   end
 
   def formatted_additionals(event)
-    used_dates = []
     event.special_additional_dates.map do |date|
       additional = date.additional_date
-      if used_dates.include?(additional)
-        ''
-      else
-        used_dates << additional
         content_tag('strong', additional.label) +
           additional.additional_date_values.map { |adv| date_range(adv.date, nil) }.join('; ')
-      end
+
     end
   end
 

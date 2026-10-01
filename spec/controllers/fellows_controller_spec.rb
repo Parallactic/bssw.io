@@ -15,7 +15,7 @@ RSpec.describe FellowsController, type: :controller do
 
   describe 'get show' do
     it 'renders the show template' do
-      fellow = FactoryBot.create(:fellow, rebuild_id: rebuild.id, honorable_mention: nil)
+      fellow = FactoryBot.create(:fellow, rebuild_id: rebuild.id, honorable_mention: nil, image_path: '/var/www/image.jpg')
       get :show, params: { id: fellow.slug }
 
       expect(response).to render_template 'show'

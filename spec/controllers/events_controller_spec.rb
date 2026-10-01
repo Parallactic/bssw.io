@@ -32,17 +32,26 @@ RSpec.describe EventsController, type: :controller do
     describe 'past events' do
       before do
         FactoryBot.create(:page, name: 'Past Events', rebuild_id: rebuild.id)
-        80.times do
+        30.times do
           event = FactoryBot.create(:event, publish: true, rebuild_id: rebuild.id)
           doc = Nokogiri::XML('<ul><li>Dates: January 1 2019 - January 10 2019</li></ul>')
           event.send(:update_dates, doc.css("li:contains('Dates:')"))
+          ad = FactoryBot.create(:additional_date, label: "Party Date", event_id: event.id)
+
+          event.reload
+
           10.times do
             event.additional_dates.first.additional_date_values << FactoryBot.create(
               :additional_date_value,
               date: 1.week.ago,
               additional_date: event.additional_dates.first
             )
+            
           end
+
+          e =   FactoryBot.create(:event, publish: true, rebuild_id: rebuild.id)
+
+          e.additional_dates.each{ |e| e.destroy if e.label == 'End Date' }
         end
       end
 
@@ -89,9 +98,20 @@ RSpec.describe EventsController, type: :controller do
       AdditionalDate.make_date('Submission Date', 1.week.from_now.to_s, event)
       AdditionalDate.make_date('Party Date', 2.weeks.from_now.to_s, event)
       get :show, params: { id: event }
-      expect(assigns(:resource)).to eq event
+      expect(response.body).to match('Party')
     end
 
+
+    it 'shows an event without end date' do
+      event = FactoryBot.create(:event, publish: true, rebuild_id: rebuild.id)
+      event.additional_dates.select{ |d| d.label == 'End Date' }.each(&:destroy)
+      AdditionalDate.make_date('Submission Date', 1.week.from_now.to_s, event)
+      AdditionalDate.make_date('Party Date', 2.weeks.from_now.to_s, event)
+      get :show, params: { id: event }
+      expect(response.body).to match('Party')
+    end
+
+    
     it 'shows an event with a different date range' do
       event = FactoryBot.create(:event,
                                 additional_dates: [
@@ -115,7 +135,7 @@ RSpec.describe EventsController, type: :controller do
                                 ],
                                 rebuild_id: rebuild.id)
       get :show, params: { id: event }
-      expect(assigns(:event)).not_to be_nil
+      expect(response.body).to include('Other')
     end
   end
 end

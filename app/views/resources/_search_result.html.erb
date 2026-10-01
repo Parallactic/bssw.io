@@ -64,10 +64,12 @@
 					Fellow
 				    <% elsif result.is_a?(Author) %>
 					Author
-				    <% elsif result.is_a?(SiteItem) %>
-					Resource
 				    <% elsif result.is_a?(Page) %>
 					Page
+
+
+				    <% elsif result.is_a?(SiteItem) %>
+					Resource
 				    <% end %>
 				</p>
 				<% if result.published_at %>

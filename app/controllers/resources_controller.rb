@@ -35,7 +35,6 @@ class ResourcesController < ApplicationController
     end
   end
 
-
   def search
     search_string = params[:search_string].to_s
     page = params[:page] ? params[:page].to_i : 1
@@ -97,11 +96,6 @@ class ResourcesController < ApplicationController
                               kind.classify.constantize.displayed.find(params[kind.to_sym]))
       end
     end
-
-    # @category = Category.displayed.find(params[:category]) if params[:category]
-    # @topic = Topic.displayed.find(params[:topic]) if params[:topic]
-    # @author = Author.displayed.find(params[:author]) if params[:author]
-    # @track = Track.displayed.find(params[:track]) if params[:track]
 
     session[:path] = if @topic
                        { 'slug' => @topic.slug, 'name' => @topic.name, 'method' => 'topic' }
