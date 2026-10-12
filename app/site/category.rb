@@ -4,7 +4,7 @@
 class Category < MarkdownImport
   #  has_and_belongs_to_many :resources, -> { distinct }
   has_many :topics, -> { order(order_num: 'asc') }
-
+  belongs_to :rebuild
   default_scope -> { order(order_num: 'asc') }
   self.table_name = 'categories'
 

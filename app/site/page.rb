@@ -2,8 +2,9 @@
 
 # plain content
 class Page < Resource
+  belongs_to :rebuild
   scope :displayed, lambda {
-    where("#{table_name}.rebuild_id = ?", RebuildStatus.first.display_rebuild_id)
+    where("#{table_name}.rebuild_id = ?", RebuildStatus.display_rebuild_id)
   }
 
   validates_presence_of :path, :name
@@ -37,7 +38,7 @@ class Page < Resource
 
   def self.names_to_pages(names)
     names.map do |name|
-      find_by(name:, rebuild_id: RebuildStatus.first.display_rebuild_id)
+      find_by(name:, rebuild_id: RebuildStatus.display_rebuild_id)
     end.delete_if(&:!)
   end
 

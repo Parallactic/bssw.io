@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe BlogPost, type: :model do
   let(:content) do
     "# Foo \n#### Publication date: Jan 1, 2017
-\n#### Contributed by [Jane Does](https://github.com)\n \n bar
+\n#### Contributed by [Jane Doe](https://github.com)\n \n bar
 \n
 \n
 **Hero Image**

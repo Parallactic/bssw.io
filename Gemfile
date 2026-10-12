@@ -43,8 +43,11 @@ group :development do
 end
 
 gem 'bootstrap-sass'
+gem 'msgpack', '>= 1.7.0'
 
 group :development, :test do
+  gem 'fuubar'
+gem 'benchmark'
   gem 'brakeman'
   #  gem 'bullet'
   gem 'factory_bot_rails'

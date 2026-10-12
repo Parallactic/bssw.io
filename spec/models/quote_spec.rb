@@ -5,6 +5,13 @@ require 'rails_helper'
 RSpec.describe Quote, type: :model do
   let(:content) { "- Foo --bar \n- baz --ban" }
 
+  before(:all) do
+    r = Rebuild.create
+    rs = RebuildStatus.create
+    RebuildStatus.first.update(in_progress_rebuild_id: r.id)
+
+  end
+  
   it 'matches content text' do
     described_class.import(content)
     expect(described_class.find_by(text: 'Foo ').author).to match 'bar'
@@ -12,6 +19,8 @@ RSpec.describe Quote, type: :model do
 
   it 'matches content author' do
     described_class.import(content)
+
     expect(described_class.find_by(author: 'ban').text).to match 'baz'
   end
+  
 end

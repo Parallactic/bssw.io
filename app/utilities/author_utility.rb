@@ -3,7 +3,10 @@
 # utility methods for processing authors
 class AuthorUtility
   def self.all_custom_info(rebuild_id, file_path)
-    Author.where(rebuild_id:).find_each(&:update_from_github)
+    Author.where(rebuild_id:)
+          .where('website LIKE ?', '%github%')
+          .where("avatar_url IS NULL OR avatar_url = '' or affiliation IS NULL OR affiliation = ''")
+          .find_each(&:update_from_github)
     custom_staff_info(file_path, rebuild_id)
     custom_author_info(file_path, rebuild_id)
   end
@@ -51,7 +54,7 @@ class AuthorUtility
   def self.custom_author_info(file_path, rebuild_id)
     Rails.logger.debug 'custom author info'
     contrib_file = nil
-    GithubImporter.tar_extract(file_path).each do |file|
+    GithubImporter.tar_extract(file_path) do |file|
       contrib_file = file.read if file.header.name.match('Contributors.md')
     end
     AuthorUtility.process_overrides(GithubImporter.parse_html_from(contrib_file), rebuild_id)
@@ -60,7 +63,7 @@ class AuthorUtility
 
   def self.custom_staff_info(file_path, rebuild_id)
     contrib_file = nil
-    GithubImporter.tar_extract(file_path).each do |file|
+    GithubImporter.tar_extract(file_path) do |file|
       contrib_file = file.read if file.header.name.match('About.md')
     end
     Page.where(rebuild_id:, base_path: 'About.md').first.update_from_content(
@@ -69,30 +72,34 @@ class AuthorUtility
   end
 
   def self.make_from_data(node, rebuild)
-    authors = []
-    node.to_html.gsub('Contributed by', '').gsub(' and ', ',').gsub(': ', '').strip.split(',').each do |text|
-      authors << from_node_text(text, rebuild)
-    end
-    authors.delete_if(&:nil?)
+    node.to_html
+        .gsub('Contributed by', '')
+        .gsub(' and ', ',')
+        .gsub(': ', '')
+        .strip
+        .split(',')
+        .map { |text| from_node_text(text, rebuild) }
   end
 
   def self.from_node_text(text, rebuild)
+    @author_cache ||= {}
+    key = [rebuild.respond_to?(:id) ? rebuild.id : rebuild, text.strip]
+    return @author_cache[key] if @author_cache.key?(key) # also caches nil results
+
     node_data = Nokogiri::HTML.parse(text)
-    auth = if node_data.css('a').empty?
-             author_from_text(node_data.text,
-                              rebuild)
+    link = node_data.at_css('a')
+    auth = if link
+             author_from_website(link, rebuild)
            else
-             author_from_website(
-               node_data.css('a').first, rebuild
-             )
+             author_from_text(node_data.text, rebuild)
            end
-    # if auth.nil?
-    #   puts "no author from #{node_data.text}"
-    # else
-    #   puts "#{auth.display_name} #{auth.website} #{auth.rebuild_id} #{auth.id}"
-    # end
-    [auth, node_data.text]
+
+    @author_cache[key] = [auth, node_data.text]
   end
+
+  # def self.reset_cache!
+  #   @author_cache = nil
+  # end
 
   def self.author_from_text(text, rebuild)
     text = text.gsub("\:", '')

@@ -6,10 +6,12 @@ class MarkdownImport < GithubImport
   self.abstract_class = true
 
   scope :displayed, lambda {
-    where("#{table_name}.rebuild_id = ?", RebuildStatus.first.display_rebuild_id)
+    where("#{table_name}.rebuild_id = ?", RebuildStatus.display_rebuild_id)
   }
 
   def update_links_and_images
+    return if content.blank?
+
     doc = Nokogiri::HTML.parse(content, nil, 'UTF-8')
 
     MarkdownUtility.update_links(doc)
@@ -17,7 +19,8 @@ class MarkdownImport < GithubImport
     MarkdownUtility.update_images(doc)
 
     html = doc.to_html.to_s
-
+    print '&'
+#    content = html
     update(content: html) unless content == html
   end
 
@@ -113,13 +116,14 @@ class MarkdownImport < GithubImport
   end
 
   def add_topics(names)
-    names.each do |top_name|
+    found = names.filter_map do |top_name|
       next if top_name.blank?
 
-      topic = Topic.from_name(top_name.strip.gsub(/^"/, '').gsub(/"$/, ''),
-                              rebuild_id)
-      topics << topic if topic
+      Topic.from_name(top_name.strip.delete_prefix('"').delete_suffix('"'), rebuild_id)
     end
+
+    new_topics = found.uniq - topics.to_a
+    topics << new_topics if new_topics.any?
   end
 
   def add_track(names)

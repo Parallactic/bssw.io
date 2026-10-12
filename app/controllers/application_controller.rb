@@ -8,12 +8,13 @@ class ApplicationController < ActionController::Base
   # With +respond_to do |format|+, "406 Not Acceptable" is sent on invalid format.
   # With a regular render (implicit or explicit), this exception is raised instead.
   # Log it to Exception Logger, but show users a 404 page instead of error 500.
+
+  rescue_from StandardError, with: :send_error
   rescue_from(ActionView::MissingTemplate) do |e|
     not_found(e)
   end
 
-  rescue_from StandardError, with: :send_error
-
+  
   def page_item
     @resource || @page || @event || @post
   end

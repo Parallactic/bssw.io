@@ -20,6 +20,7 @@ Announcement:
   end
 
   before do
+    described_class.all.each(&:delete)
     described_class.import(content, FactoryBot.create(:rebuild).id)
   end
 

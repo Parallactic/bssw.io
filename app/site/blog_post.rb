@@ -3,7 +3,7 @@
 # a blog post
 class BlogPost < SiteItem
   default_scope -> { order(published_at: 'desc') }
-
+  belongs_to :rebuild
   extend FriendlyId
   friendly_id :slug_candidates, use: %i[finders slugged scoped], scope: :rebuild_id
 

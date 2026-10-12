@@ -4,7 +4,7 @@
 # Author
 class Staff < MarkdownImport
   scope :displayed, lambda {
-    where("#{table_name}.rebuild_id = ?", RebuildStatus.first.display_rebuild_id)
+    where("#{table_name}.rebuild_id = ?", RebuildStatus.display_rebuild_id)
   }
 
   def self.make_from_data(node, val, rebuild)

@@ -2,8 +2,9 @@
 
 # bios etc for fellows
 class Fellow < SearchResult
+  belongs_to :rebuild
   scope :displayed, lambda {
-    where("#{table_name}.rebuild_id = ?", RebuildStatus.first.display_rebuild_id)
+    where("#{table_name}.rebuild_id = ?", RebuildStatus.display_rebuild_id)
   }
 
   self.table_name = 'search_results'

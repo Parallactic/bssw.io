@@ -3,7 +3,7 @@
 # contributor of a resource
 class Author < SearchResult
   self.table_name = 'search_results'
-
+  belongs_to :rebuild
   include ActionView::Helpers::TextHelper
 
   has_many :contributions, autosave: false, join_table: 'contributions'
@@ -14,7 +14,7 @@ class Author < SearchResult
   friendly_id :slug_candidates, use: %i[finders slugged scoped], scope: %i[rebuild_id type]
 
   scope :displayed, lambda {
-    where("#{table_name}.rebuild_id = ?", RebuildStatus.first.display_rebuild_id)
+    where("#{table_name}.rebuild_id = ?", RebuildStatus.display_rebuild_id)
   }
 
   def self.display_names
@@ -64,10 +64,14 @@ class Author < SearchResult
     "#{event_count} #{'event'.pluralize(event_count)}"
   end
 
+  # def self.client
+  #   @client ||= GithubImporter.github
+  # end
+
   def update_from_github
     return unless website&.match('github')
-    return unless affiliation.blank? || avatar_url.blank?
-
+    # return unless affiliation.blank? || avatar_url.blank?
+ 
     client = GithubImporter.github
     client.login
     begin
@@ -77,9 +81,12 @@ class Author < SearchResult
     end
   end
 
-  def update_info(hash)
-    update(avatar_url: hash.avatar_url.gsub(/\?v=[[:digit:]]/, ''))
-    update(affiliation: hash.company) if affiliation.blank?
+  def update_info(user)
+    print "#{user.inspect}%"
+    url = user.avatar_url
+    self.avatar_url = url.gsub(/\?v=\d+/, '') if url
+    self.affiliation = user.company if affiliation.blank?
+    save if changed?
   end
 
   def do_overrides(alpha_name, display_name)
@@ -103,13 +110,5 @@ class Author < SearchResult
     end
   end
 
-  def cleanup
-    if SiteItem.published.displayed.with_author(self).empty?
-    #      delete
-    else
-      blog_listing
-      resource_listing
-      event_listing
-    end
-  end
+
 end

@@ -36,9 +36,8 @@ module ApplicationHelper
   def formatted_additionals(event)
     event.special_additional_dates.map do |date|
       additional = date.additional_date
-        content_tag('strong', additional.label) +
-          additional.additional_date_values.map { |adv| date_range(adv.date, nil) }.join('; ')
-
+      content_tag('strong', additional.label) +
+        additional.additional_date_values.map { |adv| date_range(adv.date, nil) }.join('; ')
     end
   end
 

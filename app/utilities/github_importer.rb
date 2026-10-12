@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'net/http'
+
 # utility methods for the import
 class GithubImporter < ApplicationRecord
   self.abstract_class = true
@@ -30,22 +32,43 @@ class GithubImporter < ApplicationRecord
   end
 
   def self.save_content(branch, rebuild)
+    Rails.logger.debug 'getting'
     rebuild.update(commit_hash: github.commit(Rails.application.credentials[:github][:repo], branch)['sha'])
-    file_path = Rails.root.join("/tmp/repo-#{branch}-#{rebuild.commit_hash}-#{Time.now.to_i}.tar.gz")
-    agent.get(github.archive_link(Rails.application.credentials[:github][:repo],
-                                  ref: branch)).save(file_path)
+    file_path = Rails.root.join("tmp/repo-#{branch}-#{rebuild.commit_hash}-#{Time.now.to_i}.tar.gz").to_s
+    url = github.archive_link(Rails.application.credentials[:github][:repo])
+
+    uri = URI(url)
+    Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https',
+                                        open_timeout: 30, read_timeout: 60) do |http|
+      puts uri
+      http.request_get(uri) do |res|
+        print "Status: #{res.code}, size: #{res['content-length'].to_i / 1_000_000} MB"
+        total = 0
+        File.open(file_path, 'wb') do |f|
+          res.read_body do |chunk|
+            f.write(chunk)
+            total += chunk.size
+            print "\r#{total / 1_000_000} MB"
+          end
+        end
+      end
+    end
+    Rails.logger.debug 'got'
+    file_path
   end
 
-  def self.agent
-    agent = Mechanize.new
-    agent.pluggable_parser.default = Mechanize::Download
-    agent
-  end
+  # def self.agent
+  #   agent = Mechanize.new
+  #   agent.pluggable_parser.default = Mechanize::Download
+  #   agent
+  # end
 
-  def self.tar_extract(file_path)
-    tar = Gem::Package::TarReader.new(Zlib::GzipReader.open(file_path))
-    tar.rewind
-    tar
+  def self.tar_extract(file_path, &block)
+    Zlib::GzipReader.open(file_path) do |gz|
+      Gem::Package::TarReader.new(gz) do |tar|
+        tar.each(&block)
+      end
+    end
   end
 
   def self.included_file(file)
@@ -56,11 +79,12 @@ class GithubImporter < ApplicationRecord
   def self.populate(branch)
     rebuild = RebuildStatus.in_progress_rebuild
     file_path = save_content(branch, rebuild)
-    tar_extract(file_path).each do |file|
+    puts "extracting from #{file_path}"
+    tar_extract(file_path) do |file|
+      print '.'
       rebuild.process_file(file) if included_file(file)
-    rescue StandardError
-      # fail silently?
     end
+    puts "completed!! #{rebuild.id}"
     RebuildStatus.complete(rebuild, file_path)
   end
 end

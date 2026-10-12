@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'benchmark'
 
 RSpec.describe ResourcesController, type: :controller do
   render_views
@@ -100,17 +101,30 @@ RSpec.describe ResourcesController, type: :controller do
       credentials = ActionController::HttpAuthentication::Basic.encode_credentials name, pw
       request.env['HTTP_AUTHORIZATION'] = credentials
     end
+def timed(label)
+  t = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+  result = yield
+  puts "#{label}: #{(Process.clock_gettime(Process::CLOCK_MONOTONIC) - t).round(2)}s"
+  result
+end
 
-    it 'searches' do
+it 'searches' do
       resource = FactoryBot.create(:resource, publish: true, type: 'Resource',
                                               rebuild_id: RebuildStatus.displayed_rebuild.id)
+  
+ timed('create resources') do
       FactoryBot.create(:resource, publish: true, type: 'Resource', rebuild_id: RebuildStatus.displayed_rebuild.id)
       FactoryBot.create(:author, publish: true, first_name: "#{resource.name} auth",
                                  rebuild_id: RebuildStatus.displayed_rebuild.id)
       FactoryBot.create(:page, publish: true, name: "#{resource.name} page",
-                               rebuild_id: RebuildStatus.displayed_rebuild.id)
-      SearchResult.algolia_reindex!(1000, true)
-      get :search, params: { search_string: resource.name }
+                        rebuild_id: RebuildStatus.displayed_rebuild.id)
+  end
+     timed('reindex') do
+       SearchResult.algolia_reindex!(1000, true)
+     end
+     timed('request') do
+       get :search, params: { search_string: resource.name }
+     end
       expect(assigns(:resources)).to include(resource)
     end
 
@@ -143,7 +157,7 @@ RSpec.describe ResourcesController, type: :controller do
 
     describe 'finds pages' do
       before do
-        page = FactoryBot.create(:page, name: 'Joe', content: 'Blow',
+        FactoryBot.create(:page, name: 'Joe', content: 'Blow',
                                  rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true)
 
         FactoryBot.create(:resource, publish: true, type: 'Resource', name: 'Blorgon')
@@ -320,15 +334,13 @@ RSpec.describe ResourcesController, type: :controller do
     end
 
     it 'shows tracked resource' do
-      
       get :index, params: { track: track.slug }
       expect(assigns(:resources)).to include(tracked_resource)
     end
 
     it 'does not show untopiced resource' do
+      untopiced_resource = FactoryBot.create(:resource, rebuild_id: rebuild.id, publish: true)
       get :index, params: { topic: topic.slug }
-
-      untopiced_resource = FactoryBot.create(:resource, rebuild_id: rebuild.id)
       expect(assigns(:resources)).not_to include(untopiced_resource)
     end
 

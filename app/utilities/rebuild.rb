@@ -3,8 +3,9 @@
 # created each time we run the GH import
 class Rebuild < ApplicationRecord
   default_scope { order(created_at: 'desc') }
-
+  has_many :site_items
   after_create :set_location
+  attr_accessor :processed_files
 
   def set_location
     return if ip.blank?
@@ -18,17 +19,20 @@ class Rebuild < ApplicationRecord
     !Rebuild.where('started_at > ?', 10.minutes.ago).to_a.select { |rebuild| rebuild.ended_at.blank? }.empty?
   end
 
+  SKIP_PATHS = %w[utils/ test/ docs/].freeze
+
   def process_file(file)
     full_name = file.full_name
-    begin
-      return if full_name.match('utils/') || full_name.match('test/') || full_name.match('docs/')
+    return if SKIP_PATHS.any? { |s| full_name.include?(s) }
 
+    ActiveRecord::Base.transaction(requires_new: true) do
       resource = process_path(full_name, file.read)
-      update(files_processed: "#{files_processed}<li>#{resource.try(:path)}</li>")
-      resource.try(:save)
+      resource.try(:save) if resource.try(:changed?)
+      (@processed_files ||= []) << resource.try(:path)
+      print '*'
+    end
     rescue StandardError => e
       record_errors(File.basename(full_name), e)
-    end
   end
 
   def record_errors(file_name, error)
@@ -55,20 +59,41 @@ class Rebuild < ApplicationRecord
     File.delete(file_path)
   end
 
+
+
   def clear_old
-    rebuild_ids = Rebuild.first(5).to_a.map(&:id).delete_if(&:nil?) + [id]
-    classes = [Community, Category, Topic, Announcement, Author, Quote, SearchResult, FeaturedPost, Fellow, Page]
-    everything = Rebuild.where(['id NOT IN (?)', rebuild_ids])
-    classes.each do |klass|
-      everything += klass.where(['rebuild_id NOT IN (?)', rebuild_ids])
-      everything += klass.where(rebuild_id: nil)
+    keep_ids = (Rebuild.order(created_at: :desc).limit(5).pluck(:id) + [id]).uniq
+    stale = ->(klass) { klass.where.not(rebuild_id: keep_ids).or(klass.where(rebuild_id: nil)) }
+    conn  = ActiveRecord::Base.connection
+    
+    transaction do
+      stale_items  = stale.(SearchResult).select(:id)   # covers Author, Fellow, Event, etc.
+      stale_topics = stale.(Topic).select(:id)
+      stale_events = stale.(Event).select(:id)
+      stale_dates  = AdditionalDate.where(event_id: stale_events).select(:id)
+
+      # 1. Grandchildren, then children, then join rows (parents still exist)
+      AdditionalDateValue.where(additional_date_id: stale_dates).delete_all
+      AdditionalDate.where(event_id: stale_events).delete_all
+      FellowLink.where(fellow_id: stale_items).delete_all
+      Contribution.where(site_item_id: stale_items)
+                  .or(Contribution.where(author_id: stale_items))
+                  .delete_all
+      %w[site_items_topics site_items_tracks].each do |table|
+        conn.execute("DELETE FROM #{table} WHERE site_item_id IN (#{stale_items.to_sql})")
+      end
+      conn.execute("DELETE FROM site_items_topics WHERE topic_id IN (#{stale_topics.to_sql})")
+
+      # 2. Parents, one DELETE per table
+      [SearchResult, Topic, Community, Category, Announcement,
+       Quote, FeaturedPost, Page].each { |klass| stale.(klass).delete_all }
+      Rebuild.where.not(id: keep_ids).delete_all
     end
 
-    everything.each(&:destroy)
     Contribution.clean
-    Author.all.find_each(&:cleanup)
   end
-
+  
+  
   def self.file_structure # rubocop:disable Metrics/MethodLength
     {
       'CuratedContent/WhatIs' => WhatIs,
@@ -89,11 +114,12 @@ class Rebuild < ApplicationRecord
   end
 
   def process_path(path, content)
-    if path.match('Quote')
+    case path
+    when /Quote/
       Quote.import(content)
-    elsif path.match('Announcements')
+    when /Announcements/
       Announcement.import(content, id)
-    elsif path.match('BlogTracks')
+    when /BlogTracks/
       Track.import(content, id)
     else
       process_resource(path, content)
@@ -102,22 +128,49 @@ class Rebuild < ApplicationRecord
 
   def process_resource(path, content)
     resource = find_or_create_resource(path)
+    print '+'
     resource.parse_and_update(content)
     resource
   end
 
   def find_or_create_resource(path)
-    res = Page
-    Rebuild.file_structure.each do |expression, class_name|
-      if path.match(Regexp.new(expression))
-        res = class_name
-        break
-      end
-    end
-    item = res.find_or_create_by(path: GithubImporter.normalized_path(path), rebuild_id: id)
+    normalized = GithubImporter.normalized_path(path)
+    base       = File.basename(path)
+    res        = resource_class_for(path)
 
-    item.update(base_path: File.basename(path))
+    @resource_cache ||= {}
+    @resource_cache[[res, normalized]] ||= begin
+                                             item = res.find_or_create_by(path: normalized, rebuild_id: id) do |r|
+                                               r.base_path = base # saved in the same INSERT
+                                             end
+                                             item.update(base_path: base) unless item.base_path == base # only for pre-existing rows that differ
+                                             item
+                                             
+                                           end
 
-    item
   end
+
+  def resource_class_for(path)
+    matcher = self.class.file_structure_matchers.find { |regex, _| regex.match?(path) }
+    matcher ? matcher.last : Page
+  end
+
+  def self.file_structure_matchers
+    @file_structure_matchers ||= file_structure.map { |expr, klass| [Regexp.new(expr), klass] }
+  end
+
+  # def find_or_create_resource(path)
+  #   res = Page
+  #   Rebuild.file_structure.each do |expression, class_name|
+  #     if path.match(Regexp.new(expression))
+  #       res = class_name
+  #       break
+  #     end
+  #   end
+  #   item = res.find_or_create_by(path: GithubImporter.normalized_path(path), rebuild_id: id)
+
+  #   item.update(base_path: File.basename(path))
+
+  #   item
+  # end
 end

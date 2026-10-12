@@ -3,7 +3,7 @@
 # a bss community
 class Community < MarkdownImport
   validates_presence_of :path, :name
-
+  belongs_to :rebuild
   scope :published, -> { where(publish: true) }
   default_scope { published }
 

@@ -3,7 +3,7 @@
 # for the homepage
 class FeaturedPost < ApplicationRecord
   def self.displayed
-    all.to_a.select { |fp| fp.rebuild_id == RebuildStatus.first.display_rebuild_id }
+    all.to_a.select { |fp| fp.rebuild_id == RebuildStatus.display_rebuild_id }
   end
 
   def image?

@@ -3,7 +3,7 @@
 # resources, events, and blog posts
 class SiteItem < SearchResult
   require 'csv'
-
+  belongs_to :rebuild
   has_and_belongs_to_many :topics, -> { distinct }, join_table: 'site_items_topics', dependent: :destroy
   has_and_belongs_to_many :tracks, -> { distinct }, join_table: 'site_items_tracks'
   before_destroy { topics.clear }

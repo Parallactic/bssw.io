@@ -5,11 +5,18 @@ plugins:
   - rubocop-rspec_rails
   - rubocop-factory_bot
 
+Style/Documentation:
+  Enabled: false
+
 AllCops:
   Exclude:
     - 'db/schema.rb'
     - 'db/migrate/*'
     - 'bin/*'
+
+Metrics/MethodLength:
+  Max: 15  # Methods longer than 15 lines get a warning
+
 
 RSpec/MultipleMemoizedHelpers:
   Enabled: false

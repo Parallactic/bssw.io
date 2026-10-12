@@ -14,6 +14,7 @@ class RebuildsController < ApplicationController
   end
 
   def make_displayed
+    puts "id is #{params[:id]}"
     rs = RebuildStatus.first
     rs.update(display_rebuild_id: params[:id])
     flash[:notice] = 'Reverted!'
@@ -21,11 +22,15 @@ class RebuildsController < ApplicationController
   end
 
   def import
+    puts '...'
     branch
-    Rails.logger.debug "branch is #{@branch}"
+    puts '.....'
     rebuild = Rebuild.create(started_at: Time.zone.now, ip: request.ip)
+    puts '........'
     RebuildStatus.start(rebuild, @branch)
+    puts '...............'
     GithubImporter.populate(@branch)
+    puts '..................'
     flash[:notice] = 'Import completed!'
     redirect_to controller: 'rebuilds', action: 'index', rebuilt: true
   end
@@ -33,9 +38,7 @@ class RebuildsController < ApplicationController
   private
 
   def branch
-    @branch = if Rails.env.preview? ||
-                 Rails.env.test? ||
-                 Rails.env.development?
+    @branch = if Rails.env.preview?
                 'preview'
               else
                 'main'
@@ -45,6 +48,7 @@ class RebuildsController < ApplicationController
   def check_rebuilds
     return unless Rebuild.in_progress
 
+    puts 'another rebuild is in progress'
     flash[:error] =
       'Another rebuild (started less than 10 minutes ago) is in progress.
         Please wait for this rebuild to complete, or wait 10 minutes to override.'

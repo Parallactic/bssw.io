@@ -4,9 +4,9 @@
 class Topic < GithubImport
   #  default_scope -> { order(order_num: 'asc') }
   require 'csv'
-
+  belongs_to :rebuild
   scope :displayed, lambda {
-    where("#{table_name}.rebuild_id = ?", RebuildStatus.first.display_rebuild_id)
+    where("#{table_name}.rebuild_id = ?", RebuildStatus.display_rebuild_id)
   }
 
   self.table_name = 'topics'
@@ -43,11 +43,11 @@ class Topic < GithubImport
 
     name = top_name.strip
 
-    top = find_or_create_by(
-      name:,
-      rebuild_id:
-    )
-    top.slug = name.parameterize
-    top
+    @cache = {} unless @cache_rebuild_id == rebuild_id
+    @cache_rebuild_id = rebuild_id
+
+    @cache[name] ||= find_or_create_by(name:, rebuild_id:) do |t|
+      t.slug = name.parameterize # runs only on create, saved in the same INSERT
+    end
   end
 end

@@ -4,7 +4,7 @@
 class GithubImport < ApplicationRecord
   self.abstract_class = true
 
-  belongs_to :rebuild
+
 
   def parse_and_update(content)
     content_string = content.dup.force_encoding('UTF-8').encode!
@@ -14,14 +14,18 @@ class GithubImport < ApplicationRecord
   end
 
   def update_from_content(doc, rebuild)
-    save
-    title_chunk = MarkdownUtility.get_title_chunk(doc)
-    update(name: title_chunk.try(:strip))
-    dates(doc, rebuild)
-    update_author(doc.at("h4:contains('Contributed')"), rebuild_id) unless is_a?(Page)
-    update_taxonomy(doc, rebuild)
-    content_string = doc.css('body').to_s + "\n<!-- file path: #{path} -->".html_safe
-    update(content: content_string)
+    print '?'
+    transaction do
+      title_chunk = MarkdownUtility.get_title_chunk(doc)
+      dates(doc, rebuild)
+      update_author(doc.at("h4:contains('Contributed')"), rebuild_id) unless is_a?(Page)
+      update_taxonomy(doc, rebuild)
+
+      self.content = doc.css('body').to_s + "\n<!-- file path: #{path} -->"
+      self.name    = title_chunk.try(:strip)
+      self.save
+    end
+    print '/'
   end
 
   def snippet
@@ -38,14 +42,16 @@ class GithubImport < ApplicationRecord
   def update_author(node, rebuild)
     return unless node && respond_to?('authors')
 
-    auths = AuthorUtility.make_from_data(
-      node, rebuild
-    )
-    auths.each do |auth|
-      if auth.first.is_a?(Author)
-        contributions << Contribution.create(author: auth.first, display_name: auth.last.strip)
+    auths = AuthorUtility.make_from_data(node, rebuild)
+
+    pairs = auths.select { |auth| auth.first.is_a?(Author) }
+
+    transaction do # one commit for all of this item's authors
+      pairs.each do |author, display_name|
+        contributions.create!(author: author, display_name: display_name.strip)
       end
     end
+
     node.try(:remove)
   end
 end

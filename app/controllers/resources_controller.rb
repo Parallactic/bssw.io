@@ -39,7 +39,7 @@ class ResourcesController < ApplicationController
     search_string = params[:search_string].to_s
     page = params[:page] ? params[:page].to_i : 1
     @search = search_string
-    SearchResult.algolia_reindex!(1000, true)
+
     @resources = SearchResult.search(@search)
     @total = @resources.size
     @resources = @resources.paginate(page:, per_page: (params[:view] == 'all' ? @total : 25))

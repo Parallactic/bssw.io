@@ -3,9 +3,10 @@
 # Events e.g. conferences
 class Event < SiteItem
   include Dateable
-  has_many :additional_dates, dependent: :destroy
+  has_many :additional_dates, dependent: :destroy, inverse_of: :event
   has_many :additional_date_values, -> { order(date: :asc) }, through: :additional_dates
-
+  
+  
   scope :upcoming, lambda {
     left_outer_joins(:additional_dates).includes(:additional_date_values).where(
       'additional_date_values.date >= ?',
@@ -20,27 +21,56 @@ class Event < SiteItem
     ).order('additional_date_values.date desc')
   }
 
+  # def next_date
+  #   additional_date_values.joins(:additional_date).where('date >= ?', Time.zone.today).first
+  # end
+
+  # def prev_date
+  #   additional_date_values.joins(:additional_date).where('date < ?', Time.zone.today).where(
+  #     'additional_dates.label not LIKE ?', '%End %'
+  #   ).last
+  # end
   def next_date
-    additional_date_values.joins(:additional_date).where('date >= ?', Time.zone.today).first
+    all_date_values.select { |v| v.date && v.date >= Time.zone.today }.min_by(&:date)
   end
 
   def prev_date
-    additional_date_values.joins(:additional_date).where('date < ?', Time.zone.today).where(
-      'additional_dates.label not LIKE ?', '%End %'
-    ).last
+    additional_dates.reject { |d| d.label.to_s.include?('End ') }
+      .flat_map(&:additional_date_values)
+      .select { |v| v.date && v.date < Time.zone.today }
+      .max_by(&:date)
   end
 
-  def start_date
+def start_date
+  if additional_dates.loaded?
+    additional_dates.find { |d| d.label.include?('Start ') }
+  else
     additional_dates.where('label LIKE ?', '%Start %').first
   end
+end
+
+def end_date
+  if additional_dates.loaded?
+    additional_dates.find { |d| d.label.include?('End ') }
+  else
+    additional_dates.where('label LIKE ?', '%End %').first
+  end
+end
+
+  
+  # def start_date
+  #   additional_dates.find { |d| d.label.include?('Start ') }
+  #   #    additional_dates.where('label LIKE ?', '%Start %').first
+  # end
 
   def start_at
     start_date.try(:additional_date_values).try(:first).try(:date)
   end
 
-  def end_date
-    additional_dates.where('label LIKE ?', '%End %').first
-  end
+  # def end_date
+  #   additional_dates.find { |d| d.label.include?('End ') }
+  #   #    additional_dates.where('label LIKE ?', '%End %').first
+  # end
 
   def end_at
     end_date.try(:additional_date_values).try(:first).try(:date)
@@ -67,22 +97,13 @@ class Event < SiteItem
       send("#{method}=", node.text.split(':').last) if node
       node.try(:remove)
     end
-    if doc.at("li:contains('Website')")
-      do_website(doc.at("li:contains('Website')"))
-      #      self.website = "http:#{website}" if website
-    end
+    do_website(doc.at("li:contains('Website')")) if doc.at("li:contains('Website')")
     update_dates(doc)
     doc.at("strong:contains('Description')").try(:remove)
   end
 
   def do_website(node)
-    url = node.text
-    match = url.match('\[(.*?)\](.*)')
-    if match
-      update(website_label: match[1], website: match[2])
-    else
-      self.website = (url.split(':').last)
-    end
+    update(website_label: node.at('a').text, website: node.at('a')['href']) if node.at('a')
     node.try(:remove)
   end
 
@@ -116,5 +137,10 @@ class Event < SiteItem
     else
       AdditionalDate.make_date(label_text, date_text, self)
     end
+  end
+
+
+  def all_date_values
+    additional_dates.flat_map(&:additional_date_values)
   end
 end

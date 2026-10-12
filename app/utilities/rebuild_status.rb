@@ -2,7 +2,19 @@
 
 # store the current rebuild
 class RebuildStatus < ApplicationRecord
-  def self.displayed_rebuild
+
+  
+  after_commit { Current.rebuild_status = nil }   # any write invalidates the cache
+
+def self.current
+  Current.rebuild_status ||= first
+end
+
+def self.display_rebuild_id
+  current.display_rebuild_id
+end
+
+def self.displayed_rebuild
     Rebuild.where(id: first.display_rebuild_id).first
   end
 

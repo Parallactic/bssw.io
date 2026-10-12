@@ -32,6 +32,7 @@ class EventsController < ApplicationController
   # end
 
   def filter_events
+    
     author = params[:author]
     events = Event.displayed.published
     if author
@@ -39,7 +40,8 @@ class EventsController < ApplicationController
     else
       filter_events_by_time(events)
     end
-    @events = @events.distinct
+    @events = @events.distinct.preload(:rebuild, additional_dates: :additional_date_values)
+
   end
 
   def filter_events_by_time(events)
