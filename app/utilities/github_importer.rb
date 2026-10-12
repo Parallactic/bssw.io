@@ -27,9 +27,17 @@ class GithubImporter < ApplicationRecord
     new_path.join('/')
   end
 
+
   def self.github
-    Octokit::Client.new(access_token: Rails.application.credentials[:github][:token])
-  end
+  token = Rails.application.credentials[:github][:token]
+  client = Thread.current[:github_client]
+  return client if client && client.access_token == token
+
+  Thread.current[:github_client] = Octokit::Client.new(access_token: token)
+end
+  # def self.github
+  #   Octokit::Client.new(access_token: Rails.application.credentials[:github][:token])
+  # end
 
   def self.save_content(branch, rebuild)
     Rails.logger.debug 'getting'

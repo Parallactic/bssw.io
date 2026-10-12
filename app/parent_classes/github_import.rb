@@ -4,8 +4,6 @@
 class GithubImport < ApplicationRecord
   self.abstract_class = true
 
-
-
   def parse_and_update(content)
     content_string = content.dup.force_encoding('UTF-8').encode!
     doc = GithubImporter.parse_html_from(content_string)
@@ -23,7 +21,7 @@ class GithubImport < ApplicationRecord
 
       self.content = doc.css('body').to_s + "\n<!-- file path: #{path} -->"
       self.name    = title_chunk.try(:strip)
-      self.save
+      save
     end
     print '/'
   end

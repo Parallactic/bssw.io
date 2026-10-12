@@ -5,8 +5,7 @@ class Event < SiteItem
   include Dateable
   has_many :additional_dates, dependent: :destroy, inverse_of: :event
   has_many :additional_date_values, -> { order(date: :asc) }, through: :additional_dates
-  
-  
+
   scope :upcoming, lambda {
     left_outer_joins(:additional_dates).includes(:additional_date_values).where(
       'additional_date_values.date >= ?',
@@ -36,28 +35,27 @@ class Event < SiteItem
 
   def prev_date
     additional_dates.reject { |d| d.label.to_s.include?('End ') }
-      .flat_map(&:additional_date_values)
-      .select { |v| v.date && v.date < Time.zone.today }
-      .max_by(&:date)
+                    .flat_map(&:additional_date_values)
+                    .select { |v| v.date && v.date < Time.zone.today }
+                    .max_by(&:date)
   end
 
-def start_date
-  if additional_dates.loaded?
-    additional_dates.find { |d| d.label.include?('Start ') }
-  else
-    additional_dates.where('label LIKE ?', '%Start %').first
+  def start_date
+    if additional_dates.loaded?
+      additional_dates.find { |d| d.label.include?('Start ') }
+    else
+      additional_dates.where('label LIKE ?', '%Start %').first
+    end
   end
-end
 
-def end_date
-  if additional_dates.loaded?
-    additional_dates.find { |d| d.label.include?('End ') }
-  else
-    additional_dates.where('label LIKE ?', '%End %').first
+  def end_date
+    if additional_dates.loaded?
+      additional_dates.find { |d| d.label.include?('End ') }
+    else
+      additional_dates.where('label LIKE ?', '%End %').first
+    end
   end
-end
 
-  
   # def start_date
   #   additional_dates.find { |d| d.label.include?('Start ') }
   #   #    additional_dates.where('label LIKE ?', '%Start %').first
@@ -138,7 +136,6 @@ end
       AdditionalDate.make_date(label_text, date_text, self)
     end
   end
-
 
   def all_date_values
     additional_dates.flat_map(&:additional_date_values)

@@ -34,10 +34,13 @@ RSpec.describe RebuildsController, type: :request do
 
     describe 'post import' do
       before(:all) do
-        puts 'trying ...'
         username = Rails.application.credentials[:import][:name]
         pw = Rails.application.credentials[:import][:password]
-        post '/rebuilds/import', headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials(username, pw) }
+        require 'stackprof'
+        StackProf.run(mode: :wall, out: 'tmp/import.dump', interval: 1000) do
+          post '/rebuilds/import', headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials(username, pw) }
+        end
+
         puts "status=#{response.status} location=#{response.location.inspect}"
         puts response.body[0, 500]
       end

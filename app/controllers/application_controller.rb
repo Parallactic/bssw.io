@@ -14,7 +14,6 @@ class ApplicationController < ActionController::Base
     not_found(e)
   end
 
-  
   def page_item
     @resource || @page || @event || @post
   end

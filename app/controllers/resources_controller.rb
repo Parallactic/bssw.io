@@ -19,7 +19,6 @@ class ResourcesController < ApplicationController
     @resource ||= scoped_resources.find(params[:id])
     redirect_to "/pages/#{@resource.slug}" if @resource.is_a?(Page)
     redirect_to "/events/#{@resource.slug}" if @resource.is_a?(Event)
-    Rails.logger.debug 'redirect ....'
     redirect_to "/blog_posts/#{@resource.slug}" if @resource.is_a?(BlogPost)
   end
 

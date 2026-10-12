@@ -64,16 +64,10 @@ class Author < SearchResult
     "#{event_count} #{'event'.pluralize(event_count)}"
   end
 
-  # def self.client
-  #   @client ||= GithubImporter.github
-  # end
-
   def update_from_github
     return unless website&.match('github')
-    # return unless affiliation.blank? || avatar_url.blank?
- 
+
     client = GithubImporter.github
-    client.login
     begin
       update_info(client.user(website.split('/').last))
     rescue Octokit::NotFound
@@ -82,7 +76,6 @@ class Author < SearchResult
   end
 
   def update_info(user)
-    print "#{user.inspect}%"
     url = user.avatar_url
     self.avatar_url = url.gsub(/\?v=\d+/, '') if url
     self.affiliation = user.company if affiliation.blank?
@@ -109,6 +102,4 @@ class Author < SearchResult
       find_by(rebuild_id: rebuild, website: "https://github.com/#{website}")
     end
   end
-
-
 end

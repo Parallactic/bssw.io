@@ -2,7 +2,7 @@
 
 # handle multiple dates for events
 class AdditionalDate < ApplicationRecord
-belongs_to :event, inverse_of: :additional_dates
+  belongs_to :event, inverse_of: :additional_dates
   has_many :additional_date_values, dependent: :destroy
 
   include Dateable

@@ -7,11 +7,10 @@ RSpec.describe Quote, type: :model do
 
   before(:all) do
     r = Rebuild.create
-    rs = RebuildStatus.create
+    RebuildStatus.create
     RebuildStatus.first.update(in_progress_rebuild_id: r.id)
-
   end
-  
+
   it 'matches content text' do
     described_class.import(content)
     expect(described_class.find_by(text: 'Foo ').author).to match 'bar'
@@ -22,5 +21,4 @@ RSpec.describe Quote, type: :model do
 
     expect(described_class.find_by(author: 'ban').text).to match 'baz'
   end
-  
 end

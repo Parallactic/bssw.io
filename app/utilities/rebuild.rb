@@ -31,8 +31,8 @@ class Rebuild < ApplicationRecord
       (@processed_files ||= []) << resource.try(:path)
       print '*'
     end
-    rescue StandardError => e
-      record_errors(File.basename(full_name), e)
+  rescue StandardError => e
+    record_errors(File.basename(full_name), e)
   end
 
   def record_errors(file_name, error)
@@ -43,8 +43,10 @@ class Rebuild < ApplicationRecord
   end
 
   def update_links_and_images
-    (Page.all + SearchResult.all + Community.all
-    ).each(&:update_links_and_images)
+    MarkdownUtility.with_link_cache do
+      (SearchResult.displayed + Community.displayed
+      ).each(&:update_links_and_images)
+    end
   end
 
   def clean(file_path)
@@ -59,17 +61,15 @@ class Rebuild < ApplicationRecord
     File.delete(file_path)
   end
 
-
-
   def clear_old
     keep_ids = (Rebuild.order(created_at: :desc).limit(5).pluck(:id) + [id]).uniq
     stale = ->(klass) { klass.where.not(rebuild_id: keep_ids).or(klass.where(rebuild_id: nil)) }
     conn  = ActiveRecord::Base.connection
-    
+
     transaction do
-      stale_items  = stale.(SearchResult).select(:id)   # covers Author, Fellow, Event, etc.
-      stale_topics = stale.(Topic).select(:id)
-      stale_events = stale.(Event).select(:id)
+      stale_items  = stale.call(SearchResult).select(:id) # covers Author, Fellow, Event, etc.
+      stale_topics = stale.call(Topic).select(:id)
+      stale_events = stale.call(Event).select(:id)
       stale_dates  = AdditionalDate.where(event_id: stale_events).select(:id)
 
       # 1. Grandchildren, then children, then join rows (parents still exist)
@@ -86,14 +86,13 @@ class Rebuild < ApplicationRecord
 
       # 2. Parents, one DELETE per table
       [SearchResult, Topic, Community, Category, Announcement,
-       Quote, FeaturedPost, Page].each { |klass| stale.(klass).delete_all }
+       Quote, FeaturedPost, Page].each { |klass| stale.call(klass).delete_all }
       Rebuild.where.not(id: keep_ids).delete_all
     end
 
     Contribution.clean
   end
-  
-  
+
   def self.file_structure # rubocop:disable Metrics/MethodLength
     {
       'CuratedContent/WhatIs' => WhatIs,
@@ -140,14 +139,13 @@ class Rebuild < ApplicationRecord
 
     @resource_cache ||= {}
     @resource_cache[[res, normalized]] ||= begin
-                                             item = res.find_or_create_by(path: normalized, rebuild_id: id) do |r|
-                                               r.base_path = base # saved in the same INSERT
-                                             end
-                                             item.update(base_path: base) unless item.base_path == base # only for pre-existing rows that differ
-                                             item
-                                             
-                                           end
-
+      item = res.find_or_create_by(path: normalized, rebuild_id: id) do |r|
+        r.base_path = base # saved in the same INSERT
+      end
+      # only for pre-existing rows that differ
+      item.update(base_path: base) unless item.base_path == base
+      item
+    end
   end
 
   def resource_class_for(path)

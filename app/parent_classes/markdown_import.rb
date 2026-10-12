@@ -20,7 +20,7 @@ class MarkdownImport < GithubImport
 
     html = doc.to_html.to_s
     print '&'
-#    content = html
+    #    content = html
     update(content: html) unless content == html
   end
 
@@ -111,7 +111,8 @@ class MarkdownImport < GithubImport
              GithubImporter.github.commits(
                Rails.application.credentials[:github][:repo],
                rebuild.content_branch,
-               path: "/#{path}"
+               path: "/#{path}",
+               per_page: 1
              ).try(:first).try(:commit).try(:author).try(:date))
   end
 

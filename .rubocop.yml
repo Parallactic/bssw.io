@@ -17,6 +17,8 @@ AllCops:
 Metrics/MethodLength:
   Max: 15  # Methods longer than 15 lines get a warning
 
+Rails/Output:
+  Enabled: false
 
 RSpec/MultipleMemoizedHelpers:
   Enabled: false

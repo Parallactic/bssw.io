@@ -101,30 +101,32 @@ RSpec.describe ResourcesController, type: :controller do
       credentials = ActionController::HttpAuthentication::Basic.encode_credentials name, pw
       request.env['HTTP_AUTHORIZATION'] = credentials
     end
-def timed(label)
-  t = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-  result = yield
-  puts "#{label}: #{(Process.clock_gettime(Process::CLOCK_MONOTONIC) - t).round(2)}s"
-  result
-end
 
-it 'searches' do
+    def timed(label)
+      t = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+      result = yield
+      puts "#{label}: #{(Process.clock_gettime(Process::CLOCK_MONOTONIC) - t).round(2)}s"
+      result
+    end
+
+    it 'searches' do
       resource = FactoryBot.create(:resource, publish: true, type: 'Resource',
                                               rebuild_id: RebuildStatus.displayed_rebuild.id)
-  
- timed('create resources') do
-      FactoryBot.create(:resource, publish: true, type: 'Resource', rebuild_id: RebuildStatus.displayed_rebuild.id)
-      FactoryBot.create(:author, publish: true, first_name: "#{resource.name} auth",
+
+      timed('create resources') do
+        FactoryBot.create(:resource, publish: true, type: 'Resource',
+                                     rebuild_id: RebuildStatus.displayed_rebuild.id)
+        FactoryBot.create(:author, publish: true, first_name: "#{resource.name} auth",
+                                   rebuild_id: RebuildStatus.displayed_rebuild.id)
+        FactoryBot.create(:page, publish: true, name: "#{resource.name} page",
                                  rebuild_id: RebuildStatus.displayed_rebuild.id)
-      FactoryBot.create(:page, publish: true, name: "#{resource.name} page",
-                        rebuild_id: RebuildStatus.displayed_rebuild.id)
-  end
-     timed('reindex') do
-       SearchResult.algolia_reindex!(1000, true)
-     end
-     timed('request') do
-       get :search, params: { search_string: resource.name }
-     end
+      end
+      timed('reindex') do
+        SearchResult.algolia_reindex!(1000, true)
+      end
+      timed('request') do
+        get :search, params: { search_string: resource.name }
+      end
       expect(assigns(:resources)).to include(resource)
     end
 

@@ -4,6 +4,13 @@
 class MarkdownUtility < ApplicationRecord
   self.abstract_class = true
 
+  def self.with_link_cache
+    @link_cache = {}
+    yield
+  ensure
+    @link_cache = nil
+  end
+
   def self.caption_regexp
     '\[(.*?)\]'
   end
@@ -82,7 +89,18 @@ class MarkdownUtility < ApplicationRecord
     add_lightbox(img, src) if class_name.match('lightbox') # lb
   end
 
+  def self.resolve_link(path)
+    route = Rails.application.routes.url_helpers
+    [SiteItem, Page, Community].each do |klass|
+      item = klass.displayed.where(base_path: path).first
+      return route.send("#{klass.name.underscore}_path", item) if item.try(:id)
+    end
+    path
+  end
+
   def self.update_link(path)
+    return resolve_link(path) unless @link_cache
+
     route = Rails.application.routes.url_helpers
     [SiteItem, Page, Community].each do |klass|
       item = klass.displayed.where(base_path: path).first

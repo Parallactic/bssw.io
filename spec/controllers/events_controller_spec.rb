@@ -29,33 +29,32 @@ RSpec.describe EventsController, type: :controller do
       end
     end
 
-describe 'past events' do
-  before do
-    FactoryBot.create(:page, name: 'Past Events', rebuild_id: rebuild.id)
-  end
+    describe 'past events' do
+      before do
+        FactoryBot.create(:page, name: 'Past Events', rebuild_id: rebuild.id)
+      end
 
-  it 'shows past by page' do
-    26.times do
-      event = FactoryBot.create(:event, publish: true, rebuild_id: rebuild.id)
-      date = FactoryBot.create(:additional_date, label: 'Party Date', event_id: event.id)
-      FactoryBot.create(:additional_date_value, additional_date: date, date: 1.week.ago)
+      it 'shows past by page' do
+        26.times do
+          event = FactoryBot.create(:event, publish: true, rebuild_id: rebuild.id)
+          date = FactoryBot.create(:additional_date, label: 'Party Date', event_id: event.id)
+          FactoryBot.create(:additional_date_value, additional_date: date, date: 1.week.ago)
+        end
+
+        get :index, params: { past: true, page: 1 }
+        expect(assigns(:events).to_a.size).to eq 25
+
+        get :index, params: { past: true, page: 2 }
+        expect(assigns(:events).to_a.size).to be > 25
+      end
+
+      it 'shows past' do
+        event = FactoryBot.create(:event, rebuild:)
+        AdditionalDate.make_date('some date', 1.day.ago.to_s, event)
+        get :index, params: { past: true }
+        expect(assigns(:events)).to include(event)
+      end
     end
-
-    get :index, params: { past: true, page: 1 }
-    expect(assigns(:events).to_a.size).to eq 25
-
-    get :index, params: { past: true, page: 2 }
-    expect(assigns(:events).to_a.size).to be > 25
-
-  end
-
-  it 'shows past' do
-    event = FactoryBot.create(:event, rebuild:)
-    AdditionalDate.make_date('some date', 1.day.ago.to_s, event)
-    get :index, params: { past: true }
-    expect(assigns(:events)).to include(event)
-  end
-end
 
     it 'gets by author' do
       author = FactoryBot.create(:author, rebuild_id: rebuild.id)

@@ -46,12 +46,15 @@ gem 'bootstrap-sass'
 gem 'msgpack', '>= 1.7.0'
 
 group :development, :test do
-  gem 'fuubar'
-gem 'benchmark'
+  gem 'benchmark'
   gem 'brakeman'
-  #  gem 'bullet'
+  gem 'bullet'
+  gem 'fuubar'
+
   gem 'factory_bot_rails'
   gem 'faker'
+  gem 'flay'
+  gem 'stackprof'
   #  gem 'metric_fu', github: 'eamonn-webster/metric_fu'
   gem 'rails-controller-testing'
   gem 'reek'
