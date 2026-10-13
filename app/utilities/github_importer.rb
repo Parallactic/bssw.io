@@ -86,6 +86,7 @@ end
 
   def self.populate(branch)
     rebuild = RebuildStatus.in_progress_rebuild
+    RebuildStatus.code_branch=(branch)
     file_path = save_content(branch, rebuild)
     puts "extracting from #{file_path}"
     tar_extract(file_path) do |file|

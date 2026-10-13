@@ -16,6 +16,17 @@ RSpec.describe Rebuild, type: :model do
 
       expect(rebuild.reload.errors_encountered).to include('foo.md', 'bad file')
     end
+
+    describe '#process_file' do
+  it 'records the error and carries on when a file fails to process' do
+    rebuild = Rebuild.create!
+    file = double(full_name: 'repo/Articles/Foo.md', read: '')
+    allow(rebuild).to receive(:process_path).and_raise(StandardError, 'bad file')
+
+    expect { rebuild.send(:process_file, file) }.not_to raise_error
+    expect(rebuild.reload.errors_encountered).to include('Foo.md', 'bad file')
+  end
+end
   end
 
   it 'removes stale records and their join rows' do

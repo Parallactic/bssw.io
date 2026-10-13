@@ -98,16 +98,13 @@ class MarkdownUtility < ApplicationRecord
     path
   end
 
-  def self.update_link(path)
-    return resolve_link(path) unless @link_cache
+def self.update_link(path)
+  return resolve_link(path) unless @link_cache
 
-    route = Rails.application.routes.url_helpers
-    [SiteItem, Page, Community].each do |klass|
-      item = klass.displayed.where(base_path: path).first
-      return route.send("#{klass.name.underscore}_path", item) if item.try(:id)
-    end
-    path
-  end
+  @link_cache.fetch(path) { @link_cache[path] = resolve_link(path) }
+end
+  
+
 
   def self.update_links(doc)
     doc.css('a').each do |link|
