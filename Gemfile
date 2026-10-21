@@ -107,7 +107,7 @@ gem 'exception_notification'
 
 gem 'cloudinary'
 
-gem 'attempt'
+#gem 'attempt'
 
 gem 'ffi'
 
@@ -137,7 +137,7 @@ gem 'rack-utf8_sanitizer'
 
 # gem "handle_invalid_percent_encoding_requests"
 gem 'rouge-rails'
-gem 'warning'
+#gem 'warning'
 
 gem 'bcrypt_pbkdf'
 gem 'ed25519'
