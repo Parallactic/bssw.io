@@ -1718,7 +1718,7 @@ TABLES
     text-indent: .15em;
     border-radius: 0.85em;
 
-    @include mixins.transition(ease-in-out .2s background);
+    @include mixins.transition(ease-in-out, .2s, background);
   }
 }
 

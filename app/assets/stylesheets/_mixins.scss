@@ -3,11 +3,12 @@
  Mixins
 ------------------------ */
 
-@mixin transition($args) {
+
+
+@mixin transition($args...) {
+  -webkit-transition: $args;
   transition: $args;
 }
-
-
 @mixin transition-all {
   @include transition(all,.2s,ease-in-out);
 }

@@ -135,11 +135,11 @@ border-bottom: 2px solid #ebebeb !important;
 .card-body {
 padding: 0;
 
-@include mixins.transition(all .3s);
+@include mixins.transition(all, .3s, ease-in-out);
 }
 
 .collapse {
-@include mixins.transition(all .3s);
+@include mixins.transition(all, .3s, ease-in-out);
 
 &::before {
 --font-family: 'Font Awesome 5 Free';
