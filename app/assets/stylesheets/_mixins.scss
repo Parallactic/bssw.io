@@ -1,6 +1,11 @@
+@use "sass:selector";
 /* ------------------------
  Mixins
 ------------------------ */
+
+@mixin transition($args) {
+  transition: $args;
+}
 
 
 @mixin transition-all {
@@ -118,7 +123,7 @@ $trans: .2s ease-in-out;
 
 
 @mixin optional-at-root($sel) {
-  @at-root #{if(not &, $sel, selector-append(&, $sel))} {
+  @at-root #{if(not &, $sel, selector.append(&, $sel))} {
     @content;
   }
 }

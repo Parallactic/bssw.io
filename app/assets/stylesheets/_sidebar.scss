@@ -1,3 +1,5 @@
+@use "mixins";
+
 /**
 #######################################################################
 SIDEBAR
@@ -133,11 +135,11 @@ border-bottom: 2px solid #ebebeb !important;
 .card-body {
 padding: 0;
 
-@include transition(all .3s);
+@include mixins.transition(all .3s);
 }
 
 .collapse {
-@include transition(all .3s);
+@include mixins.transition(all .3s);
 
 &::before {
 --font-family: 'Font Awesome 5 Free';

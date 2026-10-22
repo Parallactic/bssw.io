@@ -1,3 +1,5 @@
+@use "mixins";
+
 /**
 #######################################################################
 FORMS
@@ -52,7 +54,7 @@ label {
     display: block;
 
 
-    @include transition(ease-in-out .2s border);
+    @include mixins.transition(ease-in-out .2s border);
 
     font-size: 18px;
     margin-bottom: 10px;
@@ -76,7 +78,7 @@ label {
   display: block;
   appearance: none;
 
-  @include transition(ease-in-out .2s border);
+  @include mixins.transition(ease-in-out .2s border);
 
   font-size: 18px;
   margin-bottom: 10px;
@@ -99,8 +101,8 @@ label {
   padding: .35em 4em;
   border-radius: 1.5em;
 
-  @include transition(ease-in-out .2s background-color);
-  @include transition(ease-in-out .2s color);
+  @include mixins.transition(ease-in-out .2s background-color);
+  @include mixins.transition(ease-in-out .2s color);
 
   font-size: 18px;
   margin-bottom: 40px;
@@ -154,8 +156,8 @@ label {
     border-radius: 1.5em;
     transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
 
-    @include transition(ease-in-out .2s background-color);
-    @include transition(ease-in-out .2s color);
+    @include mixins.transition(ease-in-out .2s background-color);
+    @include mixins.transition(ease-in-out .2s color);
 
     font-size: 18px;
     margin-bottom: 40px;

@@ -12,157 +12,37 @@
  *
  */
 
+//= require owl.carousel
+//= require owl.theme
 
-@import 'owl.carousel.min.css';
-@import 'owl.theme.default.min.css';
+
+@use "sass:meta";
+@use '_variables.scss';
+@use '_mixins.scss';
+
+
 @import 'github.css';
 
 
 
-@mixin transition($args) {
-  transition: $args;
-}
 
 
+@include meta.load-css('_general.scss');
+@include meta.load-css('_nav.scss');
+@include meta.load-css('_rebuilds.scss');
+@include meta.load-css('_search.scss');
+@include meta.load-css('_announcement.scss');
+@include meta.load-css('_hero.scss');
+@include meta.load-css('_fellows.scss');
+@include meta.load-css('_breadcrumbs.scss');
+@include meta.load-css('_featured.scss');
+@include meta.load-css('_quote.scss');
+@include meta.load-css('_blog.scss');
+@include meta.load-css('_pagination.scss');
+@include meta.load-css('_sidebar.scss');
+@include meta.load-css('_lightbox.scss');
+@include meta.load-css('_forms.scss');
 
-/** variables **/
-
-$nav-bg-dark: #3c3c40;
-$dark-grey: #3c3c3e;
-$headline-color: #19197D;
-$med-light-grey: #89898e;
-$link-blue: #329fff;
-
-
-
-/**
-#######################################################################
-GENERAL
-#######################################################################
-**/
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: Roboto, sans-serif;
-  color: $nav-bg-dark;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-
-p {
-  font-family: Roboto, sans-serif;
-  color: $nav-bg-dark;
-  font-size: 18px;
-  -webkit-font-smoothing: antialiased;
-  line-height: 30px;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: Roboto, sans-serif;
-  color: $dark-grey;
-  font-weight: 400;
-
-}
-
-
-h1 {
-  font-size: 45px;
-  line-height: 54px;
-}
-
-h2 {
-  font-size: 28px;
-  line-height: 36px;
-
-}
-// H2
-// Semibold, 28/36
-// #3C3C40
-// 48px preceding line-space (however that’s handled)
-
-
-
-h3 {
-  font-size: 19px;
-  font-weight: 600;
-  line-height: 30px;
-  margin-bottom: 0;
-}
-
-a {
-  transition: all 0.2s ease-in-out;
-  font-family: Roboto, sans-serif;
-  color: $link-blue;
-  text-decoration: none;
-  -webkit-font-smoothing: antialiased;
-
-  &:hover {
-    text-decoration: none;
-  }
-}
-
-mark {
-  padding: 0;
-  background: #fffea8;
-  font-weight: 400;
-  color: #5c5a5b;
-}
-
-.content {
-  a:hover {
-    color: #19197D;
-  }
-
-  p {
-    img {
-      width: 100%;
-      display: block;
-
-      &.logo {
-	width: initial;
-      }
-    }
-  }
-
-  h3 {
-    margin-top: 40px;
-  }
-
-  h2 {
-    margin-top: 40px;
-
-    &:first-child {
-      margin-top: 0;
-    }
-
-    + h3 {
-      margin-top: 0;
-    }
-  }
-
-  .caption {
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  .indented_text {
-    float: left;
-    padding-left: 20px;
-  }
-}
-
-img.page {
-  width: 100%;
-  display: block;
-}
-
-
-@import '_nav.scss';
-@import '_rebuilds.scss';
-@import '_search.scss';
 
 .main-nav .navbar-scrollup-menu .scrollup-resources-menu {
   display: none;
@@ -179,7 +59,7 @@ img.page {
   background-color: #fff !important;
 
   a {
-    color: $link-blue;
+    color: variables.$link-blue;
 
     &:hover {
       color: #19197D !important;
@@ -191,8 +71,6 @@ img.page {
   background-color: #f7f7 !important;
 }
 
-@import '_announcement.scss';
-@import '_hero.scss';
 
 /**
 #######################################################################
@@ -408,8 +286,6 @@ PAGE CONTENT
   padding-bottom: 25px;
 }
 
-@import '_fellows.scss';
-@import '_breadcrumbs.scss';
 
 .social-share {
   padding-right: 20px;
@@ -442,7 +318,7 @@ PAGE CONTENT
   }
 }
 
-@import '_featured.scss';
+
 
 /**
 #######################################################################
@@ -474,11 +350,11 @@ TOOLS
 
   h2 {
     margin-top: 0;
-    color: $link-blue;
+    color: variables.$link-blue;
   }
 
   h3 {
-    color: $link-blue;
+    color: variables.$link-blue;
     font-size: 17px;
     text-transform: uppercase;
     margin-bottom: -5px;
@@ -545,7 +421,7 @@ CARET LIST
 }
 
 .caret-list {
-  color: $link-blue;
+  color: variables.$link-blue;
   font-size: 18px;
   font-weight: 600;
   padding-left: 26px;
@@ -687,8 +563,6 @@ a.circle-icon-cta {
   transition: all 0.2s ease-in-out;
 }
 
-@import '_quote.scss';
-@import '_blog.scss';
 
 /**
 #######################################################################
@@ -862,7 +736,7 @@ PAGE HEADING
   }
 }
 
-@import '_pagination.scss';
+
 /**
 #######################################################################
 RESOURCES
@@ -881,7 +755,7 @@ RESOURCES
 
       a {
 	border-top: 1px solid #dcdcdd;
-	color: $link-blue;
+	color: variables.$link-blue;
       }
     }
 
@@ -890,7 +764,7 @@ RESOURCES
     }
 
     h3 {
-      color: $link-blue;
+      color: variables.$link-blue;
       padding-right: 120px;
     }
 
@@ -930,7 +804,7 @@ RESOURCES
     h3 {
       font-size: 17px;
       font-weight: 600;
-      color: $link-blue;
+      color: variables.$link-blue;
       transition: all 0.2s ease-in-out;
       line-height: 27px;
     }
@@ -1002,7 +876,7 @@ RESOURCES
     }
   }
 }
-@import '_sidebar.scss';
+
 
 /**
 #######################################################################
@@ -1654,7 +1528,7 @@ p.date { font-weight: bold;
   }
 
   h3 {
-    color: $link-blue;
+    color: variables.$link-blue;
     font-size: 26px;
     font-weight: 400;
     transition: all 0.2s ease-in-out;
@@ -1667,7 +1541,7 @@ p.date { font-weight: bold;
     }
   }
 
-  h4 { color: $link-blue;
+  h4 { color: variables.$link-blue;
        font-weight: 500;
        font-size: 18px;
        margin-bottom: 0;
@@ -1747,7 +1621,7 @@ MISC
     }
   }
 }
-@import '_forms.scss';
+
 
 /**
 #######################################################################
@@ -1813,7 +1687,7 @@ TABLES
   }
 }
 
-@import '_lightbox.scss';
+
 
 .learn-more {
   &:hover a {
@@ -1844,7 +1718,7 @@ TABLES
     text-indent: .15em;
     border-radius: 0.85em;
 
-    @include transition(ease-in-out .2s background);
+    @include mixins.transition(ease-in-out .2s background);
   }
 }
 

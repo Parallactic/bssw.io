@@ -1,10 +1,12 @@
+@use "variables";
+
 // #######################################################################
 // NAVIGATION
 // #######################################################################
 
 
 .bg-dark {
-  background: $nav-bg-dark;
+  background: variables.$nav-bg-dark;
 }
 
 .navbar {
@@ -79,23 +81,23 @@
 
   .navbar-nav {
     .active > .nav-link {
-      background: $med-light-grey;
+      background: variables.$med-light-grey;
       color: #fff !important;
     }
 
     .nav-link {
       &.active, &.show {
-        background: $med-light-grey;
+        background: variables.$med-light-grey;
         color: #fff !important;
       }
 
       &:hover {
-        background: $med-light-grey;
+        background: variables.$med-light-grey;
       }
     }
 
     .show > .nav-link {
-      background: $med-light-grey;
+      background: variables.$med-light-grey;
       color: #fff !important;
     }
   }
@@ -205,14 +207,14 @@ body:not(.scrollup) .sm-logo-div {
 
     .nav-heading:hover {
       h3 a, h2 a {
-        color: $headline_color;
+        color: variables.$headline_color;
       }
 
       .circle {
-        border: 4px solid $headline_color;
+        border: 4px solid variables.$headline_color;
 
         .fas {
-          color: $headline_color;
+          color: variables.$headline_color;
           transition: all 0.2s ease-in-out;
         }
       }
@@ -342,7 +344,7 @@ body:not(.scrollup) .sm-logo-div {
         color: #fff !important;
 
         &:hover {
-          color: $headline-color;
+          color: variables.$headline-color;
         }
       }
     }
@@ -350,7 +352,7 @@ body:not(.scrollup) .sm-logo-div {
 
   .caret-list li:hover {
     &::before, a {
-      color: $headline-color;
+      color: variables.$headline-color;
     }
   }
 }
@@ -678,10 +680,10 @@ body:not(.scrollup) .sm-logo-div {
     .dropdown-menu {
       a {
         &:hover {
-          color: $nav-bg-dark;
+          color: variables.$nav-bg-dark;
 
           &::before {
-            color: $nav-bg-dark;
+            color: variables.$nav-bg-dark;
           }
         }
       }

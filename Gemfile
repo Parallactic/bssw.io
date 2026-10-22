@@ -46,6 +46,8 @@ gem 'bootstrap-sass'
 gem 'msgpack', '>= 1.7.0'
 
 group :development, :test do
+  gem 'warning'
+
   gem 'benchmark'
   gem 'brakeman'
   gem 'bullet'
@@ -107,6 +109,8 @@ gem 'exception_notification'
 
 gem 'cloudinary'
 
+gem 'owlcarousel-rails'
+
 #gem 'attempt'
 
 gem 'ffi'
@@ -137,7 +141,7 @@ gem 'rack-utf8_sanitizer'
 
 # gem "handle_invalid_percent_encoding_requests"
 gem 'rouge-rails'
-#gem 'warning'
+
 
 gem 'bcrypt_pbkdf'
 gem 'ed25519'

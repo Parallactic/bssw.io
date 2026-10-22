@@ -15,6 +15,7 @@
 //= require bootstrap
 //= require bootstrap-sprockets
 //= require lightbox-bootstrap
+//= require owl.carousel
 //= require algolia/v3/algoliasearch.min
 //= require_tree .
 
