@@ -26,24 +26,21 @@ class EventsController < ApplicationController
     @last_page = (@events.size.to_f / 25).ceil
     @current_page = (params[:page] || 1).to_i
   end
-  # def set_cache_key
-  #   last_modified_str = Event.order(:updated_at).last.updated_at.utc.to_fs(:number)
-  #   @cache_key = "#{params[:past]}/all_events/#{last_modified_str}"
-  # end
 
   def filter_events
     author = params[:author]
     events = Event.displayed.published
     if author
-      @events = events.with_author(Author.displayed.find(author))
+      @events = events.with_author(Author.displayed.find(author)).distinct
     else
       filter_events_by_time(events)
     end
-    @events = @events.distinct.preload(:rebuild, additional_dates: :additional_date_values)
+    @events = @events.preload(:rebuild, additional_dates: :additional_date_values)
   end
 
+
   def filter_events_by_time(events)
-    #    set_cache_key
+
     @page = Page.find_by(name: 'Upcoming Events')
     @page = Page.find_by(name: 'Past Events') if params[:past]
 

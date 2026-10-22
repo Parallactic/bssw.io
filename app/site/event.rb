@@ -6,38 +6,35 @@ class Event < SiteItem
   has_many :additional_dates, dependent: :destroy, inverse_of: :event
   has_many :additional_date_values, -> { order(date: :asc) }, through: :additional_dates
 
-  scope :upcoming, lambda {
-    left_outer_joins(:additional_dates).includes(:additional_date_values).where(
-      'additional_date_values.date >= ?',
-      Time.zone.today
-    ).order('additional_date_values.date asc')
-  }
-
   scope :past, lambda {
-    left_outer_joins(:additional_dates).includes(:additional_date_values).where(
-      'additional_date_values.date < ?',
-      Time.zone.today
-    ).order('additional_date_values.date desc')
+    dates = AdditionalDateValue.joins(:additional_date)
+              .where('additional_date_values.date < ?', Time.zone.today)
+              .group('additional_dates.event_id')
+              .select('additional_dates.event_id, MAX(additional_date_values.date) AS sort_date')
+              joins("INNER JOIN (#{dates.to_sql}) event_dates ON event_dates.event_id = #{quoted_table_name}.id")
+          .order(Arel.sql("event_dates.sort_date DESC, #{quoted_table_name}.id DESC"))
+
   }
 
-  # def next_date
-  #   additional_date_values.joins(:additional_date).where('date >= ?', Time.zone.today).first
-  # end
+  scope :upcoming, lambda {
+    dates = AdditionalDateValue.joins(:additional_date)
+              .where('additional_date_values.date >= ?', Time.zone.today)
+              .group('additional_dates.event_id')
+              .select('additional_dates.event_id, MIN(additional_date_values.date) AS sort_date')
+              joins("INNER JOIN (#{dates.to_sql}) event_dates ON event_dates.event_id = #{quoted_table_name}.id")
+          .order(Arel.sql("event_dates.sort_date ASC, #{quoted_table_name}.id ASC"))
 
-  # def prev_date
-  #   additional_date_values.joins(:additional_date).where('date < ?', Time.zone.today).where(
-  #     'additional_dates.label not LIKE ?', '%End %'
-  #   ).last
-  # end
+  }
+  
   def next_date
     all_date_values.select { |v| v.date && v.date >= Time.zone.today }.min_by(&:date)
   end
 
   def prev_date
     additional_dates.reject { |d| d.label.to_s.include?('End ') }
-                    .flat_map(&:additional_date_values)
-                    .select { |v| v.date && v.date < Time.zone.today }
-                    .max_by(&:date)
+      .flat_map(&:additional_date_values)
+      .select { |v| v.date && v.date < Time.zone.today }
+      .max_by(&:date)
   end
 
   def start_date
