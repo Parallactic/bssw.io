@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # spec/requests/robots_spec.rb
 require 'rails_helper'
 

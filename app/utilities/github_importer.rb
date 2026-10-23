@@ -27,14 +27,13 @@ class GithubImporter < ApplicationRecord
     new_path.join('/')
   end
 
-
   def self.github
-  token = Rails.application.credentials[:github][:token]
-  client = Thread.current[:github_client]
-  return client if client && client.access_token == token
+    token = Rails.application.credentials[:github][:token]
+    client = Thread.current[:github_client]
+    return client if client && client.access_token == token
 
-  Thread.current[:github_client] = Octokit::Client.new(access_token: token)
-end
+    Thread.current[:github_client] = Octokit::Client.new(access_token: token)
+  end
   # def self.github
   #   Octokit::Client.new(access_token: Rails.application.credentials[:github][:token])
   # end
@@ -86,7 +85,7 @@ end
 
   def self.populate(branch)
     rebuild = RebuildStatus.in_progress_rebuild
-    RebuildStatus.code_branch=(branch)
+    RebuildStatus.code_branch = (branch)
     file_path = save_content(branch, rebuild)
     puts "extracting from #{file_path}"
     tar_extract(file_path) do |file|

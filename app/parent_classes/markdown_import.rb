@@ -19,9 +19,9 @@ class MarkdownImport < GithubImport
     MarkdownUtility.update_images(doc)
 
     html = doc.to_html.to_s
-    print '&'
+    Rails.logger.debug ">>> rewrite #{self.class.name} id=#{id} rebuild_id=#{rebuild_id} imgs=#{doc.css('img').size}"
     #    content = html
-    update(content: html) unless content == html
+    update!(content: html) unless content == html
   end
 
   def update_taxonomy(doc, rebuild)

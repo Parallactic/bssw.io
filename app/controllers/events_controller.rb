@@ -38,9 +38,7 @@ class EventsController < ApplicationController
     @events = @events.preload(:rebuild, additional_dates: :additional_date_values)
   end
 
-
   def filter_events_by_time(events)
-
     @page = Page.find_by(name: 'Upcoming Events')
     @page = Page.find_by(name: 'Past Events') if params[:past]
 

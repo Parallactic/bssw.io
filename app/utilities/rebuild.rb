@@ -43,9 +43,11 @@ class Rebuild < ApplicationRecord
   end
 
   def update_links_and_images
+    Rails.logger.debug ">>> displayed blogs: #{SearchResult.displayed.where(type: 'BlogPost').pluck(:id,
+                                                                                                    :path).inspect}"
     MarkdownUtility.with_link_cache do
-      (SearchResult.displayed + Community.displayed
-      ).each(&:update_links_and_images)
+      (SearchResult.where(rebuild_id: id) + Community.where(rebuild_id: id))
+        .each(&:update_links_and_images)
     end
   end
 

@@ -19,7 +19,7 @@ gem 'sqlite3'
 gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
 
-gem "dartsass-sprockets"    # drop-in replacement, uses sass-embedded
+gem 'dartsass-sprockets' # drop-in replacement, uses sass-embedded
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
@@ -111,7 +111,7 @@ gem 'cloudinary'
 
 gem 'owlcarousel-rails'
 
-#gem 'attempt'
+# gem 'attempt'
 
 gem 'ffi'
 
@@ -141,7 +141,6 @@ gem 'rack-utf8_sanitizer'
 
 # gem "handle_invalid_percent_encoding_requests"
 gem 'rouge-rails'
-
 
 gem 'bcrypt_pbkdf'
 gem 'ed25519'

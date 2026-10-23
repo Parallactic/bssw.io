@@ -60,6 +60,15 @@ RSpec.describe RebuildsController, type: :request do
         expect(Community.first.resources).not_to be_empty
       end
 
+      it 'shows images in blog posts' do
+        blog = BlogPost.displayed.where(slug: 'applications-open-for-the-2027-bssw-fellowship-program').first
+        blog.reload
+        puts "spec blog id=#{blog.id} rebuild_id=#{blog.rebuild_id}"
+
+        expect(blog.content).to match 'img'
+        expect(blog.content).to match 'cloudinary'
+      end
+
       it 'does topics and searches' do
         topic = Topic.displayed.where(slug: topic_slug).first
         wi = SearchResult.displayed.find(what_is_slug)
@@ -96,10 +105,15 @@ RSpec.describe RebuildsController, type: :request do
         expect(Author.displayed.where(website: author_slug).size).to eq 1
       end
 
-      it 'makes pages' do
+      it 'makes homepage' do
         expect(Page.find('homepage')).to be_a Page
-        expect(Page.find('homepage').snippet).not_to be_empty
+      end
 
+      it 'generates snippets' do
+        expect(Page.find('homepage').snippet).not_to be_empty
+      end
+
+      it 'generates contributor page' do
         expect(Page.displayed.where(name: 'Contributors')).not_to be_empty
       end
 
@@ -107,44 +121,52 @@ RSpec.describe RebuildsController, type: :request do
         expect(Author.displayed.where(website: 'https://github.com/npch').first.alphabetized_name).to eq 'Chue'
       end
 
-      it 'does other stuff' do
+      it 'displays resources' do
         expect(Author.displayed.where(website: author_slug).first.resource_listing).not_to eq '0 resources'
+      end
 
+      it 'has staff affiliations' do
         expect(Staff.displayed.select do |a|
                  a.website.try(
                    :match?, 'maherou'
                  )
                end.first.affiliation).to eq 'Sandia National Laboratories'
+      end
+
+      it 'has author affiliations' do
         expect(Author.displayed.select do |a|
                  a.website.try(
                    :match?, 'maherou'
                  )
                end.first.affiliation).to match "ParaTools, Inc; St. John's University, MN; HPE; Hyperion"
+      end
 
+      it 'gets category slugs' do
         expect(Category.displayed.first.slug).to eq 'better-planning'
+      end
+
+      it 'gets topics' do
         expect(BlogPost.displayed.last.topics).not_to be_empty
+      end
+
+      it 'gets topic list' do
         expect(BlogPost.displayed.last.topic_list).not_to be_empty
+      end
+
+      it 'gets start date' do
         expect(Event.where(
           base_path: '2021-10-wosss21.md'
         ).first.start_at.to_date).to eq Date.parse('October 6 2021').to_date
+      end
+
+      it 'gets end date' do
         expect(Event.where(
           base_path: '2021-10-wosss21.md'
         ).first.end_at.to_date).to eq Date.parse('October 8 2021').to_date
-
-        # expect(response).to redirect_to('/rebuilds?rebuilt=true')
       end
 
-      it 'can check rebuilds' do
-        username = Rails.application.credentials[:import][:name]
-        pw = Rails.application.credentials[:import][:password]
-        build = Rebuild.create(
-          started_at: 1.minute.ago, ended_at: nil
-        )
-        RebuildStatus.first.update(
-          in_progress_rebuild_id: build.id
-        )
-        post '/rebuilds/import', headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials(username, pw) }
-        expect(response).to redirect_to('/rebuilds')
+      it 'redirects' do
+        expect(response).to redirect_to('/rebuilds?rebuilt=true')
       end
     end
 
@@ -168,6 +190,21 @@ RSpec.describe RebuildsController, type: :request do
       end
     end
 
+    describe 'no double rebuilds' do
+      it 'can check rebuilds' do
+        username = Rails.application.credentials[:import][:name]
+        pw = Rails.application.credentials[:import][:password]
+        build = Rebuild.create(
+          started_at: 1.minute.ago, ended_at: nil
+        )
+        RebuildStatus.first.update(
+          in_progress_rebuild_id: build.id
+        )
+        post '/rebuilds/import', headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials(username, pw) }
+        expect(response).to redirect_to('/rebuilds')
+      end
+  end
+    
     describe 'make displayed' do
       before do
         3.times { Rebuild.create }

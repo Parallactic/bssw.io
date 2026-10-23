@@ -98,13 +98,11 @@ class MarkdownUtility < ApplicationRecord
     path
   end
 
-def self.update_link(path)
-  return resolve_link(path) unless @link_cache
+  def self.update_link(path)
+    return resolve_link(path) unless @link_cache
 
-  @link_cache.fetch(path) { @link_cache[path] = resolve_link(path) }
-end
-  
-
+    @link_cache.fetch(path) { @link_cache[path] = resolve_link(path) }
+  end
 
   def self.update_links(doc)
     doc.css('a').each do |link|
