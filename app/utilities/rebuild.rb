@@ -51,7 +51,7 @@ class Rebuild < ApplicationRecord
 
     update(names: Author.display_names, unpublished_files: Resource.unpublished_paths(id))
     SearchResult.clear_index!
-    SearchResult.displayed.reindex
+    SearchResult.displayed.reindex!
     File.delete(file_path)
   end
 
