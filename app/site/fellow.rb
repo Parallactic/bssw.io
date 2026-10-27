@@ -51,7 +51,6 @@ class Fellow < SearchResult
   def update_details(doc)
     doc.css('a.link-row').each do |link|
       FellowLink.create(url: link['href'], text: link.content, fellow_id: id)
-      link.try(:remove)
     end
     do_fields(doc)
     node = doc.at("strong:contains('Long Bio')")
