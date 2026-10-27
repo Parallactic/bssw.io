@@ -104,6 +104,7 @@ RSpec.describe ResourcesController, type: :controller do
       pw = Rails.application.credentials[:preview][:password]
       credentials = ActionController::HttpAuthentication::Basic.encode_credentials name, pw
       request.env['HTTP_AUTHORIZATION'] = credentials
+      SearchResult.clear_index!(true) # db rolls back between tests but the index doesn't
     end
 
     it 'searches' do
@@ -114,8 +115,7 @@ RSpec.describe ResourcesController, type: :controller do
                                  rebuild_id: RebuildStatus.displayed_rebuild.id)
       FactoryBot.create(:page, publish: true, name: "#{resource.name} page",
                                rebuild_id: RebuildStatus.displayed_rebuild.id)
-      SearchResult.reindex!
-      sleep(5)
+      SearchResult.reindex!(1000, true) # synchronous
       get :search, params: { search_string: resource.name }
       expect(assigns(:resources)).to include(resource)
     end
@@ -136,8 +136,7 @@ RSpec.describe ResourcesController, type: :controller do
       end
 
       it 'has fellow' do
-        SearchResult.reindex!
-        sleep(5)
+        SearchResult.reindex!(1000, true) # synchronous
 
         get :search, params: { search_string: 'Joe' }
 
@@ -145,8 +144,7 @@ RSpec.describe ResourcesController, type: :controller do
       end
 
       it 'does not have resource' do
-        SearchResult.reindex!
-        sleep(5)
+        SearchResult.reindex!(1000, true) # synchronous
 
         get :search, params: { search_string: 'Joe' }
 
@@ -160,8 +158,7 @@ RSpec.describe ResourcesController, type: :controller do
                                  rebuild_id: RebuildStatus.displayed_rebuild.id, publish: true)
         FactoryBot.create(:resource, publish: true, type: 'Resource', name: 'Blorgon')
         request.env['HTTP_AUTHORIZATION'] = "Basic {Base64.encode64('preview-bssw:SoMyCodeWillSeeTheFuture!!')}"
-        SearchResult.reindex
-        sleep(5)
+        SearchResult.reindex!(1000, true) # synchronous
       end
 
       it 'shows the page' do
@@ -177,8 +174,7 @@ RSpec.describe ResourcesController, type: :controller do
 
     it 'performs an empty search' do
       get :search, params: { search_string: 'foob' }
-      SearchResult.reindex
-      sleep(5)
+      SearchResult.reindex!(1000, true) # synchronous
 
       expect(assigns(:resources)).to be_empty
     end
@@ -190,8 +186,7 @@ RSpec.describe ResourcesController, type: :controller do
       before do
         resource
         other_resource
-        SearchResult.reindex
-        sleep(10)
+        SearchResult.reindex!(1000, true) # synchronous
       end
 
       it 'finds the resource' do
@@ -208,24 +203,21 @@ RSpec.describe ResourcesController, type: :controller do
     it 'finds fellows' do
       fellow = FactoryBot.create(:fellow, name: 'bar bar', rebuild_id: RebuildStatus.displayed_rebuild.id,
                                           publish: true)
-      SearchResult.reindex!
-      sleep(15)
+      SearchResult.reindex!(1000, true) # synchronous
       get :search, params: { search_string: 'bar' }
       expect(assigns(:resources)).to include(fellow)
     end
 
     it 'performs a more complex search' do
       seven_resource = FactoryBot.create(:resource, content: 'Four score and seven')
-      SearchResult.reindex
-      sleep(15)
+      SearchResult.reindex!(1000, true) # synchronous
       get :search, params: { search_string: 'four seven' }
       expect(assigns(:resources)).to include(seven_resource)
     end
 
     it 'respects quote marks in search' do
       seven_resource = FactoryBot.create(:resource, content: 'Four score and seven')
-      SearchResult.reindex!
-      sleep(5)
+      SearchResult.reindex!(1000, true) # synchronous
       get :search, params: { search_string: '"four seven"' }
 
       expect(assigns(:resources)).not_to include(seven_resource)
@@ -233,8 +225,7 @@ RSpec.describe ResourcesController, type: :controller do
 
     it 'finds quoted terms in search' do
       resource = FactoryBot.create(:resource, content: 'Four score and seven')
-      SearchResult.reindex!
-      sleep(5)
+      SearchResult.reindex!(1000, true) # synchronous
       get :search, params: { search_string: '"four score"' }
       expect(assigns(:resources)).to include(resource)
     end
@@ -246,8 +237,7 @@ RSpec.describe ResourcesController, type: :controller do
       before do
         resource
         resource2
-        SearchResult.reindex!
-        sleep(1)
+        SearchResult.reindex!(1000, true) # synchronous
       end
 
       it 'keeps search string' do
@@ -267,8 +257,7 @@ RSpec.describe ResourcesController, type: :controller do
 
       it 'renders marks' do
         FactoryBot.create(:resource, content: 'And then bloo bloo and')
-        sleep(1)
-        SearchResult.reindex!
+        SearchResult.reindex!(1000, true) # synchronous
         get :search, params: { search_string: 'bloo' }
         expect(response.body).to match "mark>bloo"
       end
@@ -285,7 +274,7 @@ RSpec.describe ResourcesController, type: :controller do
     it 'renders template' do
       FactoryBot.create(:page, name: 'Contributors', path: 'Contributors.md', rebuild_id: rebuild.id)
       get :authors
-      expect(response.body).to match(Author.last.display_name)
+      expect(response.body).to include(ERB::Util.html_escape(Author.last.display_name))
     end
   end
 
