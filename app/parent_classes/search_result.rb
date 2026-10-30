@@ -15,8 +15,8 @@ class SearchResult < MarkdownImport
   algoliasearch per_environment: true, sanitize: true, auto_index: false, if: :searchable? do
     advancedSyntax true
     attributes :name, :content, :author_list_without_links, :published_at
-    disablePrefixOnAttributes %w[name author_list_without_links content]
-    disableTypoToleranceOnAttributes %w[name author_list_without_links content]
+    disablePrefixOnAttributes []
+    disableTypoToleranceOnAttributes []
     searchableAttributes %w[name author_list_without_links content]
     attributesToSnippet %w[content]
     attributesToHighlight %w[name author_list_without_links]
