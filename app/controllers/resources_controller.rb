@@ -11,6 +11,8 @@ class ResourcesController < ApplicationController
 
   def alias
     @resource = SearchResult.displayed.find_by(alias: params[:alias])
+    raise ActionController::RoutingError, 'Not Found' unless @resource
+
     redirect_to "/items/#{@resource.slug}"
   end
 
