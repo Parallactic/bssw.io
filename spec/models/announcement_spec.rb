@@ -19,12 +19,14 @@ Announcement:
 - Display dates: #{4.days.ago.strftime('%m/%d/%Y')}-#{2.days.ago.strftime('%m/%d/%Y')} # #"
   end
 
+  let(:rebuild) { FactoryBot.create(:rebuild) }
+
   before do
-    described_class.import(content, FactoryBot.create(:rebuild).id)
+    described_class.import(content, rebuild.id)
   end
 
   it 'gets multiple announcements from the page' do
-    expect(described_class.count).to eq 3
+    expect(described_class.where(rebuild_id: rebuild.id).count).to eq 3
   end
 
   it "shows today's announcements" do
