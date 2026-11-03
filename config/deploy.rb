@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-set :rvm_ruby_version, '4.0.6'
+set :rvm_type, :system
+set :rvm_custom_path, '/usr/share/rvm'
+set :rvm_ruby_version, 'ruby-4.0.6'
 
 # set :bundle_dir, ''
 # set :bundle_flags, '--system --quiet'
