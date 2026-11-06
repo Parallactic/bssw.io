@@ -122,6 +122,19 @@ mark {
   color: #5c5a5b;
 }
 
+summary {
+	margin-left: -32px;
+	&::marker {
+		font-size: 34px;
+	}
+}
+
+@media (max-width: 767px) {
+	summary {
+		margin-left: 0;
+	}
+}
+
 .content {
   a:hover {
     color: #19197D;
