@@ -100,6 +100,7 @@ RSpec.describe ResourcesController, type: :controller do
       pw = Rails.application.credentials[:preview][:password]
       credentials = ActionController::HttpAuthentication::Basic.encode_credentials name, pw
       request.env['HTTP_AUTHORIZATION'] = credentials
+      SearchResult.clear_index!(true) # db rolls back between tests but the index doesn't
     end
 
     def timed(label)
@@ -279,7 +280,7 @@ RSpec.describe ResourcesController, type: :controller do
     it 'renders template' do
       FactoryBot.create(:page, name: 'Contributors', path: 'Contributors.md', rebuild_id: rebuild.id)
       get :authors
-      expect(response.body).to match(Author.last.display_name)
+      expect(response.body).to include(ERB::Util.html_escape(Author.last.display_name))
     end
   end
 

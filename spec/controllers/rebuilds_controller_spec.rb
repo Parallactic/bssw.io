@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
 RSpec.describe RebuildsController, type: :controller do
   describe '#branch' do
     it 'is main outside the preview environment' do

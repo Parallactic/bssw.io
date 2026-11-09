@@ -27,6 +27,8 @@ class GithubImporter < ApplicationRecord
     new_path.join('/')
   end
 
+  # Reuse one client so its HTTP connection stays open across calls
+  # (see config/initializers/octokit.rb).
   def self.github
     token = Rails.application.credentials[:github][:token]
     client = Thread.current[:github_client]
@@ -38,17 +40,52 @@ class GithubImporter < ApplicationRecord
   #   Octokit::Client.new(access_token: Rails.application.credentials[:github][:token])
   # end
 
+  # Returns a path to a private copy of the content archive; the rebuild
+  # pipeline deletes that copy when it finishes. The archive for a given
+  # commit never changes, so we keep the download and reuse it.
   def self.save_content(branch, rebuild)
     Rails.logger.debug 'getting'
     rebuild.update(commit_hash: github.commit(Rails.application.credentials[:github][:repo], branch)['sha'])
     file_path = Rails.root.join("tmp/repo-#{branch}-#{rebuild.commit_hash}-#{Time.now.to_i}.tar.gz").to_s
-    url = github.archive_link(Rails.application.credentials[:github][:repo])
+    FileUtils.cp(cached_archive(branch, rebuild.commit_hash), file_path)
+    Rails.logger.debug 'got'
+    file_path
+  end
 
+  def self.archive_cache_dir
+    Rails.root.join('tmp/github_archives')
+  end
+
+  # Downloads the archive for this commit unless it's already cached, and
+  # drops archives of older commits on the same branch.
+  def self.cached_archive(branch, sha)
+    path = archive_cache_dir.join("repo-#{branch}-#{sha}.tar.gz")
+    return path if File.exist?(path)
+
+    download_archive(sha, path)
+    Dir.glob(archive_cache_dir.join("repo-#{branch}-*.tar.gz")).each do |f|
+      FileUtils.rm_f(f) unless f == path.to_s
+    end
+    path
+  end
+
+  # Writes to a .part file first so an interrupted download is never reused.
+  def self.download_archive(sha, path)
+    FileUtils.mkdir_p(path.dirname)
+    partial = path.sub_ext(".#{Process.pid}.part")
+    stream_to_file(github.archive_link(Rails.application.credentials[:github][:repo], ref: sha), partial)
+    File.rename(partial, path)
+  ensure
+    FileUtils.rm_f(partial) if partial
+  end
+
+  def self.stream_to_file(url, file_path)
     uri = URI(url)
     Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https',
                                         open_timeout: 30, read_timeout: 60) do |http|
       puts uri
       http.request_get(uri) do |res|
+        res.value # raises unless 2xx
         print "Status: #{res.code}, size: #{res['content-length'].to_i / 1_000_000} MB"
         total = 0
         File.open(file_path, 'wb') do |f|
@@ -60,8 +97,6 @@ class GithubImporter < ApplicationRecord
         end
       end
     end
-    Rails.logger.debug 'got'
-    file_path
   end
 
   # def self.agent
@@ -93,5 +128,8 @@ class GithubImporter < ApplicationRecord
     end
     puts "completed!! #{rebuild.id}"
     RebuildStatus.complete(rebuild, file_path)
+  ensure
+    FileUtils.rm_f(file_path) if file_path
   end
+
 end

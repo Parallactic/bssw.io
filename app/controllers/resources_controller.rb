@@ -9,12 +9,12 @@ class ResourcesController < ApplicationController
                                  password: Rails.application.credentials.import['password'], only: ['import']
   end
 
-def alias
-  @resource = SearchResult.displayed.find_by(alias: params[:alias])
-  return head :not_found unless @resource
+  def alias
+    @resource = SearchResult.displayed.find_by(alias: params[:alias])
+    raise ActionController::RoutingError, 'Not Found' unless @resource
 
-  redirect_to "/items/#{@resource.slug}"
-end
+    redirect_to "/items/#{@resource.slug}"
+  end
 
   def show
     @resource = scoped_resources.find_by(slug: params[:id])

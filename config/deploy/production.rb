@@ -7,6 +7,10 @@
 
 server 'bssw.io', user: 'web', roles: %w[app db web], port: 2022
 set :deploy_to, '/var/www/bssw'
+set :ssh_options, {
+  forward_agent: false,
+  auth_methods: %w[publickey]
+}
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
@@ -38,10 +42,10 @@ set :deploy_to, '/var/www/bssw'
 #
 # Global options
 # --------------
-set :ssh_options, {
-  forward_agent: true,
-  auth_methods: %w[password]
-}
+# set :ssh_options, {
+#   forward_agent: true,
+#   auth_methods: %w[password]
+# }
 #
 # The server-based syntax can be used to override options:
 # ------------------------------------
