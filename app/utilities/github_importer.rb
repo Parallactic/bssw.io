@@ -25,8 +25,10 @@ class GithubImporter < ApplicationRecord
     new_path.join('/')
   end
 
+  # Reuse one client so its HTTP connection stays open across calls
+  # (see config/initializers/octokit.rb).
   def self.github
-    Octokit::Client.new(access_token: Rails.application.credentials[:github][:token])
+    @github ||= Octokit::Client.new(access_token: Rails.application.credentials[:github][:token])
   end
 
   def self.save_content(branch, rebuild)

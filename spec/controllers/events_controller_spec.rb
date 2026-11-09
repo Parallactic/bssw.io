@@ -32,11 +32,12 @@ RSpec.describe EventsController, type: :controller do
     describe 'past events' do
       before do
         FactoryBot.create(:page, name: 'Past Events', rebuild_id: rebuild.id)
-        200.times do
+        # 110 events = 5 pages at 25 per page; extra date values exercise duplicate joins.
+        110.times do
           event = FactoryBot.create(:event, publish: true, rebuild_id: rebuild.id)
           doc = Nokogiri::XML('<ul><li>Dates: January 1 2019 - January 10 2019</li></ul>')
           event.send(:update_dates, doc.css("li:contains('Dates:')"))
-          10.times do
+          2.times do
             event.additional_dates.first.additional_date_values << FactoryBot.create(
               :additional_date_value,
               date: 1.week.ago,
@@ -50,6 +51,7 @@ RSpec.describe EventsController, type: :controller do
         get :index, params: { past: true, page: 5 }
 
         expect(assigns(:events)).not_to be_nil
+        expect(assigns(:last_page)).to eq 5
       end
 
       it 'shows past' do

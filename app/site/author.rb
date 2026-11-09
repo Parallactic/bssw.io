@@ -69,7 +69,6 @@ class Author < SearchResult
     return unless affiliation.blank? || avatar_url.blank?
 
     client = GithubImporter.github
-    client.login
     begin
       update_info(client.user(website.split('/').last))
     rescue Octokit::NotFound

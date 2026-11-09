@@ -63,7 +63,7 @@ group :development, :test do
   gem 'simplecov'
 end
 
-gem 'github_api'
+
 gem 'loofah'
 gem 'nikkou'
 gem 'nokogiri'
