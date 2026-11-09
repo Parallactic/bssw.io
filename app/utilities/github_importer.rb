@@ -31,11 +31,41 @@ class GithubImporter < ApplicationRecord
     @github ||= Octokit::Client.new(access_token: Rails.application.credentials[:github][:token])
   end
 
+  # Returns a path to a private copy of the content archive; the rebuild
+  # pipeline deletes that copy when it finishes. The archive for a given
+  # commit never changes, so we keep the download and reuse it.
   def self.save_content(branch, rebuild)
     rebuild.update(commit_hash: github.commit(Rails.application.credentials[:github][:repo], branch)['sha'])
     file_path = Rails.root.join("/tmp/repo-#{branch}-#{rebuild.commit_hash}-#{Time.now.to_i}.tar.gz")
-    agent.get(github.archive_link(Rails.application.credentials[:github][:repo],
-                                  ref: branch)).save(file_path)
+    FileUtils.cp(cached_archive(branch, rebuild.commit_hash), file_path)
+    file_path
+  end
+
+  def self.archive_cache_dir
+    Rails.root.join('tmp/github_archives')
+  end
+
+  # Downloads the archive for this commit unless it's already cached, and
+  # drops archives of older commits on the same branch.
+  def self.cached_archive(branch, sha)
+    path = archive_cache_dir.join("repo-#{branch}-#{sha}.tar.gz")
+    return path if File.exist?(path)
+
+    download_archive(sha, path)
+    Dir.glob(archive_cache_dir.join("repo-#{branch}-*.tar.gz")).each do |f|
+      FileUtils.rm_f(f) unless f == path.to_s
+    end
+    path
+  end
+
+  # Writes to a .part file first so an interrupted download is never reused.
+  def self.download_archive(sha, path)
+    FileUtils.mkdir_p(path.dirname)
+    partial = path.sub_ext(".#{Process.pid}.part")
+    agent.get(github.archive_link(Rails.application.credentials[:github][:repo], ref: sha)).save!(partial)
+    File.rename(partial, path)
+  ensure
+    FileUtils.rm_f(partial) if partial
   end
 
   def self.agent
@@ -64,5 +94,8 @@ class GithubImporter < ApplicationRecord
       # fail silently?
     end
     RebuildStatus.complete(rebuild, file_path)
+  ensure
+    FileUtils.rm_f(file_path) if file_path
   end
+
 end
