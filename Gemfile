@@ -12,7 +12,7 @@ end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'mysql2'
-gem 'rails', '8.1.3.1'
+gem 'rails', '~> 8.1'
 gem 'sprockets-rails', '2.3.3'
 
 gem 'sqlite3'
