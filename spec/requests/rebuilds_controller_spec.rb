@@ -66,9 +66,11 @@ RSpec.describe RebuildsController, type: :request do
       end
 
       it 'shows both branches in the non-production banner' do
-        get '/'
-        expect(response.body).to include("<strong>#{TEST_CODE_BRANCH}</strong> code branch")
-        expect(response.body).to include('<strong>main</strong> content branch')
+        # separate session: a plain `get` would replace the import's response, which the
+        # 'redirects' example checks
+        page = open_session { |s| s.get '/' }.response.body
+        expect(page).to include("<strong>#{TEST_CODE_BRANCH}</strong> code branch")
+        expect(page).to include('<strong>main</strong> content branch')
       end
 
       it 'shows images in blog posts' do
