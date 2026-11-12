@@ -60,6 +60,17 @@ RSpec.describe RebuildsController, type: :request do
         expect(Community.first.resources).not_to be_empty
       end
 
+      it 'records the content branch without overwriting the deployed code branch' do
+        expect(RebuildStatus.content_branch).to eq 'main'
+        expect(RebuildStatus.code_branch).to eq TEST_CODE_BRANCH
+      end
+
+      it 'shows both branches in the non-production banner' do
+        get '/'
+        expect(response.body).to include("<strong>#{TEST_CODE_BRANCH}</strong> code branch")
+        expect(response.body).to include('<strong>main</strong> content branch')
+      end
+
       it 'shows images in blog posts' do
         blog = BlogPost.displayed.where(slug: 'applications-open-for-the-2027-bssw-fellowship-program').first
         blog.reload
@@ -203,8 +214,8 @@ RSpec.describe RebuildsController, type: :request do
         post '/rebuilds/import', headers: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials(username, pw) }
         expect(response).to redirect_to('/rebuilds')
       end
-  end
-    
+    end
+
     describe 'make displayed' do
       before do
         3.times { Rebuild.create }

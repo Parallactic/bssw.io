@@ -131,5 +131,4 @@ class GithubImporter < ApplicationRecord
   ensure
     FileUtils.rm_f(file_path) if file_path
   end
-
 end

@@ -14,6 +14,10 @@
 # the additional setup, and require it from the spec files that actually need
 # it.
 require 'warning'
+
+# The code branch config/deploy.rb would record; set in the before(:all) below.
+TEST_CODE_BRANCH = 'spec-code-branch'
+
 Gem.path.each do |path|
   Warning.ignore(/.*lostisland.*/, path)
 end
@@ -113,5 +117,7 @@ RSpec.configure do |config|
   config.before(:all) do
     r = Rebuild.create
     RebuildStatus.create(display_rebuild_id: r.id)
+    # config/deploy.rb sets this on every deploy; mirror that here.
+    RebuildStatus.code_branch = TEST_CODE_BRANCH
   end
 end

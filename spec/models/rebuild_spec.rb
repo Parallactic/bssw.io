@@ -30,18 +30,16 @@ RSpec.describe Rebuild, type: :model do
   end
 
   describe 'removes stale records and their join rows' do
-    
     let(:old) { described_class.create!(created_at: 1.year.ago) }
     let(:item) { FactoryBot.create(:resource, rebuild: old) }
-    let(:topic) { FactoryBot.create(:topic, rebuild: old) } 
+    let(:topic) { FactoryBot.create(:topic, rebuild: old) }
+
     before do
-    
       5.times do
         described_class.create(created_at: 5.months.ago)
       end
       puts "num of rebuilds: #{described_class.count}"
       keep = described_class.create!
-
 
       item.topics << topic
 

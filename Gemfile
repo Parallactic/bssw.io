@@ -3,7 +3,7 @@
 source 'https://gem.coop'
 ruby '4.0.6'
 
-# todo rack-attack
+# TODO: rack-attack
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
@@ -73,7 +73,6 @@ group :development, :test do
   gem 'rubycritic'
   gem 'simplecov'
 end
-
 
 gem 'loofah'
 gem 'nikkou'
